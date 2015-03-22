@@ -18,45 +18,52 @@ import org.junit.Test;
 public class MainTest {
 
     @Test
-    public static void main(String[] args) {
+    public void test() {
 
-        try{
+        String[] args = new String[0];
+
+        try {
             RedisClientTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("RedisClient Test failed");
         }
 
-        try{
+        try {
             StringEncryptTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("StringEncrypt Test failed");
 
         }
 
-        try{
+        try {
             ConfigurationTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Configuration Test failed");
         }
 
 
-        try{
+        try {
             AnsjSegmentationTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("AnsjSegmentation Test failed");
         }
 
-        try{
+        try {
             WordSegIntegrationTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("WordSegIntegration Test failed");
         }
 
-        try{
+        try {
             InvertedIndexTest.main(args);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("InvertedIndex Test failed");
         }
+    }
+
+    public static void main(String[] args) {
+        MainTest mainTest=new MainTest();
+        mainTest.test();
 
     }
 
