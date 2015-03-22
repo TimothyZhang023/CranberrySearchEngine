@@ -3,6 +3,7 @@
  */
 
 package com.zts1993.gse.service;
+import com.zts1993.gse.index.InvertedIndexTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -14,6 +15,7 @@ public class MainServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
 
+    private static final int DEFAULT_INTERVAL= 10000;
 
     public MainServiceThread(String name) {
 
@@ -26,9 +28,11 @@ public class MainServiceThread extends Thread {
         while(true){
 
             try {
-                Thread.sleep(1000);
+                logger.info("MainServiceThread working~ ");
+                InvertedIndexTool.genIndex();
 
-                logger.info("MainServiceThread ~ ");
+                logger.info("MainServiceThread sleep~ ");
+                Thread.sleep(DEFAULT_INTERVAL);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

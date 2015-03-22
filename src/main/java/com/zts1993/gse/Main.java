@@ -5,6 +5,7 @@
 package com.zts1993.gse;
 
 
+import com.zts1993.gse.index.InvertedIndexTool;
 import com.zts1993.gse.service.MainServiceThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -26,7 +27,13 @@ public class Main {
 
             try {
                 Thread.sleep(10000);
-                logger.info("Main ~ ");
+
+                InvertedIndexTool.queryIndex("雷锋");
+                //InvertedIndexTool.queryIndex("中国");
+                InvertedIndexTool.queryIndex("的");
+                InvertedIndexTool.queryIndex("南京");
+                //InvertedIndexTool.queryIndex("cnbeta");
+
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
