@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.db;
+package com.zts1993.gse.db.redis;
 
 /**
  * Created by TianShuo on 2015/3/22.

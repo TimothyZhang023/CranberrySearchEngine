@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.index;
 
+import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.util.HtmlParser;
 import com.zts1993.wc.common.SegmentationFactory;
 import org.ansj.domain.Term;
@@ -41,13 +42,13 @@ public class InvertedIndexTest {
 
 
         String key = "雷锋";
-        ArrayList<String> urls = invertedIndex.query(key);
+        ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
 
-        if(urls != null)
+        if(urlInfos != null)
         {
             System.out.println("得到了结果如下：");
-            for(String url : urls)
-                System.out.println(url);
+            for(URLInfo urlInfo : urlInfos)
+                System.out.println(urlInfo);
         }
         else
         {

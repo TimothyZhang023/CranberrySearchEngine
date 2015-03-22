@@ -2,10 +2,9 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.common;
+package com.zts1993.gse.db.redis;
 
-import com.zts1993.gse.db.RedisClient;
-import com.zts1993.gse.db.RedisShardedClient;
+import com.zts1993.gse.common.ConfigurationUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedis;
@@ -14,18 +13,25 @@ import redis.clients.jedis.ShardedJedisPool;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class RedisFactory {
+public class RedisDB {
 
     private static RedisClient redisClient;
     private static RedisShardedClient redisShardedClient;
 
+    private RedisDB() {
+    }
+
     public static RedisClient getRedisClient() {
 
         if (redisClient == null) {
-            redisClient = new RedisClient(
-                    ConfigurationFactory.getValue("RedisServerIp"),
-                    Integer.parseInt(ConfigurationFactory.getValue("RedisServerPort"))
-            );
+            synchronized (RedisDB.class) {
+                if (redisClient == null) {
+                    redisClient = new RedisClient(
+                            ConfigurationUtil.getValue("RedisServerIp"),
+                            Integer.parseInt(ConfigurationUtil.getValue("RedisServerPort"))
+                    );
+                }
+            }
         }
         return redisClient;
     }
@@ -33,11 +39,15 @@ public class RedisFactory {
     public static RedisShardedClient getRedisShardedClient() {
 
         if (redisShardedClient == null) {
-            redisShardedClient = new RedisShardedClient(
-                    ConfigurationFactory.getValue("RedisServerIp"),
-                    Integer.parseInt(ConfigurationFactory.getValue("RedisServerPort"))
+            synchronized (RedisDB.class) {
+                if (redisShardedClient == null) {
+                    redisShardedClient = new RedisShardedClient(
+                            ConfigurationUtil.getValue("RedisServerIp"),
+                            Integer.parseInt(ConfigurationUtil.getValue("RedisServerPort"))
 
-            );
+                    );
+                }
+            }
         }
         return redisShardedClient;
     }

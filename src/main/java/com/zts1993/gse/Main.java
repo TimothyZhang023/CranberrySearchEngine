@@ -25,7 +25,7 @@ public class Main {
         while(true){
 
             try {
-                Thread.sleep(100000);
+                Thread.sleep(10000);
                 logger.info("Main ~ ");
 
             } catch (InterruptedException e) {

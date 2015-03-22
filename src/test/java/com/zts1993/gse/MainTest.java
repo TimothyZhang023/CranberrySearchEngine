@@ -24,6 +24,11 @@ public class MainTest {
     @Test
     public void test() {
 
+        logger.info("============================");
+        logger.info("   MainTest Test Start     ");
+        logger.info("============================");
+
+
         String[] args = new String[0];
 
         try {
@@ -63,6 +68,12 @@ public class MainTest {
         } catch (Exception ex) {
             logger.info("InvertedIndex Test failed");
         }
+
+
+        logger.info("============================");
+        logger.info("MainTest Test End");
+        logger.info("============================");
+
     }
 
     public static void main(String[] args) {

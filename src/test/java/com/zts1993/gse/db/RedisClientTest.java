@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.db;
 
-import com.zts1993.gse.common.RedisFactory;
+import com.zts1993.gse.db.redis.RedisDB;
 import redis.clients.jedis.*;
 
 import java.util.Iterator;
@@ -21,10 +21,10 @@ public class RedisClientTest {
     private ShardedJedisPool shardedJedisPool;//切片连接池
 
     public RedisClientTest() {
-        jedis = RedisFactory.getJedis();
-        jedisPool = RedisFactory.getJedisPool();
-        shardedJedis = RedisFactory.getShardedJedis();
-        shardedJedisPool = RedisFactory.getShardedJedisPool();
+        jedis = RedisDB.getJedis();
+        jedisPool = RedisDB.getJedisPool();
+        shardedJedis = RedisDB.getShardedJedis();
+        shardedJedisPool = RedisDB.getShardedJedisPool();
     }
 
     public Jedis getJedis() {

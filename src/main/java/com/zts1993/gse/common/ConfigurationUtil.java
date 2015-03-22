@@ -9,13 +9,20 @@ import com.zts1993.gse.util.Configuration;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class ConfigurationFactory {
+public class ConfigurationUtil {
 
     private static Configuration configuration;
 
+    private ConfigurationUtil() {
+    }
+
     public static Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = new Configuration();
+            synchronized (ConfigurationUtil.class) {
+                if (configuration == null) {
+                    configuration = new Configuration();
+                }
+            }
         }
         return configuration;
     }
