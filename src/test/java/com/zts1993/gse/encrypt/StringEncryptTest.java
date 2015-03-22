@@ -1,6 +1,4 @@
-package com.zts1993.gse.test.encrypt;
-
-import com.zts1993.gse.encrypt.StringEncrypt;
+package com.zts1993.gse.encrypt;
 
 /**
  * Created by TianShuo on 2015/3/21.
@@ -8,7 +6,7 @@ import com.zts1993.gse.encrypt.StringEncrypt;
 public class StringEncryptTest {
 
     public static void main(String args[]) {
-        StringEncrypt stringEncrypt=new StringEncrypt("SHA-256");
+        StringEncrypt stringEncrypt = new StringEncrypt("SHA-256");
         String s;
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);

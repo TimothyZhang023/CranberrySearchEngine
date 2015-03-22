@@ -1,6 +1,4 @@
-package com.zts1993.gse.test.util;
-
-import com.zts1993.gse.util.Configuration;
+package com.zts1993.gse.util;
 
 /**
  * Created by TianShuo on 2015/3/21.
