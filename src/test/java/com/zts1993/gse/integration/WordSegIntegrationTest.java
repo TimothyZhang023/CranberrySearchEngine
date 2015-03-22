@@ -14,13 +14,17 @@ import java.util.List;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class WordSegIntegrationTest {   public static void main(String[] args) {
-    // write your code here
-
-    viewHtml();
+public class WordSegIntegrationTest{
 
 
-}
+
+    public static void main(String[] args) {
+        // write your code here
+
+        viewHtml();
+
+
+    }
 
     private static void viewHtml() {
         File root = new File(ClassLoader.getSystemResource("html").getPath());
@@ -56,8 +60,7 @@ public class WordSegIntegrationTest {   public static void main(String[] args) {
 
         List<Term> parse;
         parse = SegmentationFactory.getIndexSegmentation().parse(text);
-        System.out.println("Segmentation : "+parse);
-
+        System.out.println("Segmentation : " + parse);
 
     }
 
@@ -76,4 +79,8 @@ public class WordSegIntegrationTest {   public static void main(String[] args) {
             }
         }
     }
+
+
+
+
 }
