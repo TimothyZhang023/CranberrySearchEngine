@@ -4,12 +4,11 @@
 
 package com.zts1993.gse.index;
 
+import com.zts1993.gse.common.RedisFactory;
 import org.ansj.domain.Term;
+import redis.clients.jedis.Jedis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -44,6 +43,7 @@ public class InvertedIndex {
 
         if(termList.size()==0){ return ; }
 
+        Jedis jedis= RedisFactory.getJedis();
         Term term;
         String word;
         Iterator<Term> termIterator = termList.iterator();
@@ -58,6 +58,9 @@ public class InvertedIndex {
                 ArrayList<String> urls = new ArrayList<String>();
                 urls.add(url);
                 invertedIndexMap.put(word, urls);
+
+                 jedis.sadd(word, url);
+
             }
             //索引中已经含有这个key，不许要加入这个key，需要找到这个key从而把url链接上
             else
@@ -65,11 +68,14 @@ public class InvertedIndex {
                 ArrayList<String> urls = invertedIndexMap.get(word);
                 if(!urls.contains(url))
                     urls.add(url);
+
+                jedis.sadd(word, url);
+
             }
 
         }
 
-
+        //RedisFactory.closeJedis(jedis);
         //Todo process here
 
         System.out.println("***************************************************************");
@@ -83,7 +89,12 @@ public class InvertedIndex {
 
 
     public ArrayList<String> query(String key) {
-        return invertedIndexMap.get(key);
+
+        Jedis jedis= RedisFactory.getJedis();
+        Set<String> querySet=jedis.smembers(key);
+        ArrayList<String> stringArrayList=new ArrayList<String>(querySet);
+         return stringArrayList;
+        //  return invertedIndexMap.get(key);
     }
 
     public static void main(String[] args) {

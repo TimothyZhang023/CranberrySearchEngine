@@ -6,6 +6,7 @@ package com.zts1993.gse;
 
 import com.zts1993.gse.db.RedisClientTest;
 import com.zts1993.gse.encrypt.StringEncryptTest;
+import com.zts1993.gse.index.InvertedIndexTest;
 import com.zts1993.gse.integration.WordSegIntegrationTest;
 import com.zts1993.gse.util.ConfigurationTest;
 import com.zts1993.wc.ansj.AnsjSegmentationTest;
@@ -47,6 +48,12 @@ public class MainTest {
             WordSegIntegrationTest.main(args);
         }catch (Exception ex){
             System.out.println("WordSegIntegration Test failed");
+        }
+
+        try{
+            InvertedIndexTest.main(args);
+        }catch (Exception ex){
+            System.out.println("InvertedIndex Test failed");
         }
 
     }
