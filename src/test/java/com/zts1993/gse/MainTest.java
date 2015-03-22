@@ -10,12 +10,14 @@ import com.zts1993.gse.index.InvertedIndexTest;
 import com.zts1993.gse.integration.WordSegIntegrationTest;
 import com.zts1993.gse.util.ConfigurationTest;
 import com.zts1993.wc.ansj.AnsjSegmentationTest;
+import org.junit.Test;
 
 /**
  * Created by TianShuo on 2015/3/22.
  */
 public class MainTest {
 
+    @Test
     public static void main(String[] args) {
 
         try{

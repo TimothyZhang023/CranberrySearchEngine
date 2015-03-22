@@ -35,6 +35,12 @@
             <!--<classifier>min</classifier> &lt;!&ndash;如果是需要nlp方式分词,就去掉这个标签&ndash;&gt;-->
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
