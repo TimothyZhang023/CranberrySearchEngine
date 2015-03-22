@@ -9,7 +9,8 @@ services:
 before_install:
   - mysql -e "create database IF NOT EXISTS gse_test;" -uroot
 
-install:  ./script/test-preparation.sh
+install:
+  chmod ugo+x ./script/test-preparation.sh && ./script/test-preparation.sh
 
 
 env:
