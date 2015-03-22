@@ -4,6 +4,7 @@
 
 package com.zts1993.wc.ansj;
 
+import com.zts1993.gse.filter.TermFilter;
 import com.zts1993.wc.util.ISegmentation;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.NlpAnalysis;
@@ -18,7 +19,7 @@ public class NlpSegmentation implements ISegmentation {
 
     @Override
     public List<Term> parse(String input) {
-        return NlpAnalysis.parse(input);
+        return TermFilter.process(NlpAnalysis.parse(input));
     }
 
 

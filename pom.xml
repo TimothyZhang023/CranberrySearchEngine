@@ -13,6 +13,7 @@
     <description>Cranberry Search Engine Kernel - Base On Java and Redis</description>
     <url>http://cse.greencms.net</url>
 
+
     <repositories>
         <repository>
             <id>mvn-repo</id>
@@ -36,6 +37,5 @@
         </dependency>
 
     </dependencies>
-
 
 </project>

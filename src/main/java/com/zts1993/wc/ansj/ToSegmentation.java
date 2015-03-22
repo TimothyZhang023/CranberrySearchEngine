@@ -4,6 +4,7 @@
 
 package com.zts1993.wc.ansj;
 
+import com.zts1993.gse.filter.TermFilter;
 import com.zts1993.wc.util.ISegmentation;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
@@ -18,6 +19,6 @@ public class ToSegmentation implements ISegmentation {
 
     @Override
     public List<Term> parse(String input) {
-        return ToAnalysis.parse(input);
+        return TermFilter.process(ToAnalysis.parse(input));
     }
 }
