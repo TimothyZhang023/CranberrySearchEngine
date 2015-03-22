@@ -14,20 +14,20 @@ public class MainTest {
         try{
             RedisClientTest.main(args);
         }catch (Exception ex){
-            System.out.println("RedisClientTest failed");
+            System.out.println("RedisClient Test failed");
         }
 
         try{
             StringEncryptTest.main(args);
         }catch (Exception ex){
-            System.out.println("StringEncryptTest failed");
+            System.out.println("StringEncrypt Test failed");
 
         }
 
         try{
             ConfigurationTest.main(args);
         }catch (Exception ex){
-            System.out.println("RedisConfigurationTestClientTest failed");
+            System.out.println("Configuration Test failed");
         }
 
     }
