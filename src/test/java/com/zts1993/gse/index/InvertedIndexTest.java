@@ -24,7 +24,35 @@ public class InvertedIndexTest {
      * @param args
      */
     public static void main(String[] args) {
-        InvertedIndex invertedIndex = new InvertedIndex();
+
+        genIndex();
+
+        queryIndex("雷锋");
+        queryIndex("中国");
+        queryIndex("的");
+        queryIndex("南京");
+        queryIndex("cnbeta");
+
+    }
+
+    private static void queryIndex(String key) {
+        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
+
+        if(urlInfos != null)
+        {
+            System.out.println(key+"查询结果如下：");
+            for(URLInfo urlInfo : urlInfos)
+                System.out.println(urlInfo);
+        }
+        else
+        {
+            System.out.println("真可惜，没找到您要搜索的关键词");
+        }
+    }
+
+    private static void genIndex() {
+        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
         List<Term> termList=null;
 
         File root = new File(ClassLoader.getSystemResource("html").getPath());
@@ -38,27 +66,7 @@ public class InvertedIndexTest {
 
             }
         }
-
-
-
-        String key = "雷锋";
-        ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
-
-        if(urlInfos != null)
-        {
-            System.out.println("得到了结果如下：");
-            for(URLInfo urlInfo : urlInfos)
-                System.out.println(urlInfo);
-        }
-        else
-        {
-            System.out.println("真可惜，没找到您要搜索的关键词");
-        }
-
-
     }
-
-
 
 
     private static List<Term> readFile(String fileName) {
@@ -85,7 +93,7 @@ public class InvertedIndexTest {
 
         List<Term> parse;
         parse = SegmentationFactory.getIndexSegmentation().parse(text);
-        System.out.println("Segmentation : " + parse);
+//        System.out.println("Segmentation : " + parse);
 
         return parse;
 

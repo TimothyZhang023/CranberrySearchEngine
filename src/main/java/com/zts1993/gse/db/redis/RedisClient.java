@@ -40,9 +40,9 @@ public class RedisClient implements IRedisClient {
         // 池基本配置
         JedisPoolConfig config = new JedisPoolConfig();
         //  config.setMaxActive(20);
-        config.setMaxIdle(5);
+        //config.setMaxIdle(5);
         // config.setMaxWait(1000l);
-        config.setTestOnBorrow(false);
+        //config.setTestOnBorrow(false);
 
         jedisPool = new JedisPool(config, ip, 6379);
     }

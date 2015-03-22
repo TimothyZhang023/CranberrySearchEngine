@@ -66,6 +66,8 @@ public class MainTest {
         try {
             InvertedIndexTest.main(args);
         } catch (Exception ex) {
+            logger.info(ex.getMessage());
+            logger.info(ex.getStackTrace());
             logger.info("InvertedIndex Test failed");
         }
 

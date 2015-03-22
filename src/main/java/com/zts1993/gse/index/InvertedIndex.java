@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class InvertedIndex {
 
-    private static final int DEFAULT_CAPACITY = 10000;
+    private static final int DEFAULT_CAPACITY = 1000;
 
     private static final Logger logger = LogManager.getLogger("InvertedIndex");
 
@@ -47,8 +47,15 @@ public class InvertedIndex {
         return invertedIndexMap;
     }
 
+    public LRUCache<String, ArrayList<URLInfo>> getInvertedIndex() {
+        if (invertedIndexMap == null) {
+            initInvertedIndex();
+        }
+        return invertedIndexMap;
+    }
 
-    public static synchronized int count() {
+
+        public static synchronized int count() {
         return invertedIndexMap.size();
     }
 
@@ -82,26 +89,22 @@ public class InvertedIndex {
             // System.out.println(term.getRealName());
 
             if (!invertedIndexMap.containsKey(word)) {
-                logger.info("LRU Write Cache hit~");
+//                logger.info("LRU Write Cache hit~");
                 ArrayList<URLInfo> urls = new ArrayList<URLInfo>();
                 urls.add(new URLInfo(url));
                 invertedIndexMap.put(word, urls);
-                jedis.sadd(word, new URLInfo(url).getHash());
-
             } else {
-                logger.info("LRU Write Cache missed!");
                 ArrayList<URLInfo> urls = invertedIndexMap.get(word);
                 if (!urls.contains(new URLInfo(url)))
                     urls.add(new URLInfo(url));
 
-                jedis.sadd(word, new URLInfo(url).getHash());
             }
 
+            jedis.sadd(word, new URLInfo(url).getHash());
         }
-
-        logger.info("add into invertedIndex finished!!");
-        logger.info("the size of invertedIndex is : " + invertedIndexMap.size());
-        logger.info("********************************");
+//        logger.info("add into invertedIndex finished!!");
+//        logger.info("the size of invertedIndex is : " + invertedIndexMap.size());
+//        logger.info("********************************");
 
     }
 
@@ -110,7 +113,7 @@ public class InvertedIndex {
         ArrayList<URLInfo> stringArrayList = invertedIndexMap.get(key);
 
         if (stringArrayList == null) {
-            logger.info("LRU Read Cache missed!");
+//            logger.info("LRU Read Cache missed!");
 
             stringArrayList = new ArrayList<URLInfo>();
 
@@ -124,7 +127,7 @@ public class InvertedIndex {
             }
             invertedIndexMap.put(key, stringArrayList);
         }else{
-            logger.info("LRU Read Cache hit~");
+//            logger.info("LRU Read Cache hit~");
 
         }
 

@@ -50,6 +50,7 @@ public class LRUCache<K, V> implements Serializable {
         this.map = new HashMap<K, ValueEntry>(maxCapacity);
     }
 
+
     public boolean containsKey(K key) {
         try {
             lock.lock();
@@ -63,7 +64,6 @@ public class LRUCache<K, V> implements Serializable {
         try {
             lock.lock();
             if ((map.size() > maxCapacity - 1) && !map.containsKey(key)) {
-                // System.out.println("开始");
                 Set<Map.Entry<K, ValueEntry>> entries = this.map.entrySet();
                 removeRencentlyLeastAccess(entries);
             }

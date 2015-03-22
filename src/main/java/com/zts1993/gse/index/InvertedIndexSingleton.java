@@ -14,7 +14,7 @@ public class InvertedIndexSingleton {
     private InvertedIndexSingleton() {
     }
 
-    public InvertedIndex getInstance() {
+    public static InvertedIndex getInstance() {
         if (invertedIndex == null) {
             synchronized (InvertedIndexSingleton.class) {
                 if (invertedIndex == null) {
