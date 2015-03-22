@@ -5,3 +5,13 @@ jdk:
   - openjdk6
 services:
   - redis-server
+
+before_install:
+  - mysql -e "create database IF NOT EXISTS gse_test;" -uroot
+
+install:  ./script/test-preparation.sh
+
+
+env:
+  global:
+    - RedisServerIp=127.0.0.1
