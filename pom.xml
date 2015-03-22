@@ -4,9 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
-    <artifactId>GSE</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.zts1993</groupId>
+    <artifactId>CSE</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>Cranberry Search Engine Kernel</name>
+    <description>Cranberry Search Engine Kernel - Base On Java and Redis</description>
+    <url>http://cse.greencms.net</url>
 
     <repositories>
         <repository>

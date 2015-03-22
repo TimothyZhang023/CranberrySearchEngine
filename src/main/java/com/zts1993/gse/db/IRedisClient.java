@@ -6,5 +6,4 @@ package com.zts1993.gse.db;
 public interface IRedisClient {
 
 
-
 }
