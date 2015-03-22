@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Timothy" pattern="src:com.zts1993..*" />
+</component>

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 By Timothy Zhang
+ */
+
 package com.zts1993.gse.common;
 
 import com.zts1993.gse.db.RedisClient;

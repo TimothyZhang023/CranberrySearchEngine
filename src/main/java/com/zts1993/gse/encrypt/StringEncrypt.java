@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 By Timothy Zhang
+ */
+
 package com.zts1993.gse.encrypt;
 
 import java.security.MessageDigest;
@@ -14,13 +18,7 @@ public class StringEncrypt {
     public final static String SHA_384 = "SHA-384";
     public final static String SHA_1 = "SHA-1";
 
-    /**
-     * 对字符串加密 Hash ,加密算法使用MD5,SHA-1,SHA-256,默认使用SHA-256
-     *
-     * @param strSrc  要加密的字符串
-     * @param encName 加密类型
-     * @return
-     */
+    public final static String SHA = "SHA-512";
 
     private String encMethod;
 
