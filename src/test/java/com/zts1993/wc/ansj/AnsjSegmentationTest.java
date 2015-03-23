@@ -22,9 +22,9 @@ public class AnsjSegmentationTest {
     public static void main(String[] args) {
 
           testAllSegmentation(demo1);
-          testAllSegmentation(demo2);
-          testAllSegmentation(demo3);
-          testAllSegmentation(demo4);
+//          testAllSegmentation(demo2);
+//          testAllSegmentation(demo3);
+//          testAllSegmentation(demo4);
     }
 
 

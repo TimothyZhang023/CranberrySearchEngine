@@ -37,6 +37,10 @@ public class WordSegIntegrationTest{
     }
 
     private static void readFile(String fileName) {
+
+        System.out.println("Segmentation : " + fileName);
+
+
         BufferedReader br;
         StringBuffer buffer = new StringBuffer();
         String line;
@@ -60,7 +64,6 @@ public class WordSegIntegrationTest{
 
         List<Term> parse;
         parse = SegmentationFactory.getIndexSegmentation().parse(text);
-        System.out.println("Segmentation : " + parse);
 
     }
 
