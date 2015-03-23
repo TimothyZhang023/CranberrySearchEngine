@@ -17,12 +17,12 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
 
-        IndexServiceThread indexServiceThread =new IndexServiceThread("Main");
+        IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
         indexServiceThread.setDaemon(true);
         indexServiceThread.start();
 
 
-        while(true){
+        while (true) {
             try {
                 Thread.sleep(10000);
 

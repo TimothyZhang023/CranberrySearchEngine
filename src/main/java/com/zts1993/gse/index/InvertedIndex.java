@@ -55,7 +55,7 @@ public class InvertedIndex {
     }
 
 
-        public static synchronized int count() {
+    public static synchronized int count() {
         return invertedIndexMap.size();
     }
 
@@ -128,7 +128,7 @@ public class InvertedIndex {
                 stringArrayList.add(URLInfo.getURLInfoByHash(urlHash));
             }
             invertedIndexMap.put(key, stringArrayList);
-        }else{
+        } else {
 //            logger.info("LRU Read Cache hit~");
 
         }

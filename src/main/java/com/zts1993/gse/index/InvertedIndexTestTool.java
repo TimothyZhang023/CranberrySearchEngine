@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -44,14 +42,11 @@ public class InvertedIndexTestTool {
         InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
         ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
 
-        if(urlInfos != null)
-        {
-            System.out.println(key+"查询结果如下：");
-            for(URLInfo urlInfo : urlInfos)
+        if (urlInfos != null) {
+            System.out.println(key + "查询结果如下：");
+            for (URLInfo urlInfo : urlInfos)
                 System.out.println(urlInfo);
-        }
-        else
-        {
+        } else {
             System.out.println("真可惜，没找到您要搜索的关键词");
         }
     }
@@ -61,7 +56,7 @@ public class InvertedIndexTestTool {
 
 
         InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
-        List<Term> termList=null;
+        List<Term> termList = null;
 
         File root = new File(ClassLoader.getSystemResource("html").getPath());
         File[] fs = root.listFiles();
@@ -69,8 +64,8 @@ public class InvertedIndexTestTool {
             System.out.println(fs[i].getAbsolutePath());
             if (fs[i].isDirectory()) {
             } else {
-                termList=readFile(fs[i].getAbsolutePath());
-                invertedIndex.addToInvertedIndex(termList,fs[i].getAbsolutePath());
+                termList = readFile(fs[i].getAbsolutePath());
+                invertedIndex.addToInvertedIndex(termList, fs[i].getAbsolutePath());
 
             }
         }
