@@ -14,11 +14,14 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class InvertedIndexTool {
+public class InvertedIndexTestTool {
+
 
     private static final Logger logger = LogManager.getLogger("InvertedIndexTool");
 
@@ -56,6 +59,7 @@ public class InvertedIndexTool {
     public static void genIndex() {
         logger.info("start to genIndex ~ ");
 
+
         InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
         List<Term> termList=null;
 
@@ -70,6 +74,9 @@ public class InvertedIndexTool {
 
             }
         }
+
+        logger.info("genIndex finished~ ");
+
     }
 
 

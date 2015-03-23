@@ -105,6 +105,7 @@ public class InvertedIndex {
 //        logger.info("add into invertedIndex finished!!");
 //        logger.info("the size of invertedIndex is : " + invertedIndexMap.size());
 //        logger.info("********************************");
+        RedisDB.closeJedis(jedis);
 
     }
 
@@ -119,6 +120,7 @@ public class InvertedIndex {
 
             Jedis jedis = RedisDB.getJedis();
             Set<String> querySet = jedis.smembers(key);
+            RedisDB.closeJedis(jedis);
 
             Iterator<String> it = querySet.iterator();
             while (it.hasNext()) {

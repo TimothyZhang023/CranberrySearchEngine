@@ -15,8 +15,10 @@ import java.util.List;
 public class TermFilter {
 
     public static List<Term> process(List<Term> termList) {
-
-        return removeSpace(termList);
+        List<Term> termList1;
+        termList1 = removeSpace(termList);
+        termList1 = removeKeyword(termList);
+        return termList1;
 
     }
 
@@ -27,10 +29,16 @@ public class TermFilter {
             term = termIterator.next();
             if (term.getRealName().trim().equals("")) {
                 termIterator.remove();
-//                continue;
+//              continue;
             }
             // System.out.println(term.getRealName());
         }
+
+        return termList;
+    }
+
+    public static List<Term> removeKeyword(List<Term> termList) {
+
 
         return termList;
     }

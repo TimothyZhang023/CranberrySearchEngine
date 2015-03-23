@@ -16,8 +16,6 @@ public class Configuration {
      * 读取properties文件
      */
     private Properties propertie;
-    private FileInputStream inputFile;
-    private FileOutputStream outputFile;
 
     /**
      * 初始化Configuration类

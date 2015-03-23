@@ -19,7 +19,6 @@ import java.util.List;
 
 public class RedisShardedClient implements IRedisClient {
 
-    private ShardedJedis jedis;//切片额客户端连接
     private ShardedJedisPool jedisPool;//切片连接池
     private List<JedisShardInfo> shards;
     JedisPoolConfig config;
@@ -27,17 +26,14 @@ public class RedisShardedClient implements IRedisClient {
 
     public RedisShardedClient() {
         initialPool("127.0.0.1", 6379);
-        jedis = jedisPool.getResource();
     }
 
     public RedisShardedClient(String ip, int port) {
         initialPool(ip, port);
-        jedis = jedisPool.getResource();
     }
 
     public RedisShardedClient(String ip) {
         initialPool(ip, 6379);
-        jedis = jedisPool.getResource();
     }
 
     /**
@@ -65,18 +61,12 @@ public class RedisShardedClient implements IRedisClient {
 
 
     public ShardedJedis getJedis() {
-        return jedis;
+        return jedisPool.getResource();
     }
 
-    public void setJedis(ShardedJedis jedis) {
-        this.jedis = jedis;
-    }
 
     public ShardedJedisPool getJedisPool() {
         return jedisPool;
     }
 
-    public void setJedisPool(ShardedJedisPool jedisPool) {
-        this.jedisPool = jedisPool;
-    }
 }

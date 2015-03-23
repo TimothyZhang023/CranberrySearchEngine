@@ -2,9 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.common;
-
-import com.zts1993.gse.util.Configuration;
+package com.zts1993.gse.util;
 
 /**
  * Created by TianShuo on 2015/3/22.

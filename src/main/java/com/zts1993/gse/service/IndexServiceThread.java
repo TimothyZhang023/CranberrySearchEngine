@@ -3,7 +3,7 @@
  */
 
 package com.zts1993.gse.service;
-import com.zts1993.gse.index.InvertedIndexTool;
+import com.zts1993.gse.index.InvertedIndexTestTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -11,13 +11,13 @@ import org.apache.log4j.Logger;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class MainServiceThread extends Thread {
+public class IndexServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
 
     private static final int DEFAULT_INTERVAL= 10000;
 
-    public MainServiceThread(String name) {
+    public IndexServiceThread(String name) {
 
         super(name);//调用父类带参数的构造方法
 
@@ -28,10 +28,11 @@ public class MainServiceThread extends Thread {
         while(true){
 
             try {
-                logger.info("MainServiceThread working~ ");
-                InvertedIndexTool.genIndex();
+                logger.info("IndexServiceThread working~ ");
 
-                logger.info("MainServiceThread sleep~ ");
+                InvertedIndexTestTool.genIndex();
+
+                logger.info("IndexServiceThread sleep~ ");
                 Thread.sleep(DEFAULT_INTERVAL);
 
             } catch (InterruptedException e) {

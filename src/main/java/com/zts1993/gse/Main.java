@@ -5,8 +5,8 @@
 package com.zts1993.gse;
 
 
-import com.zts1993.gse.index.InvertedIndexTool;
-import com.zts1993.gse.service.MainServiceThread;
+import com.zts1993.gse.index.InvertedIndexTestTool;
+import com.zts1993.gse.service.IndexServiceThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -17,23 +17,20 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
 
-        MainServiceThread mainServiceThread=new MainServiceThread("Main");
-        mainServiceThread.setDaemon(true);
-        mainServiceThread.start();
-
+        IndexServiceThread indexServiceThread =new IndexServiceThread("Main");
+        indexServiceThread.setDaemon(true);
+        indexServiceThread.start();
 
 
         while(true){
-
             try {
                 Thread.sleep(10000);
 
-                InvertedIndexTool.queryIndex("雷锋");
-                //InvertedIndexTool.queryIndex("中国");
-                InvertedIndexTool.queryIndex("的");
-                InvertedIndexTool.queryIndex("南京");
-                //InvertedIndexTool.queryIndex("cnbeta");
-
+                //InvertedIndexTestTool.queryIndex("雷锋");
+                InvertedIndexTestTool.queryIndex("中国");
+                InvertedIndexTestTool.queryIndex("的");
+                //InvertedIndexTestTool.queryIndex("南京");
+                InvertedIndexTestTool.queryIndex("cnbeta");
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
