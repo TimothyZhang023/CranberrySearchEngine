@@ -7,6 +7,7 @@ package com.zts1993.gse;
 
 import com.zts1993.gse.index.InvertedIndexTestTool;
 import com.zts1993.gse.service.IndexServiceThread;
+import com.zts1993.gse.service.RestApiThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -21,6 +22,10 @@ public class Main {
         indexServiceThread.setDaemon(true);
         indexServiceThread.start();
 
+        RestApiThread restApiThread = new RestApiThread("Main");
+        restApiThread.setDaemon(true);
+        restApiThread.start();
+
 
         while (true) {
             try {
@@ -28,7 +33,7 @@ public class Main {
 
                 //InvertedIndexTestTool.queryIndex("雷锋");
                 InvertedIndexTestTool.queryIndex("中国");
-                InvertedIndexTestTool.queryIndex("的");
+                //InvertedIndexTestTool.queryIndex("的");
                 //InvertedIndexTestTool.queryIndex("南京");
                 InvertedIndexTestTool.queryIndex("cnbeta");
 

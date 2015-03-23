@@ -28,9 +28,11 @@ public class URLInfo {
         this.rank = 1.0;
 
         Jedis jedis = RedisDB.getJedis();
-        jedis.set(hash+"_url",url);
-        jedis.set(hash+"_date",date);
-        jedis.set(hash+"_rank",String.valueOf(rank));
+        jedis.set(hash + "_url", url);
+        jedis.set(hash + "_date", date);
+        jedis.set(hash + "_rank", String.valueOf(rank));
+        RedisDB.closeJedis(jedis);
+
     }
 
     public URLInfo(String hash, String url, String date, double rank) {
@@ -40,21 +42,20 @@ public class URLInfo {
         this.rank = rank;
     }
 
-    public static URLInfo getURLInfoByHash(String hash){
+    public static URLInfo getURLInfoByHash(String hash) {
         Jedis jedis = RedisDB.getJedis();
-        String url=jedis.get(hash+"_url");
-        String date= jedis.get(hash + "_date");
+        String url = jedis.get(hash + "_url");
+        String date = jedis.get(hash + "_date");
 //        double rank=Double.valueOf(jedis.get(hash + "_rank"));
-        double rank=1.0;
-        return new URLInfo(hash,url,date,rank);
+        double rank = 1.0;
+
+        RedisDB.closeJedis(jedis);
+
+        return new URLInfo(hash, url, date, rank);
     }
 
     public String getHash() {
         return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
     }
 
     public String getUrl() {
@@ -110,7 +111,7 @@ public class URLInfo {
         int result = hash.hashCode();
         result = 31 * result + url.hashCode();
         result = 31 * result + date.hashCode();
-        result = 31 * result ;
+        result = 31 * result;
         return result;
     }
 }
