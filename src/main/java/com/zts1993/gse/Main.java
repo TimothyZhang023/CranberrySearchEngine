@@ -5,7 +5,6 @@
 package com.zts1993.gse;
 
 
-import com.zts1993.gse.index.InvertedIndexTestTool;
 import com.zts1993.gse.service.IndexServiceThread;
 import com.zts1993.gse.service.RestApiThread;
 import org.apache.log4j.LogManager;
@@ -29,13 +28,13 @@ public class Main {
 
         while (true) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(1000000);
 
                 //InvertedIndexTestTool.queryIndex("雷锋");
-                InvertedIndexTestTool.queryIndex("中国");
+                //InvertedIndexTestTool.queryIndex("中国");
                 //InvertedIndexTestTool.queryIndex("的");
                 //InvertedIndexTestTool.queryIndex("南京");
-                InvertedIndexTestTool.queryIndex("cnbeta");
+                //InvertedIndexTestTool.queryIndex("cnbeta");
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

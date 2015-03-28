@@ -39,8 +39,7 @@ public class InvertedIndexTestTool {
     }
 
     public static void queryIndex(String key) {
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
-        ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
+        ArrayList<URLInfo> urlInfos = query(key);
 
         if (urlInfos != null) {
             System.out.println(key + "查询结果如下：");
@@ -49,6 +48,11 @@ public class InvertedIndexTestTool {
         } else {
             System.out.println("真可惜，没找到您要搜索的关键词");
         }
+    }
+
+    public static ArrayList<URLInfo> query(String key) {
+        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        return invertedIndex.query(key);
     }
 
     public static void genIndex() {

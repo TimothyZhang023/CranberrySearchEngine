@@ -14,10 +14,6 @@ import com.zts1993.wc.util.ISegmentation;
 public class SegmentationFactory {
 
 
-    public static ISegmentation getSegmentation() {
-        return getDefaultSegmentation();
-    }
-
     public static ISegmentation getDefaultSegmentation() {
         return getCseSegmentation();
     }

@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.service;
 
-import com.zts1993.gse.webservice.QueryApi;
+import com.zts1993.gse.webservice.RestService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -17,7 +17,6 @@ public class RestApiThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("RestApiThread");
 
-    private static final int DEFAULT_INTERVAL = 10000;
 
     public RestApiThread(String name) {
 
@@ -33,7 +32,7 @@ public class RestApiThread extends Thread {
 
             String[] args = new String[0];
 
-            QueryApi.main(args);
+            RestService.main(args);
 
         } catch (IOException e) {
             e.printStackTrace();

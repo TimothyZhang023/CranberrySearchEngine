@@ -18,7 +18,7 @@ public class StringEncrypt {
     public final static String SHA_384 = "SHA-384";
     public final static String SHA_1 = "SHA-1";
 
-    public final static String SHA = "SHA-512";
+    public final static String SHA = "SHA-256";
 
     private String encMethod;
 

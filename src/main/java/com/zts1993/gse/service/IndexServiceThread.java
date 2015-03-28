@@ -16,7 +16,7 @@ public class IndexServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
 
-    private static final int DEFAULT_INTERVAL = 10000;
+    private static final int DEFAULT_INTERVAL = 1000000;
 
     public IndexServiceThread(String name) {
 

@@ -22,7 +22,7 @@ public class TermFilter {
 
     }
 
-    public static List<Term> removeSpace(List<Term> termList) {
+    private static List<Term> removeSpace(List<Term> termList) {
         Term term;
         Iterator<Term> termIterator = termList.iterator();
         while (termIterator.hasNext()) {
@@ -37,7 +37,7 @@ public class TermFilter {
         return termList;
     }
 
-    public static List<Term> removeKeyword(List<Term> termList) {
+    private static List<Term> removeKeyword(List<Term> termList) {
 
 
         return termList;
