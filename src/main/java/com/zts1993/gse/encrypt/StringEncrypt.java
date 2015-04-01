@@ -27,7 +27,7 @@ public class StringEncrypt {
     }
 
     public StringEncrypt() {
-        setEncMethod("SHA-256");
+        setEncMethod(SHA);
     }
 
     public String getEncMethod() {

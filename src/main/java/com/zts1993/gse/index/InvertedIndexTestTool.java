@@ -5,15 +5,17 @@
 package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.util.HtmlParser;
-import com.zts1993.wc.common.SegmentationFactory;
-import org.ansj.domain.Term;
+import com.zts1993.gse.thread.GenIndexFromFileTask;
+import com.zts1993.gse.util.ConfigurationUtil;
+import com.zts1993.gse.util.MutliThreadCounter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -55,58 +57,107 @@ public class InvertedIndexTestTool {
         return invertedIndex.query(key);
     }
 
+    public static ArrayList<URLInfo> queryAll(Set<String> key) {
+        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        return invertedIndex.queryAll(key);
+    }
+
+    public static void genIndexByQueue() {
+
+
+    }
+
     public static void genIndex() {
         logger.info("start to genIndex ~ ");
 
 
         InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
-        List<Term> termList = null;
+//        List<Term> termList = null;
 
-        File root = new File(ClassLoader.getSystemResource("html").getPath());
+        //ClassLoader.getSystemResource("html").getPath()
+        File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
         File[] fs = root.listFiles();
+
+        logger.info("Html files to be processed : " + fs.length);
+
+        long startMili = System.currentTimeMillis();// 当前时间对应的毫秒数
+        long endMili;
+
+        //newCachedThreadPool
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+
         for (int i = 0; i < fs.length; i++) {
-            System.out.println(fs[i].getAbsolutePath());
-            if (fs[i].isDirectory()) {
-            } else {
-                termList = readFile(fs[i].getAbsolutePath());
-                invertedIndex.addToInvertedIndex(termList, fs[i].getAbsolutePath());
+
+
+            if (!fs[i].isDirectory()) {
+                try {
+
+                    String path = fs[i].getAbsolutePath();
+
+                    //  logger.info("path"+path);
+                    Runnable runner = new GenIndexFromFileTask(invertedIndex, path);
+                    executor.execute(runner);
+
+                    endMili = System.currentTimeMillis();
+                    //logger.info("Time elapsed："+getTimeDes(endMili-startMili));
+                    if (((endMili - startMili) / 1000 / 60 > 0) && (i % 10 == 1)) {
+                        logger.info("Current speed：" + ((double) MutliThreadCounter.sum()) / ((double) (endMili - startMili) / 1000.0 / 60.0) + " pages/min");
+                    }
+
+                    Thread.sleep(100);
+
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                    logger.error(e.getStackTrace());
+                }
 
             }
+
+
         }
+
+        executor.shutdown(); //关闭后不能加入新线程，队列中的线程则依次执行完
+
 
         logger.info("genIndex finished~ ");
 
     }
 
 
-    private static List<Term> readFile(String fileName) {
-        BufferedReader br;
-        StringBuffer buffer = new StringBuffer();
-        String line;
+    public static String getTimeDes(long ms) {
+        int ss = 1000;
+        int mi = ss * 60;
+        int hh = mi * 60;
+        int dd = hh * 24;
 
-        try {
-            br = new BufferedReader(new FileReader(fileName));
-            while ((line = br.readLine()) != null) {
-                buffer.append(line);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        long day = ms / dd;
+        long hour = (ms - day * dd) / hh;
+        long minute = (ms - day * dd - hour * hh) / mi;
+        long second = (ms - day * dd - hour * hh - minute * mi) / ss;
+        long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
+
+        StringBuilder str = new StringBuilder();
+        if (day > 0) {
+            str.append(day).append("天,");
+        }
+        if (hour > 0) {
+            str.append(hour).append("小时,");
+        }
+        if (minute > 0) {
+            str.append(minute).append("分钟,");
+        }
+        if (second > 0) {
+            str.append(second).append("秒,");
+        }
+        if (milliSecond > 0) {
+            str.append(milliSecond).append("毫秒,");
+        }
+        if (str.length() > 0) {
+            str = str.deleteCharAt(str.length() - 1);
         }
 
-        String fileContent = buffer.toString();
-
-        HtmlParser htmlParser = new HtmlParser();
-        String text = htmlParser.html2Text(fileContent);
-//        System.out.println(text);
-
-        List<Term> parse;
-        parse = SegmentationFactory.getIndexSegmentation().parse(text);
-//        System.out.println("Segmentation : " + parse);
-
-        return parse;
-
+        return str.toString();
     }
+
 
 }

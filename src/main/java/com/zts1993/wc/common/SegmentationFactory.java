@@ -15,7 +15,7 @@ public class SegmentationFactory {
 
 
     public static ISegmentation getDefaultSegmentation() {
-        return getCseSegmentation();
+        return getIndexSegmentation();
     }
 
 

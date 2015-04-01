@@ -1,4 +1,4 @@
-Cranberry Search Engine Kernel - Base On Java and Redis
+Cranberry Search Engine Kernel
 ================================
 [![Build Status](https://magnum.travis-ci.com/zts1993/CranberrySearchEngine.svg?token=BUhpyUqs3x5XU96NN9my&branch=master)](https://magnum.travis-ci.com/zts1993/CranberrySearchEngine)
 
@@ -21,6 +21,7 @@ Email: cse(@)zts1993.com
 
 # Milestone:
  - v0.1 2015.3.22 First init
+ - v0.2 2015.3.28 First integration (no spider)
 
 
 2015/3/22

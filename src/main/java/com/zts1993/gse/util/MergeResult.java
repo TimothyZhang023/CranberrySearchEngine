@@ -35,6 +35,11 @@ public class MergeResult {
         return urlInfoArrayList;
 
     }
+    public ArrayList<URLInfo> queryResultAll() {
+
+        return InvertedIndexTestTool.queryAll(qyeryKeySet);
+
+    }
 
 
 }

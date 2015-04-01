@@ -5,8 +5,8 @@
 package com.zts1993.gse;
 
 
-import com.zts1993.gse.service.IndexServiceThread;
-import com.zts1993.gse.service.RestApiThread;
+import com.zts1993.gse.thread.IndexServiceThread;
+import com.zts1993.gse.thread.RestApiThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -16,25 +16,32 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
+        try {
 
-        IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
-        indexServiceThread.setDaemon(true);
-        indexServiceThread.start();
+//            SegmentationServiceThread segmentationServiceThread = new SegmentationServiceThread("Main");
+//            segmentationServiceThread.setDaemon(true);
+//            segmentationServiceThread.start();
+//            Thread.sleep(10 * 1000);
+//
+            RestApiThread restApiThread = new RestApiThread("Main");
+            restApiThread.setDaemon(true);
+            restApiThread.start();
+            Thread.sleep(3* 1000);
 
-        RestApiThread restApiThread = new RestApiThread("Main");
-        restApiThread.setDaemon(true);
-        restApiThread.start();
+            IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
+            indexServiceThread.setDaemon(true);
+            indexServiceThread.start();
+            Thread.sleep(10 * 1000);
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         while (true) {
             try {
                 Thread.sleep(1000000);
-
-                //InvertedIndexTestTool.queryIndex("雷锋");
-                //InvertedIndexTestTool.queryIndex("中国");
-                //InvertedIndexTestTool.queryIndex("的");
-                //InvertedIndexTestTool.queryIndex("南京");
-                //InvertedIndexTestTool.queryIndex("cnbeta");
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

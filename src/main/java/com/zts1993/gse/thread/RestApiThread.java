@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.service;
+package com.zts1993.gse.thread;
 
 import com.zts1993.gse.webservice.RestService;
 import org.apache.log4j.LogManager;
