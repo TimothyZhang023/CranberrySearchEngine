@@ -26,5 +26,8 @@
         <module name="GSE" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="GSE" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
