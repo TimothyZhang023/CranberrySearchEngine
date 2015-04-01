@@ -5,68 +5,28 @@
 package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.URLInfo;
+import com.zts1993.gse.bean.WordFreq;
 import com.zts1993.gse.db.redis.RedisDB;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by TianShuo on 2015/3/22.
  */
 public class InvertedIndex {
 
-    private static final int DEFAULT_CAPACITY = 1000;
-
     private static final Logger logger = LogManager.getLogger("InvertedIndex");
-
-//    private static LRUCache<String, ArrayList<URLInfo>> invertedIndexMap;
-
-    static {
-//        initInvertedIndex();
-    }
 
     public InvertedIndex() {
     }
 
-//    private static LRUCache<String, ArrayList<URLInfo>> initInvertedIndex() {
-//        if (invertedIndexMap == null) {
-//            synchronized (InvertedIndex.class) {
-//                if (invertedIndexMap == null) {
-//                    logger.info("Init InvertedIndex LRUCache");
-//                    invertedIndexMap = new LRUCache<String, ArrayList<URLInfo>>(DEFAULT_CAPACITY);
-//                }
-//            }
-//        }
-//        return invertedIndexMap;
-//    }
-//
-//    public LRUCache<String, ArrayList<URLInfo>> getInvertedIndex() {
-//        if (invertedIndexMap == null) {
-//            initInvertedIndex();
-//        }
-//        return invertedIndexMap;
-//    }
-
-
-//    public static synchronized int count() {
-//        return invertedIndexMap.size();
-//    }
-
-//    public LRUCache<String, ArrayList<URLInfo>> createInvertedIndex() {
-//
-//        invertedIndexMap = new LRUCache<String, ArrayList<URLInfo>>();
-//
-//        //Todo process here
-//
-//        logger.info("create invertedIndex finished!!");
-//        logger.info("the size of invertedIndex is : " + invertedIndexMap.size());
-//        logger.info("********************************");
-//
-//        return invertedIndexMap;
-//    }
 
     public void addToInvertedIndex(List<Term> termList, String url) {
 
@@ -74,22 +34,40 @@ public class InvertedIndex {
             return;
         }
 
-        Set<String> stringSet=new HashSet<String>() ;
+        ArrayList<WordFreq> stringSet = new ArrayList<WordFreq>();
         Jedis jedis = RedisDB.getJedis();
         Term term;
         String word;
+        WordFreq wordFreq;
+
         Iterator<Term> termIterator = termList.iterator();
         while (termIterator.hasNext()) {
             term = termIterator.next();
             word = term.getRealName();
-            stringSet.add(word);
+
+
+            wordFreq = new WordFreq(word);
+            if (stringSet.contains(wordFreq)) {
+                int index = stringSet.indexOf(wordFreq);
+                wordFreq = stringSet.get(index);
+                wordFreq.setIncr();
+                stringSet.set(index, wordFreq);
+
+            } else {
+                stringSet.add(wordFreq);
+            }
+
+            //  logger.info("Add WordFreq : "+wordFreq.toString());
 
         }
 
-        Iterator<String> stringIterator= stringSet.iterator();
-        while(stringIterator.hasNext()){
-            word = stringIterator.next();
-            jedis.sadd(word, new URLInfo(url).getHash());
+        logger.info(String.format("%s words in %s", stringSet.size(), url));
+
+        Iterator<WordFreq> stringIterator = stringSet.iterator();
+        while (stringIterator.hasNext()) {
+            wordFreq = stringIterator.next();
+            //  jedis.sadd(wordFreq.getWord(), new URLInfo(url).getHash());
+            jedis.zadd(wordFreq.getWord(), 1.0 * wordFreq.getCount(), new URLInfo(url).getHash());
         }
 
         RedisDB.closeJedis(jedis);
@@ -98,25 +76,19 @@ public class InvertedIndex {
 
 
     public ArrayList<URLInfo> query(String key) {
-        ArrayList<URLInfo> stringArrayList;//= invertedIndexMap.get(key);
-
-//        if (stringArrayList == null) {
-//            logger.info("LRU Read Cache missed!");
+        ArrayList<URLInfo> stringArrayList;
 
         stringArrayList = new ArrayList<URLInfo>();
 
         Jedis jedis = RedisDB.getJedis();
-        Set<String> querySet = jedis.smembers(key);
+        //  Set<String> querySet = jedis.smembers(key);
+        Set<String> querySet = jedis.zrange(key, 0, -1);
         RedisDB.closeJedis(jedis);
 
         for (String urlHash : querySet) {
             stringArrayList.add(URLInfo.getURLInfoByHash(urlHash));
         }
-        //          invertedIndexMap.put(key, stringArrayList);
-//        } else {
-////            logger.info("LRU Read Cache hit~");
-//
-//        }
+
 
         return stringArrayList;
     }
@@ -135,6 +107,8 @@ public class InvertedIndex {
         for (String urlHash : querySet) {
             stringArrayList.add(URLInfo.getURLInfoByHash(urlHash));
         }
+
+
 
         return stringArrayList;
     }

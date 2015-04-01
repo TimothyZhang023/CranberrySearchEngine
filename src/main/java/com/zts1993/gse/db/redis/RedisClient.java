@@ -35,8 +35,8 @@ public class RedisClient implements IRedisClient {
     private void initialPool(String ip, int port) {
         // 池基本配置
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(500);
-        config.setMaxIdle(100);
+        config.setMaxTotal(1500);
+        config.setMaxIdle(10);
         // config.setMaxWait(1000l);
         //config.setTestOnBorrow(false);
 
