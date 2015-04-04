@@ -5,8 +5,8 @@
 package com.zts1993.gse.util;
 
 import com.zts1993.gse.filter.TermFilter;
-import com.zts1993.wc.common.SegmentationFactory;
-import com.zts1993.wc.util.ISegmentation;
+import com.zts1993.gse.segmentation.common.SegmentationFactory;
+import com.zts1993.gse.segmentation.util.ISegmentation;
 import org.ansj.domain.Term;
 
 import java.util.HashSet;

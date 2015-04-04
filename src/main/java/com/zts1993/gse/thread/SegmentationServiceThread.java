@@ -4,8 +4,8 @@
 
 package com.zts1993.gse.thread;
 
-import com.zts1993.wc.common.SegmentationFactory;
-import com.zts1993.wc.util.ISegmentation;
+import com.zts1993.gse.segmentation.common.SegmentationFactory;
+import com.zts1993.gse.segmentation.util.ISegmentation;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ public class SegmentationServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("SegmentationServiceThread");
 
-    private static final int DEFAULT_INTERVAL = 60*1000;
+    private static final int DEFAULT_INTERVAL = 60 * 1000;
 
 
     public SegmentationServiceThread(String name) {

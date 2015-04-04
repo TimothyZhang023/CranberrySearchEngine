@@ -6,7 +6,7 @@ package com.zts1993.gse;
 
 
 import com.zts1993.gse.thread.IndexServiceThread;
-import com.zts1993.gse.thread.RestApiThread;
+import com.zts1993.gse.thread.RestApiServiceThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -23,10 +23,10 @@ public class Main {
 //            segmentationServiceThread.start();
 //            Thread.sleep(10 * 1000);
 //
-            RestApiThread restApiThread = new RestApiThread("Main");
-            restApiThread.setDaemon(true);
-            restApiThread.start();
-            Thread.sleep(3* 1000);
+            RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
+            restApiServiceThread.setDaemon(true);
+            restApiServiceThread.start();
+            Thread.sleep(3 * 1000);
 
             IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
             indexServiceThread.setDaemon(true);

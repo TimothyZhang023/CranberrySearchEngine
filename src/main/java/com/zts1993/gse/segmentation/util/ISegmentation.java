@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.wc.util;
+package com.zts1993.gse.segmentation.util;
 
 import org.ansj.domain.Term;
 

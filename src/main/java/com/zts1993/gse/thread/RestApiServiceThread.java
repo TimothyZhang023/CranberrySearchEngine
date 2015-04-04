@@ -13,12 +13,12 @@ import java.io.IOException;
 /**
  * Created by TianShuo on 2015/3/23.
  */
-public class RestApiThread extends Thread {
+public class RestApiServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("RestApiThread");
 
 
-    public RestApiThread(String name) {
+    public RestApiServiceThread(String name) {
 
         super(name);//调用父类带参数的构造方法
 

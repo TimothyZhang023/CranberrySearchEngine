@@ -81,33 +81,33 @@ public class FileCharsetDetector {
     }
 
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
 
-            File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
-            File[] fs = root.listFiles();
+        File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
+        File[] fs = root.listFiles();
 
-            logger.info("Html files to be processed : " + fs.length);
-
-
-            for (int i = 0; i < fs.length; i++) {
+        logger.info("Html files to be processed : " + fs.length);
 
 
-                if (!fs[i].isDirectory()) {
-                    try {
-
-                        String path = fs[i].getAbsolutePath();
-
-                        logger.info(String.format("Path: %s Encode %s", path,FileCharsetDetector.getFileEncode(path) ));
+        for (int i = 0; i < fs.length; i++) {
 
 
-                    } catch (Exception e) {
-                        logger.error(e.getMessage());
-                        logger.error(e.getStackTrace());
-                    }
+            if (!fs[i].isDirectory()) {
+                try {
 
+                    String path = fs[i].getAbsolutePath();
+
+                    logger.info(String.format("Path: %s Encode %s", path, FileCharsetDetector.getFileEncode(path)));
+
+
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                    logger.error(e.getStackTrace());
                 }
 
-
             }
+
+
         }
+    }
 }

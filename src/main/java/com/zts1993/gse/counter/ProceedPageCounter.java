@@ -2,24 +2,24 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.util;
+package com.zts1993.gse.counter;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by TianShuo on 2015/3/29.
  */
-public class MutliThreadCounter {
+public class ProceedPageCounter {
 
 
-    private static AtomicInteger counter_integer= new AtomicInteger(0);
+    private static AtomicInteger counter_integer = new AtomicInteger(0);
 
 
-    public static int sum(){
-       return counter_integer.get();
+    public static int sum() {
+        return counter_integer.get();
     }
 
-    public static int incr(){
+    public static int incr() {
         return counter_integer.getAndIncrement();
     }
 

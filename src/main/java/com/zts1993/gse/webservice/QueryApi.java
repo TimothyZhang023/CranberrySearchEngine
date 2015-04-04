@@ -42,20 +42,19 @@ public class QueryApi {
 
         DivideQuery divideQuery = new DivideQuery(keyword);
         MergeResult mergeResult = new MergeResult(divideQuery.divide());
-        ArrayList<URLInfo> urlInfoArrayList=mergeResult.queryResult();
+        ArrayList<URLInfo> urlInfoArrayList = mergeResult.queryResult();
 
         System.out.println(urlInfoArrayList);
 
 
-        StringBuilder resStringBuilder=new StringBuilder(String.format("Query %s Result :\n",keyword) );
-        for (URLInfo urlInfo:urlInfoArrayList){
+        StringBuilder resStringBuilder = new StringBuilder(String.format("Query %s Result :\n", keyword));
+        for (URLInfo urlInfo : urlInfoArrayList) {
             resStringBuilder.append("\n");
             resStringBuilder.append(urlInfo.toString());
         }
 
         return resStringBuilder.toString();
     }
-
 
 
 }

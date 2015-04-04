@@ -5,6 +5,7 @@
 package com.zts1993.gse.db;
 
 import com.zts1993.gse.db.redis.RedisDB;
+import com.zts1993.gse.db.redis.RedisShardedDB;
 import redis.clients.jedis.*;
 
 import java.util.Iterator;
@@ -23,8 +24,8 @@ public class RedisClientTest {
     public RedisClientTest() {
         jedis = RedisDB.getJedis();
         jedisPool = RedisDB.getJedisPool();
-        shardedJedis = RedisDB.getShardedJedis();
-        shardedJedisPool = RedisDB.getShardedJedisPool();
+        shardedJedis = RedisShardedDB.getShardedJedis();
+        shardedJedisPool = RedisShardedDB.getShardedJedisPool();
     }
 
     public Jedis getJedis() {

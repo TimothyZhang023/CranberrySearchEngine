@@ -5,9 +5,8 @@
 package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.thread.GenIndexFromFileTask;
 import com.zts1993.gse.util.ConfigurationUtil;
-import com.zts1993.gse.util.MutliThreadCounter;
+import com.zts1993.gse.counter.ProceedPageCounter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -101,7 +100,7 @@ public class InvertedIndexTestTool {
                     endMili = System.currentTimeMillis();
                     //logger.info("Time elapsed："+getTimeDes(endMili-startMili));
                     if (((endMili - startMili) / 1000 / 60 > 0) && (i % 10 == 1)) {
-                        logger.info("Current speed：" + ((double) MutliThreadCounter.sum()) / ((double) (endMili - startMili) / 1000.0 / 60.0) + " pages/min");
+                        logger.info("Current speed：" + ((double) ProceedPageCounter.sum()) / ((double) (endMili - startMili) / 1000.0 / 60.0) + " pages/min");
                     }
 
                     Thread.sleep(100);

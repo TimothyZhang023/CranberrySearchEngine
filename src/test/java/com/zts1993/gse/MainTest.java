@@ -9,7 +9,7 @@ import com.zts1993.gse.encrypt.StringEncryptTest;
 import com.zts1993.gse.index.InvertedIndexTest;
 import com.zts1993.gse.integration.WordSegIntegrationTest;
 import com.zts1993.gse.util.ConfigurationTest;
-import com.zts1993.wc.ansj.AnsjSegmentationTest;
+import com.zts1993.gse.segmentation.ansj.AnsjSegmentationTest;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;

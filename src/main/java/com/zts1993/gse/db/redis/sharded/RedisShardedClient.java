@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.db.redis;
+package com.zts1993.gse.db.redis.sharded;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RedisShardedClient implements IRedisClient {
+public class RedisShardedClient {
 
     private ShardedJedisPool jedisPool;//切片连接池
     private List<JedisShardInfo> shards;

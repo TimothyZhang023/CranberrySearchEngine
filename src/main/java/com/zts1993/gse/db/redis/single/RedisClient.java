@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.db.redis;
+package com.zts1993.gse.db.redis.single;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -13,7 +13,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 
-public class RedisClient implements IRedisClient {
+public class RedisClient {
 
     private JedisPool jedisPool;//非切片连接池
 

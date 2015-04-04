@@ -23,7 +23,8 @@ public class TestApi {
         return "Hello World22";
     }
 
-    @GET @Path("/list")
+    @GET
+    @Path("/list")
     @Produces({"application/json", "application/xml"})
     public String getList() {
         return "list";

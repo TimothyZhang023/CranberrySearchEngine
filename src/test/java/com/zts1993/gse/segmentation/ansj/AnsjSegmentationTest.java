@@ -2,9 +2,9 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.wc.ansj;
+package com.zts1993.gse.segmentation.ansj;
 
-import com.zts1993.wc.common.SegmentationFactory;
+import com.zts1993.gse.segmentation.common.SegmentationFactory;
 import org.ansj.domain.Term;
 
 import java.util.List;
@@ -33,6 +33,9 @@ public class AnsjSegmentationTest {
         List<Term> parse;
 
         System.out.println("Try to Parse : "+ demo);
+
+        parse = SegmentationFactory.getCseSegmentation().parse(demo);
+        System.out.println("CseSegmentation : "+parse);
 
         parse = SegmentationFactory.getBaseSegmentation().parse(demo);
         System.out.println("BaseSegmentation : "+parse);

@@ -6,8 +6,11 @@ package com.zts1993.gse.thread;
 
 import com.alibaba.fastjson.JSON;
 import com.zts1993.gse.bean.IndexNotify;
+import com.zts1993.gse.counter.GenIndexThreadSemaphore;
+import com.zts1993.gse.index.GenIndexFromFileTask;
 import com.zts1993.gse.index.InvertedIndex;
 import com.zts1993.gse.index.InvertedIndexSingleton;
+import com.zts1993.gse.util.ConfigurationUtil;
 import com.zts1993.gse.util.RedisQueue;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -41,57 +44,62 @@ public class IndexServiceThread extends Thread {
 
 
         InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(GenIndexThreadSemaphore.Threads);
         RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
         while (true) {
+            try {
 
-            String jsonText = redisQueue.pop();
-            if (jsonText == null) {
-                try {
-                    logger.info("No task in Queue : IndexNotifyQueue");
-                    Thread.sleep(1000);
+                String jsonText = redisQueue.pop();
+                if (jsonText == null) {
+                    try {
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                        logger.info("No task in Queue : IndexNotifyQueue");
+                        Thread.sleep(1000);
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+
+                    IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
+
+                    try {
+
+                        String filePath = ConfigurationUtil.getValue("HTMLPATH") + indexNotify.getHash_key() + ".html";
+
+                        Runnable runner = new GenIndexFromFileTask(invertedIndex, filePath);
+                        executor.execute(runner);
+
+
+                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(),GenIndexThreadSemaphore.sum()));
+
+                        while (GenIndexThreadSemaphore.sum() < 1) {
+                            Thread.sleep(100);
+                        }
+
+                    } catch (Exception e) {
+
+                        logger.info(e.getMessage());
+                        logger.info(e.getStackTrace());
+
+                    }
+
                 }
 
-            } else {
-//                logger.info(String.format("Queue Info: %s ", jsonText));
-                IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
 
-                try {
+            } catch (Exception e) {
 
-                    String filePath = "C:\\Users\\TianShuo\\PycharmProjects\\CSE-Spider\\html\\" + indexNotify.getHash_key() + ".html";
-
-                    Runnable runner = new GenIndexFromFileTask(invertedIndex,filePath);
-                    executor.execute(runner);
-
-
-                    long queueSize = redisQueue.size();
-                    long sleepTime =10000 / (queueSize + 1);
-
-                    logger.info(String.format("Queue Size: %s and Sleep : %s ms", queueSize,sleepTime));
-                    Thread.sleep(sleepTime);
-
-
-                } catch (Exception e) {
-
-                    logger.info(e.getMessage());
-                    logger.info(e.getStackTrace());
-
-                }
+                //Check if redis got problem
+                logger.info(e.getMessage());
+                logger.info(e.getStackTrace());
 
             }
 
+
         }
-
-
     }
-
-
-
-
 
     public static void main(String[] args) {
 
@@ -111,9 +119,7 @@ public class IndexServiceThread extends Thread {
         }
 
 
-
     }
-
 
 
 }

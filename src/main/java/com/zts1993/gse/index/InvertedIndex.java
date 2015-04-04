@@ -82,7 +82,7 @@ public class InvertedIndex {
 
         Jedis jedis = RedisDB.getJedis();
         //  Set<String> querySet = jedis.smembers(key);
-        Set<String> querySet = jedis.zrange(key, 0, -1);
+        Set<String> querySet = jedis.zrevrange(key, 0, -1);
         RedisDB.closeJedis(jedis);
 
         for (String urlHash : querySet) {
@@ -107,7 +107,6 @@ public class InvertedIndex {
         for (String urlHash : querySet) {
             stringArrayList.add(URLInfo.getURLInfoByHash(urlHash));
         }
-
 
 
         return stringArrayList;

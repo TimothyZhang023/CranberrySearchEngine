@@ -2,11 +2,11 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.wc.common;
+package com.zts1993.gse.segmentation.common;
 
 
-import com.zts1993.wc.ansj.*;
-import com.zts1993.wc.util.ISegmentation;
+import com.zts1993.gse.segmentation.ansj.*;
+import com.zts1993.gse.segmentation.util.ISegmentation;
 
 /**
  * Created by TianShuo on 2015/3/22.
