@@ -15,7 +15,7 @@ public class WordFreq {
 
     public WordFreq(String word) {
         this.word = word;
-        this.count = 0;
+        this.count = 1;
     }
 
     public String getWord() {

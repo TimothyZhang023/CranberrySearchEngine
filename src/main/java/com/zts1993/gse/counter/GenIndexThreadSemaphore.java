@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GenIndexThreadSemaphore {
 
 
-    public static final int Threads=4;
+    public static final int Threads=5;
 
     private static AtomicInteger counter_integer = new AtomicInteger(Threads);
 

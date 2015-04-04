@@ -36,7 +36,7 @@ public class FileCharsetDetector {
         det.Init(new nsICharsetDetectionObserver() {
             public void Notify(String charset) {
                 HtmlCharsetDetector.found = true;
-                System.out.println("CHARSET = " + charset);
+//                System.out.println("CHARSET = " + charset);
             }
         });
 
@@ -61,7 +61,7 @@ public class FileCharsetDetector {
         det.DataEnd();
 
         if (isAscii) {
-            System.out.println("CHARSET = ASCII");
+//            System.out.println("CHARSET = ASCII");
             found = true;
         }
 

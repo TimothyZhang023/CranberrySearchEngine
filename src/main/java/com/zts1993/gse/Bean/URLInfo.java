@@ -7,6 +7,7 @@ package com.zts1993.gse.bean;
 import com.zts1993.gse.db.redis.RedisDB;
 import com.zts1993.gse.encrypt.StringEncrypt;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class URLInfo {
+public class URLInfo implements Comparable<Object>{
 
     private String hash;
     private String url;
@@ -25,7 +26,7 @@ public class URLInfo {
         this.url = url;
         this.hash = new StringEncrypt().encrypt(url);
         this.date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
-        this.rank = 1.0;
+        this.rank = 10.0;
 
         Jedis jedis = RedisDB.getJedis();
         jedis.set(hash + "_url", url);
@@ -34,6 +35,23 @@ public class URLInfo {
         RedisDB.closeJedis(jedis);
 
     }
+
+
+    public URLInfo(String url, double rank) {
+        this.url = url;
+        this.hash = new StringEncrypt().encrypt(url);
+        this.date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+        this.rank = rank;
+
+        Jedis jedis = RedisDB.getJedis();
+        jedis.set(hash + "_url", url);
+        jedis.set(hash + "_date", date);
+        jedis.set(hash + "_rank", rank+"");
+        RedisDB.closeJedis(jedis);
+
+    }
+
+
 
     public URLInfo(String hash, String url, String date, double rank) {
         this.hash = hash;
@@ -46,8 +64,22 @@ public class URLInfo {
         Jedis jedis = RedisDB.getJedis();
         String url = jedis.get(hash + "_url");
         String date = jedis.get(hash + "_date");
-//        double rank=Double.valueOf(jedis.get(hash + "_rank"));
-        double rank = 1.0;
+        double rank=Double.valueOf(jedis.get(hash + "_rank"));
+   //     double rank = 1.0;
+
+        RedisDB.closeJedis(jedis);
+
+        return new URLInfo(hash, url, date, rank);
+    }
+
+    public static URLInfo getURLInfoByHash(Tuple tuple) {
+        String hash=tuple.getElement();
+        double rank=tuple.getScore();
+
+        Jedis jedis = RedisDB.getJedis();
+        String url = jedis.get(hash + "_url");
+        String date = jedis.get(hash + "_date");
+   //     double rank = 1.0;
 
         RedisDB.closeJedis(jedis);
 
@@ -113,5 +145,22 @@ public class URLInfo {
         result = 31 * result + date.hashCode();
         result = 31 * result;
         return result;
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        if(this ==o){
+            return 0;
+        } else if (o!=null && o instanceof URLInfo) {
+            URLInfo u = (URLInfo) o;
+            if(rank>=u.rank){
+                return -1;
+            }else{
+                return 1;
+            }
+        }else{
+            return -1;
+        }
     }
 }

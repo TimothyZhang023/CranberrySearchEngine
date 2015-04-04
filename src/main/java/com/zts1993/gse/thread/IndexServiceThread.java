@@ -69,14 +69,14 @@ public class IndexServiceThread extends Thread {
 
                         String filePath = ConfigurationUtil.getValue("HTMLPATH") + indexNotify.getHash_key() + ".html";
 
-                        Runnable runner = new GenIndexFromFileTask(invertedIndex, filePath);
+                        Runnable runner = new GenIndexFromFileTask(invertedIndex, filePath,indexNotify);
                         executor.execute(runner);
 
 
                         logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(),GenIndexThreadSemaphore.sum()));
 
                         while (GenIndexThreadSemaphore.sum() < 1) {
-                            Thread.sleep(100);
+                            Thread.sleep(50);
                         }
 
                     } catch (Exception e) {

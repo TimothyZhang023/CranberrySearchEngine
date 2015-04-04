@@ -7,7 +7,7 @@
 
     <groupId>com.zts1993</groupId>
     <artifactId>CSE</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
 
     <name>Cranberry Search Engine Kernel</name>
     <description>Cranberry Search Engine Kernel - Base On Java and Redis</description>

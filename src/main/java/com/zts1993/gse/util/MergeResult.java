@@ -6,9 +6,11 @@ package com.zts1993.gse.util;
 
 import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.index.InvertedIndexTestTool;
+import redis.clients.jedis.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -36,11 +38,23 @@ public class MergeResult {
 
     }
 
-    public ArrayList<URLInfo> queryResultAll() {
+    public ArrayList<Tuple> queryResultKeys() {
 
-        return InvertedIndexTestTool.queryAll(qyeryKeySet);
+        ArrayList<Tuple> urlHashKeys = new ArrayList<Tuple>();
+        Iterator<String> iterator = qyeryKeySet.iterator();
+        String aQyeryKeySet = iterator.next();
+        urlHashKeys.addAll(InvertedIndexTestTool.queryKeys(aQyeryKeySet));
+
+        while (iterator.hasNext()) {
+            aQyeryKeySet = iterator.next();
+            urlHashKeys.retainAll(InvertedIndexTestTool.queryKeys(aQyeryKeySet));
+        }
+
+        return urlHashKeys;
 
     }
+
+
 
 
 }

@@ -4,11 +4,12 @@
 
 package com.zts1993.gse.index;
 
+import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.counter.GenIndexThreadSemaphore;
+import com.zts1993.gse.counter.ProceedPageCounter;
 import com.zts1993.gse.segmentation.common.SegmentationFactory;
 import com.zts1993.gse.util.FileCharsetDetector;
 import com.zts1993.gse.util.HtmlParser;
-import com.zts1993.gse.counter.ProceedPageCounter;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -27,12 +28,13 @@ public class GenIndexFromFileTask implements Runnable {
 
     private String filePath;
     private InvertedIndex invertedIndex;
+    private IndexNotify indexNotify;
 
 
-    public GenIndexFromFileTask(InvertedIndex invertedIndex, String filePath) {
-
+    public GenIndexFromFileTask(InvertedIndex invertedIndex, String filePath, IndexNotify indexNotify) {
         this.filePath = filePath;
         this.invertedIndex = invertedIndex;
+        this.indexNotify = indexNotify;
     }
 
     public void run() {
@@ -40,7 +42,7 @@ public class GenIndexFromFileTask implements Runnable {
         try {
             GenIndexThreadSemaphore.decr();
 
-            genIndexFromFile(invertedIndex, filePath);
+            genIndexFromFile();
 
             GenIndexThreadSemaphore.incr();
         } catch (Exception e) {
@@ -53,37 +55,43 @@ public class GenIndexFromFileTask implements Runnable {
     }
 
 
-    private static void genIndexFromFile(InvertedIndex invertedIndex, String filePath) {
+    private void genIndexFromFile() {
         long startMili;// 当前时间对应的毫秒数
         long endMili;
 
         startMili = System.currentTimeMillis();
-        List<Term> termList = readFile(filePath);
+        List<Term> termList = getSegmentation();
         endMili = System.currentTimeMillis();
 
         long timespend1 = endMili - startMili;
 
         startMili = System.currentTimeMillis();
-        invertedIndex.addToInvertedIndex(termList, filePath);
+
+        invertedIndex.addToInvertedIndex(termList, indexNotify.getUrl());
+
         endMili = System.currentTimeMillis();
 
         long timespend2 = endMili - startMili;
 
         logger.info(String.format("No.%s Segmentation: %s ms; InvertedIndex: %s ms",
-                ProceedPageCounter.incr() + 1, timespend1, timespend2 ));
+                ProceedPageCounter.incr() + 1, timespend1, timespend2));
 
     }
 
-    private static List<Term> readFile(String fileName) {
+    /**
+     * Segmentation
+     * @return List of all words
+     */
+    private List<Term> getSegmentation() {
         BufferedReader br;
         StringBuffer buffer = new StringBuffer();
         String line;
 
         try {
 
-            String fileEncode = FileCharsetDetector.getFileEncode(fileName);
+            String fileEncode = FileCharsetDetector.getFileEncode(filePath);
 
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), fileEncode));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), fileEncode));
             while ((line = br.readLine()) != null) {
                 buffer.append(line);
             }

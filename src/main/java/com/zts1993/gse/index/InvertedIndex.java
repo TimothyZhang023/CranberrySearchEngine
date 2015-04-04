@@ -11,11 +11,9 @@ import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -57,9 +55,7 @@ public class InvertedIndex {
                 stringSet.add(wordFreq);
             }
 
-            //  logger.info("Add WordFreq : "+wordFreq.toString());
-
-        }
+         }
 
         logger.info(String.format("%s words in %s", stringSet.size(), url));
 
@@ -67,7 +63,8 @@ public class InvertedIndex {
         while (stringIterator.hasNext()) {
             wordFreq = stringIterator.next();
             //  jedis.sadd(wordFreq.getWord(), new URLInfo(url).getHash());
-            jedis.zadd(wordFreq.getWord(), 1.0 * wordFreq.getCount(), new URLInfo(url).getHash());
+            URLInfo urlInfo=new URLInfo(url);
+            jedis.zadd(wordFreq.getWord(), 1.0 * wordFreq.getCount(), urlInfo.getHash());
         }
 
         RedisDB.closeJedis(jedis);
@@ -93,29 +90,16 @@ public class InvertedIndex {
         return stringArrayList;
     }
 
-    public ArrayList<URLInfo> queryAll(Set<String> key) {
-        ArrayList<URLInfo> stringArrayList;//= invertedIndexMap.get(key);
-
-        stringArrayList = new ArrayList<URLInfo>();
-
+    public Set<Tuple> queryKeys(String key) {
         Jedis jedis = RedisDB.getJedis();
+        Set<Tuple> queryTuple = jedis.zrevrangeWithScores(key, 0, -1);
 
-
-        Set<String> querySet = jedis.sinter(key.toArray(new String[key.size()]));
         RedisDB.closeJedis(jedis);
 
-        for (String urlHash : querySet) {
-            stringArrayList.add(URLInfo.getURLInfoByHash(urlHash));
-        }
-
-
-        return stringArrayList;
+        return queryTuple;
     }
 
-    public static void main(String[] args) {
 
-
-    }
 
 
 }
