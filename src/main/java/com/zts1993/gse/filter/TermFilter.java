@@ -17,7 +17,7 @@ public class TermFilter {
     public static List<Term> process(List<Term> termList) {
         List<Term> termList1;
         termList1 = removeSpace(termList);
-        termList1 = removeKeyword(termList);
+        termList1 = removeKeyword(termList1);
         return termList1;
 
     }

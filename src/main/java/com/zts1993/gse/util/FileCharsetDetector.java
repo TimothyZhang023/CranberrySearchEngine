@@ -28,7 +28,7 @@ public class FileCharsetDetector {
     public static String getFileEncode(String fileName) throws IOException {
 
         // Initalize the nsDetector() ;
-        nsDetector det = new nsDetector(nsPSMDetector.ALL);
+        nsDetector det = new nsDetector(nsPSMDetector.SIMPLIFIED_CHINESE);
 
         // Set an observer...
         // The Notify() will be called when a matching charset is found.
@@ -36,7 +36,6 @@ public class FileCharsetDetector {
         det.Init(new nsICharsetDetectionObserver() {
             public void Notify(String charset) {
                 HtmlCharsetDetector.found = true;
-//                System.out.println("CHARSET = " + charset);
             }
         });
 
@@ -61,15 +60,14 @@ public class FileCharsetDetector {
         det.DataEnd();
 
         if (isAscii) {
-//            System.out.println("CHARSET = ASCII");
             found = true;
         }
 
-        if (!found) {//如果没找到，则找到最可能的那些字符集
+        if (!found) {
             String probs[] = det.getProbableCharsets();
 
 //            for (String prob : probs) {
-//                System.out.println("Probable Charset = " + prob);
+//                logger.debug("Probable Charset = " + prob);
 //
 //            }
 
@@ -86,7 +84,7 @@ public class FileCharsetDetector {
         File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
         File[] fs = root.listFiles();
 
-        logger.info("Html files to be processed : " + fs.length);
+        logger.debug("Html files to be processed : " + fs.length);
 
 
         for (int i = 0; i < fs.length; i++) {
@@ -96,9 +94,7 @@ public class FileCharsetDetector {
                 try {
 
                     String path = fs[i].getAbsolutePath();
-
-                    logger.info(String.format("Path: %s Encode %s", path, FileCharsetDetector.getFileEncode(path)));
-
+                    logger.debug(String.format("Path: %s Encode %s", path, FileCharsetDetector.getFileEncode(path)));
 
                 } catch (Exception e) {
                     logger.error(e.getMessage());

@@ -63,8 +63,8 @@ public class InvertedIndex {
         while (stringIterator.hasNext()) {
             wordFreq = stringIterator.next();
             //  jedis.sadd(wordFreq.getWord(), new URLInfo(url).getHash());
-            URLInfo urlInfo=new URLInfo(url);
-            jedis.zadd(wordFreq.getWord(), 1.0 * wordFreq.getCount(), urlInfo.getHash());
+            URLInfo urlInfo=new URLInfo(url,termList.size());
+            jedis.zadd(wordFreq.getWord(), 10.0 * (wordFreq.getCount()/termList.size()), urlInfo.getHash());
         }
 
         RedisDB.closeJedis(jedis);

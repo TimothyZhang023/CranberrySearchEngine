@@ -5,7 +5,7 @@
 package com.zts1993.gse.segmentation.ansj;
 
 import com.zts1993.gse.filter.TermFilter;
-import com.zts1993.gse.segmentation.util.ISegmentation;
+import com.zts1993.gse.segmentation.common.ISegmentation;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.NlpAnalysis;
 

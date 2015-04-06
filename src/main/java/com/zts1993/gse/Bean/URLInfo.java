@@ -15,103 +15,70 @@ import java.util.Date;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class URLInfo implements Comparable<Object>{
+public class URLInfo implements Comparable<Object> {
 
     private String hash;
     private String url;
     private String date;
     private double rank;
+    private int wordCount;
 
-    public URLInfo(String url) {
+
+    public URLInfo(String url, int wordCount) {
         this.url = url;
-        this.hash = new StringEncrypt().encrypt(url);
+        this.hash = new StringEncrypt(StringEncrypt.SHA_256).encrypt(url);
         this.date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
         this.rank = 10.0;
+        this.wordCount = wordCount;
 
         Jedis jedis = RedisDB.getJedis();
-        jedis.set(hash + "_url", url);
-        jedis.set(hash + "_date", date);
-        jedis.set(hash + "_rank", String.valueOf(rank));
+        jedis.set("url:" + hash, url);
+        jedis.set("date:" + hash, date);
+        jedis.set("rank:" + hash, rank + "");
+        jedis.set("wordCount:" + hash, wordCount + "");
         RedisDB.closeJedis(jedis);
 
     }
 
 
-    public URLInfo(String url, double rank) {
-        this.url = url;
-        this.hash = new StringEncrypt().encrypt(url);
-        this.date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
-        this.rank = rank;
-
-        Jedis jedis = RedisDB.getJedis();
-        jedis.set(hash + "_url", url);
-        jedis.set(hash + "_date", date);
-        jedis.set(hash + "_rank", rank+"");
-        RedisDB.closeJedis(jedis);
-
-    }
-
-
-
-    public URLInfo(String hash, String url, String date, double rank) {
+    public URLInfo(String hash, String url, String date, double rank, int wordCount) {
         this.hash = hash;
         this.url = url;
         this.date = date;
         this.rank = rank;
+        this.wordCount = wordCount;
     }
 
     public static URLInfo getURLInfoByHash(String hash) {
         Jedis jedis = RedisDB.getJedis();
-        String url = jedis.get(hash + "_url");
-        String date = jedis.get(hash + "_date");
-        double rank=Double.valueOf(jedis.get(hash + "_rank"));
-   //     double rank = 1.0;
+
+        String url = jedis.get("url:" + hash);
+        String date = jedis.get("date:" + hash);
+        double rank = Double.valueOf(jedis.get("rank:" + hash));
+        int wordCount = Integer.valueOf(jedis.get("wordCount:" + hash));
 
         RedisDB.closeJedis(jedis);
 
-        return new URLInfo(hash, url, date, rank);
+        return new URLInfo(hash, url, date, rank, wordCount);
     }
 
     public static URLInfo getURLInfoByHash(Tuple tuple) {
-        String hash=tuple.getElement();
-        double rank=tuple.getScore();
+        String hash = tuple.getElement();
+        double rank = tuple.getScore();
 
         Jedis jedis = RedisDB.getJedis();
-        String url = jedis.get(hash + "_url");
-        String date = jedis.get(hash + "_date");
-   //     double rank = 1.0;
+
+        String url = jedis.get("url:" + hash);
+        String date = jedis.get("date:" + hash);
+        int wordCount = Integer.valueOf(jedis.get("wordCount:" + hash));
 
         RedisDB.closeJedis(jedis);
 
-        return new URLInfo(hash, url, date, rank);
+        return new URLInfo(hash, url, date, rank, wordCount);
     }
 
     public String getHash() {
         return hash;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public double getRank() {
-        return rank;
-    }
-
-    public void setRank(double rank) {
-        this.rank = rank;
     }
 
     @Override
@@ -121,6 +88,7 @@ public class URLInfo implements Comparable<Object>{
                 ", url='" + url + '\'' +
                 ", date='" + date + '\'' +
                 ", rank='" + rank + '\'' +
+                ", wordCount='" + wordCount + '\'' +
                 '}';
     }
 
@@ -131,18 +99,13 @@ public class URLInfo implements Comparable<Object>{
 
         URLInfo urlInfo = (URLInfo) o;
 
-        if (!hash.equals(urlInfo.hash)) return false;
-        if (!url.equals(urlInfo.url)) return false;
-        if (!url.equals(urlInfo.date)) return false;
+        return hash.equals(urlInfo.hash);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = hash.hashCode();
-        result = 31 * result + url.hashCode();
-        result = 31 * result + date.hashCode();
         result = 31 * result;
         return result;
     }
@@ -150,16 +113,16 @@ public class URLInfo implements Comparable<Object>{
 
     @Override
     public int compareTo(Object o) {
-        if(this ==o){
+        if (this == o) {
             return 0;
-        } else if (o!=null && o instanceof URLInfo) {
+        } else if (o != null && o instanceof URLInfo) {
             URLInfo u = (URLInfo) o;
-            if(rank>=u.rank){
+            if (rank >= u.rank) {
                 return -1;
-            }else{
+            } else {
                 return 1;
             }
-        }else{
+        } else {
             return -1;
         }
     }

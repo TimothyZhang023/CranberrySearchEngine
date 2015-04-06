@@ -12,22 +12,18 @@ import java.security.NoSuchAlgorithmException;
  */
 public class StringEncrypt {
 
-    public final static String MD5 = "MD5";
-    public final static String SHA_256 = "SHA-256";
-    public final static String SHA_512 = "SHA-512";
-    public final static String SHA_384 = "SHA-384";
-    public final static String SHA_1 = "SHA-1";
+//    public final static String MD5 = "MD5";
+//    public final static String SHA_1 = "SHA-1";
 
-    public final static String SHA = "SHA-256";
+    public final static String SHA_256 = "SHA-256";
+
+//    public final static String SHA_512 = "SHA-512";
+//    public final static String SHA_384 = "SHA-384";
 
     private String encMethod;
 
     public StringEncrypt(String encMethod) {
         this.encMethod = encMethod;
-    }
-
-    public StringEncrypt() {
-        setEncMethod(SHA);
     }
 
     public String getEncMethod() {
@@ -39,8 +35,8 @@ public class StringEncrypt {
     }
 
     public String encrypt(String strSrc) {
-        MessageDigest md = null;
-        String strDes = null;
+        MessageDigest md;
+        String strDes;
 
         byte[] bt = strSrc.getBytes();
         try {
@@ -56,9 +52,9 @@ public class StringEncrypt {
 
     public String bytes2Hex(byte[] bts) {
         String des = "";
-        String tmp = null;
-        for (int i = 0; i < bts.length; i++) {
-            tmp = (Integer.toHexString(bts[i] & 0xFF));
+        String tmp;
+        for (byte bt : bts) {
+            tmp = (Integer.toHexString(bt & 0xFF));
             if (tmp.length() == 1) {
                 des += "0";
             }
@@ -67,7 +63,4 @@ public class StringEncrypt {
         return des;
     }
 
-    public static void main(String args[]) {
-
-    }
 }

@@ -10,7 +10,7 @@ package com.zts1993.gse.encrypt;
 public class StringEncryptTest {
 
     public static void main(String args[]) {
-        StringEncrypt stringEncrypt = new StringEncrypt(StringEncrypt.SHA);
+        StringEncrypt stringEncrypt = new StringEncrypt(StringEncrypt.SHA_256);
         String s;
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);

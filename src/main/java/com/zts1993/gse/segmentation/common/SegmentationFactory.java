@@ -6,7 +6,6 @@ package com.zts1993.gse.segmentation.common;
 
 
 import com.zts1993.gse.segmentation.ansj.*;
-import com.zts1993.gse.segmentation.util.ISegmentation;
 
 /**
  * Created by TianShuo on 2015/3/22.

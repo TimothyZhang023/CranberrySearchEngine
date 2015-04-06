@@ -10,6 +10,7 @@ package com.zts1993.gse.bean;
 public class IndexNotify {
 
     private String url;
+    private String title;
     private String hash_key;
     private String storage_type;
     private String page_encoding;
@@ -55,8 +56,18 @@ public class IndexNotify {
         this.queue_time = queue_time;
     }
 
-    public IndexNotify(String url, String hash_key, String storage_type, String page_encoding, String queue_time) {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public IndexNotify(String url, String title, String hash_key, String storage_type, String page_encoding, String queue_time) {
         this.url = url;
+        this.title = title;
         this.hash_key = hash_key;
         this.storage_type = storage_type;
         this.page_encoding = page_encoding;
@@ -64,5 +75,17 @@ public class IndexNotify {
     }
 
     public IndexNotify() {
+    }
+
+    @Override
+    public String toString() {
+        return "IndexNotify{" +
+                "url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", hash_key='" + hash_key + '\'' +
+                ", storage_type='" + storage_type + '\'' +
+                ", page_encoding='" + page_encoding + '\'' +
+                ", queue_time='" + queue_time + '\'' +
+                '}';
     }
 }

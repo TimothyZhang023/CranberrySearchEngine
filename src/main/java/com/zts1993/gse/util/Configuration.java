@@ -13,40 +13,35 @@ public class Configuration {
     /**
      * 读取properties文件
      */
-    private Properties propertie;
+    private Properties properties;
 
     /**
      * 初始化Configuration类
      */
     public Configuration() {
-        propertie = new Properties();
+        properties = new Properties();
         try {
-            propertie.load(getClass().getClassLoader().getResourceAsStream("configure.properties"));
+            properties.load(getClass().getClassLoader().getResourceAsStream("configure.properties"));
         } catch (FileNotFoundException ex) {
-            System.out.println("文件路径错误或者文件不存在");
+            System.out.println("No such file configure.properties");
             ex.printStackTrace();
         } catch (IOException ex) {
-            System.out.println("装载文件失败!");
+            System.out.println("load configure.properties failed!");
             ex.printStackTrace();
         }
     }
 
     /**
-     * 重载函数，得到key的值
-     *
-     * @param key 取得其值的键
-     * @return key的值
+     * get value by key
+     * @param key String
+     * @return value String
      */
     public String getValue(String key) {
-        if (propertie.containsKey(key)) {
-            String property = propertie.getProperty(key);//得到某一属性的值
-            return property;
+        if (properties.containsKey(key)) {
+            return properties.getProperty(key);
         } else
             return "";
     }
 
-
-    public static void main(String args[]) {
-    }
 
 }

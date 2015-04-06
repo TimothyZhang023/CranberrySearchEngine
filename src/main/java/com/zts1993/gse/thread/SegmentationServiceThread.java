@@ -5,7 +5,7 @@
 package com.zts1993.gse.thread;
 
 import com.zts1993.gse.segmentation.common.SegmentationFactory;
-import com.zts1993.gse.segmentation.util.ISegmentation;
+import com.zts1993.gse.segmentation.common.ISegmentation;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

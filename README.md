@@ -22,9 +22,10 @@ Email: cse(@)zts1993.com
 # Milestone:
  - v0.1 2015.3.22 First init
  - v0.2 2015.3.28 First integration (no spider)
+ - v0.3 2015.4.2 Integration with spiders
 
 
-2015/3/22
+2015/4/5
 
 
 ![GreenStudio](http://green.njut.asia/Public/share/img/logo-png.png "GreenStudio logo")

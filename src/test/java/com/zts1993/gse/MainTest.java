@@ -6,10 +6,8 @@ package com.zts1993.gse;
 
 import com.zts1993.gse.db.RedisClientTest;
 import com.zts1993.gse.encrypt.StringEncryptTest;
-import com.zts1993.gse.index.InvertedIndexTest;
 import com.zts1993.gse.integration.WordSegIntegrationTest;
 import com.zts1993.gse.util.ConfigurationTest;
-import com.zts1993.gse.segmentation.ansj.AnsjSegmentationTest;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -51,11 +49,6 @@ public class MainTest {
         }
 
 
-        try {
-            AnsjSegmentationTest.main(args);
-        } catch (Exception ex) {
-            logger.info("AnsjSegmentation Test failed");
-        }
 
         try {
             WordSegIntegrationTest.main(args);
@@ -63,13 +56,13 @@ public class MainTest {
             logger.info("WordSegIntegration Test failed");
         }
 
-        try {
-            InvertedIndexTest.main(args);
-        } catch (Exception ex) {
-            logger.info(ex.getMessage());
-            logger.info(ex.getStackTrace());
-            logger.info("InvertedIndex Test failed");
-        }
+//        try {
+//            InvertedIndexTest.main(args);
+//        } catch (Exception ex) {
+//            logger.info(ex.getMessage());
+//            logger.info(ex.getStackTrace());
+//            logger.info("InvertedIndex Test failed");
+//        }
 
 
         logger.info("============================");

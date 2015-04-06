@@ -4,7 +4,6 @@
 
 package com.zts1993.gse.util;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,17 +61,6 @@ public class HtmlParser {
         return textStr;//返回文本字符串
     }
 
-
-    public String gb2utf8(String inputString) {
-
-        try {
-            return new String(inputString.getBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            System.err.println(e.getMessage());
-            return "";
-        }
-    }
 
     //URL还需要做的工作，去除一些无用链接，修复一些相对路径的链接
     public ArrayList<URL> urlDetector(String htmlDoc) {

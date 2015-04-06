@@ -35,7 +35,7 @@ public class InvertedIndexTest {
     }
 
     private static void queryIndex(String key) {
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        InvertedIndex invertedIndex = new InvertedIndex();
         ArrayList<URLInfo> urlInfos = invertedIndex.query(key);
 
         if(urlInfos != null)
@@ -51,7 +51,7 @@ public class InvertedIndexTest {
     }
 
     private static void genIndex() {
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        InvertedIndex invertedIndex = new InvertedIndex();
         List<Term> termList=null;
 
         File root = new File(ClassLoader.getSystemResource("html").getPath());

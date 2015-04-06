@@ -9,7 +9,6 @@ import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.counter.GenIndexThreadSemaphore;
 import com.zts1993.gse.index.GenIndexFromFileTask;
 import com.zts1993.gse.index.InvertedIndex;
-import com.zts1993.gse.index.InvertedIndexSingleton;
 import com.zts1993.gse.util.ConfigurationUtil;
 import com.zts1993.gse.util.RedisQueue;
 import org.apache.log4j.LogManager;
@@ -43,7 +42,7 @@ public class IndexServiceThread extends Thread {
         //InvertedIndexTestTool.genIndex();
 
 
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        InvertedIndex invertedIndex = new InvertedIndex();
         ExecutorService executor = Executors.newFixedThreadPool(GenIndexThreadSemaphore.Threads);
         RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
@@ -76,7 +75,7 @@ public class IndexServiceThread extends Thread {
                         logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(),GenIndexThreadSemaphore.sum()));
 
                         while (GenIndexThreadSemaphore.sum() < 1) {
-                            Thread.sleep(50);
+                            Thread.sleep(100);
                         }
 
                     } catch (Exception e) {

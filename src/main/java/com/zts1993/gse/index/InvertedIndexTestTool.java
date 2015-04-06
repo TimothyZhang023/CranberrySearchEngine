@@ -48,11 +48,11 @@ public class InvertedIndexTestTool {
 //    }
 
     public static ArrayList<URLInfo> query(String key) {
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        InvertedIndex invertedIndex = new InvertedIndex();;
         return invertedIndex.query(key);
     }
     public static Set<Tuple> queryKeys(String key) {
-        InvertedIndex invertedIndex = InvertedIndexSingleton.getInstance();
+        InvertedIndex invertedIndex = new InvertedIndex();;
         return invertedIndex.queryKeys(key);
     }
 

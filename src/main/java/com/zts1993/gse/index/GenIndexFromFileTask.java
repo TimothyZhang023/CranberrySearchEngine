@@ -24,7 +24,6 @@ public class GenIndexFromFileTask implements Runnable {
 
     private static final Logger logger = LogManager.getLogger("GenInfexFromFileThread");
 
-    private static final int DEFAULT_INTERVAL = 1000000;
 
     private String filePath;
     private InvertedIndex invertedIndex;
@@ -73,8 +72,10 @@ public class GenIndexFromFileTask implements Runnable {
 
         long timespend2 = endMili - startMili;
 
-        logger.info(String.format("No.%s Segmentation: %s ms; InvertedIndex: %s ms",
-                ProceedPageCounter.incr() + 1, timespend1, timespend2));
+        ProceedPageCounter.incr();
+
+        logger.debug(String.format("No.%s Segmentation: %s ms; InvertedIndex: %s ms",
+                ProceedPageCounter.sum(), timespend1, timespend2));
 
     }
 
