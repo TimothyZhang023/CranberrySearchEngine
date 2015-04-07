@@ -34,7 +34,7 @@
             <groupId>org.ansj</groupId>
             <artifactId>ansj_seg</artifactId>
             <!--<classifier>min</classifier> &lt;!&ndash;如果是需要nlp方式分词,就去掉这个标签&ndash;&gt;-->
-            <version>1.4</version>
+            <version>2.0.8</version>
         </dependency>
 
 

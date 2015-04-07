@@ -10,7 +10,7 @@ import com.zts1993.gse.counter.GenIndexThreadSemaphore;
 import com.zts1993.gse.index.GenIndexFromFileTask;
 import com.zts1993.gse.index.InvertedIndex;
 import com.zts1993.gse.util.ConfigurationUtil;
-import com.zts1993.gse.util.RedisQueue;
+import com.zts1993.gse.db.redis.RedisQueue;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -53,7 +53,7 @@ public class IndexServiceThread extends Thread {
                 if (jsonText == null) {
                     try {
 
-                        logger.info("No task in Queue : IndexNotifyQueue");
+                        logger.debug("No task in Queue : IndexNotifyQueue");
                         Thread.sleep(1000);
 
                     } catch (InterruptedException e) {
@@ -92,8 +92,8 @@ public class IndexServiceThread extends Thread {
 
                 //Check if redis got problem
                 logger.info(e.getMessage());
-                logger.info(e.getStackTrace());
 
+                e.printStackTrace();
             }
 
 

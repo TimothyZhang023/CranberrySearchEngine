@@ -45,12 +45,6 @@ public class SegmentationFactoryTest {
     }
 
     @Test
-    public void testGetCseSegmentation() throws Exception {
-        parse = SegmentationFactory.getCseSegmentation().parse(demo);
-
-    }
-
-    @Test
     public void testGetBaseSegmentation() throws Exception {
         parse = SegmentationFactory.getBaseSegmentation().parse(demo);
 

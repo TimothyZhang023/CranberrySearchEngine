@@ -2,9 +2,8 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.util;
+package com.zts1993.gse.db.redis;
 
-import com.zts1993.gse.db.redis.RedisDB;
 import redis.clients.jedis.Jedis;
 
 /**

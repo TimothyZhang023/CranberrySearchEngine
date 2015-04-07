@@ -4,7 +4,6 @@
 
 package com.zts1993.gse.db.redis;
 
-import com.zts1993.gse.db.redis.single.RedisClient;
 import com.zts1993.gse.util.ConfigurationUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

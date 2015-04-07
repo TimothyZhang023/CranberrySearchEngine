@@ -4,14 +4,6 @@
 
 package com.zts1993.gse.bean;
 
-import com.zts1993.gse.db.redis.RedisDB;
-import com.zts1993.gse.encrypt.StringEncrypt;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Tuple;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by TianShuo on 2015/3/22.
  */
@@ -23,22 +15,7 @@ public class URLInfo implements Comparable<Object> {
     private double rank;
     private int wordCount;
 
-
-    public URLInfo(String url, int wordCount) {
-        this.url = url;
-        this.hash = new StringEncrypt(StringEncrypt.SHA_256).encrypt(url);
-        this.date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
-        this.rank = 10.0;
-        this.wordCount = wordCount;
-
-        Jedis jedis = RedisDB.getJedis();
-        jedis.set("url:" + hash, url);
-        jedis.set("date:" + hash, date);
-        jedis.set("rank:" + hash, rank + "");
-        jedis.set("wordCount:" + hash, wordCount + "");
-        RedisDB.closeJedis(jedis);
-
-    }
+    private int hits = 1;
 
 
     public URLInfo(String hash, String url, String date, double rank, int wordCount) {
@@ -49,32 +26,27 @@ public class URLInfo implements Comparable<Object> {
         this.wordCount = wordCount;
     }
 
-    public static URLInfo getURLInfoByHash(String hash) {
-        Jedis jedis = RedisDB.getJedis();
-
-        String url = jedis.get("url:" + hash);
-        String date = jedis.get("date:" + hash);
-        double rank = Double.valueOf(jedis.get("rank:" + hash));
-        int wordCount = Integer.valueOf(jedis.get("wordCount:" + hash));
-
-        RedisDB.closeJedis(jedis);
-
-        return new URLInfo(hash, url, date, rank, wordCount);
+    public void addHit() {
+        this.hits++;
     }
 
-    public static URLInfo getURLInfoByHash(Tuple tuple) {
-        String hash = tuple.getElement();
-        double rank = tuple.getScore();
+    public int getHits() {
+        return hits;
+    }
 
-        Jedis jedis = RedisDB.getJedis();
+    public double getRank() {
+        return rank;
+    }
 
-        String url = jedis.get("url:" + hash);
-        String date = jedis.get("date:" + hash);
-        int wordCount = Integer.valueOf(jedis.get("wordCount:" + hash));
+    public double addRank(double rank1) {
+        this.rank = rank1 + rank;
+        return this.rank;
+    }
 
-        RedisDB.closeJedis(jedis);
 
-        return new URLInfo(hash, url, date, rank, wordCount);
+
+    public void setRank(double rank) {
+        this.rank = rank;
     }
 
     public String getHash() {
@@ -117,8 +89,11 @@ public class URLInfo implements Comparable<Object> {
             return 0;
         } else if (o != null && o instanceof URLInfo) {
             URLInfo u = (URLInfo) o;
-            if (rank >= u.rank) {
+
+            if (rank > u.rank) {
                 return -1;
+            } else if (rank == u.rank) {
+                return 0;
             } else {
                 return 1;
             }

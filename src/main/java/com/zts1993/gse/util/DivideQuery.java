@@ -8,6 +8,8 @@ import com.zts1993.gse.filter.TermFilter;
 import com.zts1993.gse.segmentation.common.SegmentationFactory;
 import com.zts1993.gse.segmentation.common.ISegmentation;
 import org.ansj.domain.Term;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +21,8 @@ import java.util.Set;
  */
 public class DivideQuery {
 
+    private static final Logger logger = LogManager.getLogger("DivideQuery");
+
     private String queryKey;
 
 
@@ -28,6 +32,9 @@ public class DivideQuery {
 
 
     public Set<String> divide() {
+
+        StringBuilder sb= new StringBuilder("Segmentation of :");
+        sb.append(queryKey);
 
         ISegmentation iSegmentation = SegmentationFactory.getDefaultSegmentation();
         List<Term> termList = iSegmentation.parse(queryKey);
@@ -42,10 +49,15 @@ public class DivideQuery {
                 termIterator.remove();
 //              continue;
             } else {
+                sb.append(" ");
+                sb.append(term.getRealName());
                 qyeryKeySet.add(term.getRealName());
             }
 
         }
+
+        logger.info(sb.toString());
+
 
         return qyeryKeySet;
 

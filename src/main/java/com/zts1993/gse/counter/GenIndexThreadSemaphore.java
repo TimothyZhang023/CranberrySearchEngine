@@ -17,15 +17,15 @@ public class GenIndexThreadSemaphore {
     private static AtomicInteger counter_integer = new AtomicInteger(Threads);
 
 
-    public static int sum() {
+    public synchronized static int sum() {
         return counter_integer.get();
     }
 
-    public static int incr() {
+    public synchronized static int incr() {
         return counter_integer.getAndIncrement();
     }
 
-    public static int decr() {
+    public synchronized static int decr() {
         return counter_integer.getAndDecrement();
     }
 

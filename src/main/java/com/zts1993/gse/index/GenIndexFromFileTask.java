@@ -47,15 +47,14 @@ public class GenIndexFromFileTask implements Runnable {
         } catch (Exception e) {
 
             logger.info(e.getMessage());
-            logger.info(e.getStackTrace());
-
+            e.printStackTrace();
         }
 
     }
 
 
     private void genIndexFromFile() {
-        long startMili;// 当前时间对应的毫秒数
+        long startMili;
         long endMili;
 
         startMili = System.currentTimeMillis();
@@ -81,6 +80,7 @@ public class GenIndexFromFileTask implements Runnable {
 
     /**
      * Segmentation
+     *
      * @return List of all words
      */
     private List<Term> getSegmentation() {
@@ -110,7 +110,7 @@ public class GenIndexFromFileTask implements Runnable {
 
 
         List<Term> parse;
-        parse = SegmentationFactory.getIndexSegmentation().parse(text);
+        parse = SegmentationFactory.getDefaultSegmentation().parse(text);
 
 
         return parse;

@@ -16,15 +16,12 @@ public class Pager {
     private int end;// 结束行
     private int totalPage; // 共多少页
 
-
-    public Pager() {
-    }
-
-
     public Pager(int curPage, int pageSize, int totalRow) {
         this.curPage = curPage;
         this.pageSize = pageSize;
         this.totalRow = totalRow;
+        this.totalPage=totalRow/pageSize+1;
+
     }
 
     public int getCurPage() {
@@ -51,13 +48,6 @@ public class Pager {
         return end;
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
 
     public int getTotalRow() {
         return totalRow;
@@ -75,6 +65,7 @@ public class Pager {
     }
 
     public int getTotalPage() {
+
 
         return this.totalPage;
     }

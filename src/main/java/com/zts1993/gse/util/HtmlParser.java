@@ -4,9 +4,6 @@
 
 package com.zts1993.gse.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,39 +59,56 @@ public class HtmlParser {
     }
 
 
-    //URL还需要做的工作，去除一些无用链接，修复一些相对路径的链接
-    public ArrayList<URL> urlDetector(String htmlDoc) {
-        final String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
-        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+//    //URL还需要做的工作，去除一些无用链接，修复一些相对路径的链接
+//    public ArrayList<URL> urlDetector(String htmlDoc) {
+//        final String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
+//        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+//
+//        ArrayList<URL> allURLs = new ArrayList<URL>();
+//
+//        Matcher matcher = pattern.matcher(htmlDoc);
+//        String tempURL;
+//        //初次匹配到的url是形如：<a href="http://bbs.life.sina.com.cn/" target="_blank">
+//        //为此，需要进行下一步的处理，把真正的url抽取出来，可以对于前两个"之间的部分进行记录得到url
+//        while (matcher.find()) {
+//            try {
+//
+//                tempURL = matcher.group();
+//                tempURL = tempURL.substring(tempURL.indexOf("\"") + 1);
+//                if (!tempURL.contains("\""))
+//                    continue;
+//
+//                tempURL = tempURL.substring(0, tempURL.indexOf("\""));
+//                //System.out.println(tempURL);
+//                //即使在之前的处理下，还是有可能发生意外的，比如，程序用的是相对的url
+//                //这样，这个字符串就不可以用于url的初始化，我们先把这部分省略不考虑
+//                //之后可以写一个补充host的方法将这些url补齐
+//                if (tempURL.startsWith("http"))
+//                    allURLs.add(new URL(tempURL));
+//
+//
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return allURLs;
+//    }
 
-        ArrayList<URL> allURLs = new ArrayList<URL>();
 
-        Matcher matcher = pattern.matcher(htmlDoc);
-        String tempURL;
-        //初次匹配到的url是形如：<a href="http://bbs.life.sina.com.cn/" target="_blank">
-        //为此，需要进行下一步的处理，把真正的url抽取出来，可以对于前两个"之间的部分进行记录得到url
-        while (matcher.find()) {
-            try {
-
-                tempURL = matcher.group();
-                tempURL = tempURL.substring(tempURL.indexOf("\"") + 1);
-                if (!tempURL.contains("\""))
-                    continue;
-
-                tempURL = tempURL.substring(0, tempURL.indexOf("\""));
-                //System.out.println(tempURL);
-                //即使在之前的处理下，还是有可能发生意外的，比如，程序用的是相对的url
-                //这样，这个字符串就不可以用于url的初始化，我们先把这部分省略不考虑
-                //之后可以写一个补充host的方法将这些url补齐
-                if (tempURL.startsWith("http"))
-                    allURLs.add(new URL(tempURL));
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+    public static String escapeQueryChars(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            // These characters are part of the query syntax and must be escaped
+            if (c == '\\' || c == '+' || c == '-' || c == '!'  || c == '(' || c == ')' || c == ':'
+                    || c == '^' || c == '[' || c == ']' || c == '\"' || c == '{' || c == '}' || c == '~'
+                    || c == '*' || c == '?' || c == '|' || c == '&'  || c == ';' || c == '/'
+                    || Character.isWhitespace(c)) {
+                sb.append('\\');
             }
+            sb.append(c);
         }
-        return allURLs;
+        return sb.toString();
     }
 
 }

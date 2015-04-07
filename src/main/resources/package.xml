@@ -35,7 +35,7 @@
 
         <!-- 把项目的配置文件，打包进zip文件的config目录 -->
         <fileSet>
-            <directory>${project.basedir}\src\main\config</directory>
+            <directory>${project.basedir}\src\main\resources</directory>
             <outputDirectory>config</outputDirectory>
             <includes>
                 <include>*.xml</include>

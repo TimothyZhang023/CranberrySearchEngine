@@ -5,12 +5,10 @@
 package com.zts1993.gse.webservice;
 
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.util.DivideQuery;
-import com.zts1993.gse.util.MergeResult;
+import com.zts1993.gse.index.InvertedIndex;
 import com.zts1993.gse.util.Pager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import redis.clients.jedis.Tuple;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,7 +17,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Created by TianShuo on 2015/3/23.
@@ -27,6 +27,9 @@ import java.util.*;
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/query/{keyword}")
 public class QueryApi {
+
+    private int curPage = 1;
+    private int pageSize = 40;
 
     private static final Logger logger = LogManager.getLogger("QueryApi");
 
@@ -41,41 +44,34 @@ public class QueryApi {
         startMili = System.currentTimeMillis();
 
         MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
-        logger.info(queryParams);
-
-        MultivaluedMap<String, String> pathParams = ui.getPathParameters();
-        logger.info(pathParams);
-
-        DivideQuery divideQuery = new DivideQuery(keyword);
-        MergeResult mergeResult = new MergeResult(divideQuery.divide());
-//        ArrayList<URLInfo> urlInfoArrayList = mergeResult.queryResult();
-        ArrayList<Tuple> urlHashIds = mergeResult.queryResultKeys();
-
-
-        int curPage = 1;
-        int pageSize = 40;
-        int totalRow = urlHashIds.size();
-
         if (queryParams.containsKey("p")) {
             curPage = Integer.valueOf(queryParams.getFirst("p"));
         }
+
+
+
+        InvertedIndex invertedIndex = new InvertedIndex();
+        ArrayList<URLInfo> urlInfoArrayList = invertedIndex.query(keyword);
+
+
+        endMili = System.currentTimeMillis();
+
+
+        Collections.sort(urlInfoArrayList);
+
+        //render page
+        StringBuilder resStringBuilder = getRenderedResult(keyword, startMili, endMili, pageSize, urlInfoArrayList.size(), curPage, urlInfoArrayList);
+        return resStringBuilder.toString();
+    }
+
+    private StringBuilder getRenderedResult(String keyword, long startMili, long endMili, int pageSize, int totalRow, int curPage, ArrayList<URLInfo> urlInfoArrayList) {
 
         Pager pager = new Pager(curPage, pageSize, totalRow);
         pager.setCurPage(curPage);
 
         logger.info("Pager Info:" + pager.toString());
 
-        endMili = System.currentTimeMillis();
-
         StringBuilder resStringBuilder = new StringBuilder(String.format("Query %s with %s Result in %s ms :\n", keyword, totalRow, endMili - startMili));
-
-        ArrayList<URLInfo> urlInfoArrayList=new ArrayList<URLInfo>();
-
-        for(Tuple urlHashId:urlHashIds){
-            urlInfoArrayList.add(URLInfo.getURLInfoByHash(urlHashId));
-        }
-
-        Collections.sort(urlInfoArrayList);
 
         int i = 0;
         for (Iterator<URLInfo> iterator = urlInfoArrayList.iterator(); iterator.hasNext() && i < pager.getStart() + pageSize; i++) {
@@ -83,18 +79,11 @@ public class QueryApi {
             if (i > pager.getStart()) {
                 resStringBuilder.append("\n");
                 resStringBuilder.append(urlInfo.toString());
-
-
             }
 
         }
-
-
-
-
-        resStringBuilder.append(String.format("\nCurrent page %s with total %s pages", pager.getCurPage(),pager.getTotalPage()));
-
-        return resStringBuilder.toString();
+        resStringBuilder.append(String.format("\nCurrent page %s with total %s pages", pager.getCurPage(), pager.getTotalPage()));
+        return resStringBuilder;
     }
 
 

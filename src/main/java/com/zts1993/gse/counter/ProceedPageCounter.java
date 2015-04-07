@@ -15,11 +15,11 @@ public class ProceedPageCounter {
     private static AtomicInteger counter_integer = new AtomicInteger(0);
 
 
-    public static int sum() {
+    public synchronized static int sum() {
         return counter_integer.get();
     }
 
-    public static int incr() {
+    public synchronized static int incr() {
         return counter_integer.getAndIncrement();
     }
 

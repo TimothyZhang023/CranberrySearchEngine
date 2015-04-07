@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.db.redis.single;
+package com.zts1993.gse.db.redis;
 
 /**
  * Created by TianShuo on 2015/3/22.
@@ -30,9 +30,9 @@ public class RedisClient {
         config.setMaxTotal(1500);
         config.setMaxIdle(10);
         // config.setMaxWait(1000l);
-        //config.setTestOnBorrow(false);
+        config.setTestOnBorrow(true);
 
-        jedisPool = new JedisPool(config, ip, 6379);
+        jedisPool = new JedisPool(config, ip, port);
     }
 
 

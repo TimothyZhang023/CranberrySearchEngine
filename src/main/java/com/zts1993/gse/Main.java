@@ -26,7 +26,7 @@ public class Main {
             RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
             restApiServiceThread.setDaemon(true);
             restApiServiceThread.start();
-            Thread.sleep(3 * 1000);
+//            Thread.sleep(3 * 1000);
 
             IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
             indexServiceThread.setDaemon(true);
