@@ -16,8 +16,7 @@ public class Pager {
     private int end;// 结束行
     private int totalPage; // 共多少页
 
-    public Pager(int curPage, int pageSize, int totalRow) {
-        this.curPage = curPage;
+    public Pager(int pageSize, int totalRow) {
         this.pageSize = pageSize;
         this.totalRow = totalRow;
         this.totalPage=totalRow/pageSize+1;

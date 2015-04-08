@@ -4,9 +4,11 @@
 
 package com.zts1993.gse.webservice;
 
-import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.index.InvertedIndexTool;
 import com.zts1993.gse.bean.Pager;
+import com.zts1993.gse.bean.URLInfo;
+import com.zts1993.gse.html.FetchLocalHtmlFile;
+import com.zts1993.gse.html.IFetchHtml;
+import com.zts1993.gse.index.InvertedIndexTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -39,9 +41,7 @@ public class QueryApi {
     @Produces("text/plain")
     public String getQueryResult(@Context UriInfo ui, @PathParam("keyword") String keyword) {
 
-        long startMili;// 当前时间对应的毫秒数
-        long endMili;
-        startMili = System.currentTimeMillis();
+
 
         MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
         if (queryParams.containsKey("p")) {
@@ -49,36 +49,40 @@ public class QueryApi {
         }
 
 
-
         InvertedIndexTool invertedIndexTool = new InvertedIndexTool();
         ArrayList<URLInfo> urlInfoArrayList = invertedIndexTool.query(keyword);
 
 
-        endMili = System.currentTimeMillis();
 
 
         Collections.sort(urlInfoArrayList);
 
         //render page
-        StringBuilder resStringBuilder = getRenderedResult(keyword, startMili, endMili, pageSize, urlInfoArrayList.size(), curPage, urlInfoArrayList);
+        StringBuilder resStringBuilder = getRenderedResult(keyword, pageSize, curPage, urlInfoArrayList);
         return resStringBuilder.toString();
     }
 
-    private StringBuilder getRenderedResult(String keyword, long startMili, long endMili, int pageSize, int totalRow, int curPage, ArrayList<URLInfo> urlInfoArrayList) {
-
-        Pager pager = new Pager(curPage, pageSize, totalRow);
+    private StringBuilder getRenderedResult(String keyword,  int pageSize, int curPage, ArrayList<URLInfo> urlInfoArrayList) {
+        int totalRow = urlInfoArrayList.size();
+        Pager pager = new Pager(pageSize, totalRow);
         pager.setCurPage(curPage);
 
         logger.info("Pager Info:" + pager.toString());
 
-        StringBuilder resStringBuilder = new StringBuilder(String.format("Query %s with %s Result in %s ms :\n", keyword, totalRow, endMili - startMili));
+        StringBuilder resStringBuilder = new StringBuilder(String.format("Query %s with %s Result :\n", keyword, totalRow));
 
 
-        List<URLInfo> urlInfoList=   urlInfoArrayList.subList(pager.getStart(), pager.getStart() + pageSize);
+
+        List<URLInfo> urlInfoList = urlInfoArrayList.subList(pager.getStart(), pager.getEnd());
 
         for (URLInfo urlInfo : urlInfoList) {
             resStringBuilder.append("\n");
             resStringBuilder.append(urlInfo.toString());
+
+            IFetchHtml iFetchHtml=new FetchLocalHtmlFile(urlInfo.getDocId());
+            resStringBuilder.append(iFetchHtml.fetch());
+
+
         }
         resStringBuilder.append(String.format("\nCurrent page %s with total %s pages", pager.getCurPage(), pager.getTotalPage()));
         return resStringBuilder;
