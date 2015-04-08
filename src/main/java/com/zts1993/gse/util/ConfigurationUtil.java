@@ -29,4 +29,12 @@ public class ConfigurationUtil {
         return getConfiguration().getValue(key);
     }
 
+    public static String getValue(String key, String default1) {
+        String res = getConfiguration().getValue(key);
+        if (res.equals("")) {
+            return default1;
+        }
+        return res;
+    }
+
 }

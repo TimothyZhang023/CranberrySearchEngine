@@ -15,15 +15,23 @@ public class StringEncryptTest {
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);
 
-        stringEncrypt.setEncMethod("MD5");
+        stringEncrypt.setEncMethod(StringEncrypt.MD5);
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);
 
-        stringEncrypt.setEncMethod("SHA-1");
+        stringEncrypt.setEncMethod(StringEncrypt.SHA_1);
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);
 
-        stringEncrypt.setEncMethod("SHA-512");
+        stringEncrypt.setEncMethod(StringEncrypt.SHA_256);
+        s = stringEncrypt.encrypt("timothy");
+        System.out.println(s);
+
+        stringEncrypt.setEncMethod(StringEncrypt.SHA_384);
+        s = stringEncrypt.encrypt("timothy");
+        System.out.println(s);
+
+        stringEncrypt.setEncMethod(StringEncrypt.SHA_512);
         s = stringEncrypt.encrypt("timothy");
         System.out.println(s);
     }

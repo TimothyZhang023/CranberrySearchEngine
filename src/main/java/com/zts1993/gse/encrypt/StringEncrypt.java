@@ -12,13 +12,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public class StringEncrypt {
 
-//    public final static String MD5 = "MD5";
-//    public final static String SHA_1 = "SHA-1";
+    public final static String MD5 = "MD5";
+    public final static String SHA_1 = "SHA-1";
 
     public final static String SHA_256 = "SHA-256";
 
-//    public final static String SHA_512 = "SHA-512";
-//    public final static String SHA_384 = "SHA-384";
+    public final static String SHA_512 = "SHA-512";
+    public final static String SHA_384 = "SHA-384";
 
     private String encMethod;
 

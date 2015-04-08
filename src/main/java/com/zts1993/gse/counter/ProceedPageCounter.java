@@ -23,9 +23,5 @@ public class ProceedPageCounter {
         return counter_integer.getAndIncrement();
     }
 
-//    public static int decr(){
-//        return counter_integer.getAndDecrement();
-//    }
-
 
 }

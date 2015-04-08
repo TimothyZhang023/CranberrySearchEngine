@@ -24,8 +24,9 @@ public class RedisDB {
             synchronized (RedisDB.class) {
                 if (redisClient == null) {
                     redisClient = new RedisClient(
-                            ConfigurationUtil.getValue("RedisServerIp"),
-                            Integer.parseInt(ConfigurationUtil.getValue("RedisServerPort"))
+                            ConfigurationUtil.getValue("RedisServerIp", "127.0.0.1"),
+                            Integer.parseInt(ConfigurationUtil.getValue("RedisServerPort", "6379")),
+                            Integer.parseInt(ConfigurationUtil.getValue("RedisServerPoolSize", "5000"))
                     );
                 }
             }

@@ -14,6 +14,9 @@ import java.util.List;
  */
 public class TermFilter {
 
+
+
+
     public static List<Term> process(List<Term> termList) {
         List<Term> termList1;
         termList1 = removeSpace(termList);
@@ -25,13 +28,18 @@ public class TermFilter {
     private static List<Term> removeSpace(List<Term> termList) {
         Term term;
         Iterator<Term> termIterator = termList.iterator();
+        StopWordsFilter stopWordsFilter=new StopWordsFilter();
         while (termIterator.hasNext()) {
             term = termIterator.next();
             if (term.getRealName().trim().equals("")) {
                 termIterator.remove();
-//              continue;
+                continue;
             }
-            // System.out.println(term.getRealName());
+            if (stopWordsFilter.isPuncOrStopWords(term.getRealName().trim())) {
+                termIterator.remove();
+                continue;
+            }
+//            System.out.println(String.format("%s : %s",term.getRealName(),term.score()));
         }
 
         return termList;

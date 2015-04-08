@@ -19,7 +19,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by TianShuo on 2015/3/23.
@@ -73,14 +73,12 @@ public class QueryApi {
 
         StringBuilder resStringBuilder = new StringBuilder(String.format("Query %s with %s Result in %s ms :\n", keyword, totalRow, endMili - startMili));
 
-        int i = 0;
-        for (Iterator<URLInfo> iterator = urlInfoArrayList.iterator(); iterator.hasNext() && i < pager.getStart() + pageSize; i++) {
-            URLInfo urlInfo = iterator.next();
-            if (i > pager.getStart()) {
-                resStringBuilder.append("\n");
-                resStringBuilder.append(urlInfo.toString());
-            }
 
+        List<URLInfo> urlInfoList=   urlInfoArrayList.subList(pager.getStart(), pager.getStart() + pageSize);
+
+        for (URLInfo urlInfo : urlInfoList) {
+            resStringBuilder.append("\n");
+            resStringBuilder.append(urlInfo.toString());
         }
         resStringBuilder.append(String.format("\nCurrent page %s with total %s pages", pager.getCurPage(), pager.getTotalPage()));
         return resStringBuilder;
