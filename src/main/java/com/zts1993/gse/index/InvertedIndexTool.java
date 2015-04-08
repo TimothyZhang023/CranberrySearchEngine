@@ -93,13 +93,13 @@ public class InvertedIndexTool {
 
             String cWord = entry.getKey().toString();
             Integer termCount = (Integer) entry.getValue();
-//            double tf = (1.0 * termCount) / (1.0 * htmlDoc.getWordCount());
-            double tf = java.lang.Math.log(
-                    (1.0 * termCount)
-                            /
-                            (1.0 * htmlDoc.getWordCount())
-                   )
-                    + 1;
+            double tf = (1.0 * termCount) / (1.0 * htmlDoc.getWordCount());
+//            double tf = java.lang.Math.log(
+//                    (1.0 * termCount)
+//                            /
+//                            (1.0 * htmlDoc.getWordCount())
+//                   )
+//                    + 1;
 
             try {
                 jedis.zadd(cWord, tf, htmlDoc.getDocId());
