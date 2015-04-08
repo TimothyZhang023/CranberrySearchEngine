@@ -23,7 +23,7 @@ public class StopWordsFilter {
 
     public boolean isPuncOrStopWords(String words) {
         if (vector.contains(words)) {
-             return true;
+            return true;
         }
         return false;
     }

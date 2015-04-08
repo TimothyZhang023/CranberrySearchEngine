@@ -17,14 +17,14 @@ public class RedisClient {
 
     private JedisPool jedisPool;//非切片连接池
 
-    public RedisClient(String ip, int port,int poolsize) {
-        initialPool(ip, port,poolsize);
+    public RedisClient(String ip, int port, int poolsize) {
+        initialPool(ip, port, poolsize);
     }
 
     /**
      * 初始化非切片池
      */
-    private void initialPool(String ip, int port,int poolsize) {
+    private void initialPool(String ip, int port, int poolsize) {
         // 池基本配置
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(poolsize);

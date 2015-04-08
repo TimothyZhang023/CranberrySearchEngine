@@ -37,7 +37,7 @@ public class InvertedIndexGenerationTask implements Runnable {
 
             logger.error(e.getMessage());
             e.printStackTrace();
-        }finally {
+        } finally {
             InvertedIndexThreadSemaphore.incr();
         }
 

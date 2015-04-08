@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.util;
 
+import com.zts1993.gse.bean.Factors;
 import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.db.logic.URLInfoLogic;
 import com.zts1993.gse.db.redis.RedisDB;
@@ -16,10 +17,7 @@ import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by TianShuo on 2015/3/28.
@@ -65,7 +63,7 @@ public class QueryResult {
 
         for (String eachKeywords : queryWordsSet) {
 
-            Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, 5000);
+            Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, Factors.MaxFetchPerWord);
 
             Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
@@ -104,7 +102,7 @@ public class QueryResult {
         }
 
         //update rank
-        for (int position = 0; position < urlInfoArrayList.size(); position++) {
+        for (int position = 0; position < urlInfoArrayList.size()&&position < Factors.MaxFetchPerRequest ; position++) {
             double coord = urlInfoArrayList.get(position).getHits() * 1.0 / queryWordsCount * 1.0;
             URLInfo preUrlInfo = urlInfoArrayList.get(position);
             preUrlInfo.setRank(preUrlInfo.getRank() * coord);
@@ -113,6 +111,8 @@ public class QueryResult {
         }
 
         RedisDB.closeJedis(jedis);
+
+        Collections.sort(urlInfoArrayList);
 
         return urlInfoArrayList;
 

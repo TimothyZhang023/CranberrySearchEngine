@@ -15,8 +15,6 @@ import java.util.List;
 public class TermFilter {
 
 
-
-
     public static List<Term> process(List<Term> termList) {
         List<Term> termList1;
         termList1 = removeSpace(termList);
@@ -28,7 +26,7 @@ public class TermFilter {
     private static List<Term> removeSpace(List<Term> termList) {
         Term term;
         Iterator<Term> termIterator = termList.iterator();
-        StopWordsFilter stopWordsFilter=new StopWordsFilter();
+        StopWordsFilter stopWordsFilter = new StopWordsFilter();
         while (termIterator.hasNext()) {
             term = termIterator.next();
             if (term.getRealName().trim().equals("")) {

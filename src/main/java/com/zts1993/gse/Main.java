@@ -13,10 +13,9 @@ import org.apache.log4j.Logger;
 
 public class Main {
 
-    /***
+    /**
      * add arg "-disableApi true" to disable RestApiService
      * add arg "-disableIndex true" to disable IndexService
-     *
      */
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
@@ -29,20 +28,19 @@ public class Main {
             Args.setArgs(args);
 
 
-
-            if(Args.getArgs("disableApi").equals("TRUE")){
+            if (Args.getArgs("disableApi").equals("TRUE")) {
                 logger.info("RestApiServiceThread will not start up due to args");
 
-            }else{
+            } else {
                 RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
                 restApiServiceThread.setDaemon(true);
                 restApiServiceThread.start();
             }
 
-            if(Args.getArgs("disableIndex").equals("TRUE")){
+            if (Args.getArgs("disableIndex").equals("TRUE")) {
                 logger.info("IndexServiceThread will not start up due to args");
 
-            }else{
+            } else {
                 IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
                 indexServiceThread.setDaemon(true);
                 indexServiceThread.start();

@@ -33,6 +33,7 @@ public class Configuration {
 
     /**
      * get value by key
+     *
      * @param key String
      * @return value String
      */

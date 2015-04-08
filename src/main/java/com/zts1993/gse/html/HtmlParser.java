@@ -59,6 +59,52 @@ public class HtmlParser {
     }
 
 
+    //&quot;&nbsp;
+    public String html2SimpleText(String inputString) {
+        String htmlStr = inputString; //含html标签的字符串
+        String textStr = "";
+        Pattern p_script, p_style, p_html, p_filter;
+        Matcher m_script, m_style, m_html, m_filter;
+
+        try {
+            //定义script正则式{或<script[^>]*?>[\s\S]*?<\/script> }
+            String regEx_script = "<script[^>]*?>[\\s\\S]*?</script>";
+            //定义style正则式{或<style[^>]*?>[\s\S]*?<\/style> }
+            String regEx_style = "<style[^>]*?>[\\s\\S]*?</style>";
+            //定义HTML标签的正则表达式
+            String regEx_html = "<[^>]+>";
+            String[] filter = {"&quot;", "&nbsp;"};
+
+            p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
+            m_script = p_script.matcher(htmlStr);
+            htmlStr = m_script.replaceAll(""); //过滤script标签
+
+            p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
+            m_style = p_style.matcher(htmlStr);
+            htmlStr = m_style.replaceAll(""); //过滤style标签
+
+            p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
+            m_html = p_html.matcher(htmlStr);
+            htmlStr = m_html.replaceAll(""); //过滤html标签
+
+            //过滤style标签    &quot; &nbsp;
+            for (int i = 0; i < filter.length; i++) {
+                p_filter = Pattern.compile(filter[i], Pattern.CASE_INSENSITIVE);
+                m_filter = p_filter.matcher(htmlStr);
+                htmlStr = m_filter.replaceAll("");
+            }
+
+
+            textStr =  htmlStr.replaceAll("\\s*", "");
+
+        } catch (Exception e) {
+            System.err.println("Html2Text: " + e.getMessage());
+        }
+
+        return textStr;//返回文本字符串
+    }
+
+
 //    //URL还需要做的工作，去除一些无用链接，修复一些相对路径的链接
 //    public ArrayList<URL> urlDetector(String htmlDoc) {
 //        final String patternString = "<[a|A]\\s+href=([^>]*\\s*>)";
@@ -100,9 +146,9 @@ public class HtmlParser {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             // These characters are part of the query syntax and must be escaped
-            if (c == '\\' || c == '+' || c == '-' || c == '!'  || c == '(' || c == ')' || c == ':'
+            if (c == '\\' || c == '+' || c == '-' || c == '!' || c == '(' || c == ')' || c == ':'
                     || c == '^' || c == '[' || c == ']' || c == '\"' || c == '{' || c == '}' || c == '~'
-                    || c == '*' || c == '?' || c == '|' || c == '&'  || c == ';' || c == '/'
+                    || c == '*' || c == '?' || c == '|' || c == '&' || c == ';' || c == '/'
                     || Character.isWhitespace(c)) {
                 sb.append('\\');
             }

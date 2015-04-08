@@ -6,9 +6,9 @@ package com.zts1993.gse.thread;
 
 import com.alibaba.fastjson.JSON;
 import com.zts1993.gse.bean.IndexNotify;
-import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import com.zts1993.gse.db.redis.RedisQueue;
 import com.zts1993.gse.index.InvertedIndexGenerationTask;
+import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

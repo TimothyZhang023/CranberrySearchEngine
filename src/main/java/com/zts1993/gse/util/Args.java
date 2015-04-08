@@ -26,10 +26,10 @@ public class Args {
         for (int i = 0; i < args.length; i++) {
             if (i % 2 == 0 && i + 1 < args.length) {
                 settings.put(args[i].toUpperCase(), args[i + 1].toUpperCase());
-                System.out.println(String.format("key:%s,value:%s",args[i], args[i + 1]));
+                System.out.println(String.format("key:%s,value:%s", args[i], args[i + 1]));
             }
         }
-            }
+    }
 
     public static String getArgs(String key) {
         if (settings.containsKey("-" + key.toUpperCase())) {

@@ -43,9 +43,6 @@ public class RedisQueue {
     }
 
 
-
-
-
     private String key;
 
     public RedisQueue(String key) {
