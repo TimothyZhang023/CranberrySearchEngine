@@ -67,8 +67,19 @@ public class QueryResult {
 
             Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, 5000);
 
-            double idf = java.lang.Math.log(totolPages * 1.0 - st.size() + 0.5 / st.size() + 0.5);
-//            double idf = java.lang.Math.log(totolPages * 1.0 / st.size() + 1);
+            Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
+
+
+//            double idf = java.lang.Math.log(
+//                    (
+//                            totolPages * 1.0 - stSize + 0.5
+//                    ) / (
+//                            stSize + 0.5
+//
+//                    ));
+
+            //inverse frequency smooth
+            double idf = java.lang.Math.log(totolPages * 1.0 / stSize + 1);
 
             for (Tuple tuple : st) {
                 URLInfo newUrlInfo = URLInfoLogic.getSimpleURLInfo(tuple, idf);

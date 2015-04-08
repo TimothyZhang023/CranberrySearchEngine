@@ -9,13 +9,32 @@ package com.zts1993.gse.bean;
  */
 public class Factors {
 
-    public static double cpuOverUse = 1.0;
 
-    public static double titleWeight = 10;
-    public static double contentWeight = 1;
+    /**
+     * double const
+     */
+    public static double cpuOverUse = 1.0;
+    public static int titleWeight = 10;
+    public static int contentWeight = 1;
+
+
+    /**
+     * int const
+     */
+    public static int LowerQuality = 20;
+
+
+    /**
+     * bm25 const
+     */
     public static double BM25K1 = 2;
     public static double BM25b = 0.75;
     public static double BM25avg = 400;
 
 
+    /**
+     * Word Count Punish
+     */
+    public static int PunishThreshold = 200;
+    public static int PunishMultiplier = 1000;
 }

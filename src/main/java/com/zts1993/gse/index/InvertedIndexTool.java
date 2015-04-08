@@ -87,14 +87,19 @@ public class InvertedIndexTool {
         startMili = System.currentTimeMillis();
 
 
-
-         URLInfoLogic.storeURLInfo(htmlDoc);
+        URLInfoLogic.storeURLInfo(htmlDoc);
 
         for (Map.Entry entry : wordFreqMap.entrySet()) {
 
             String cWord = entry.getKey().toString();
             Integer termCount = (Integer) entry.getValue();
-            double tf = (1.0 * termCount) / (1.0 * htmlDoc.getWordCount());
+//            double tf = (1.0 * termCount) / (1.0 * htmlDoc.getWordCount());
+            double tf = java.lang.Math.log(
+                    (1.0 * termCount)
+                            /
+                            (1.0 * htmlDoc.getWordCount())
+                   )
+                    + 1;
 
             try {
                 jedis.zadd(cWord, tf, htmlDoc.getDocId());
@@ -119,7 +124,6 @@ public class InvertedIndexTool {
 
     public ArrayList<URLInfo> query(String queryWords) {
         ArrayList<URLInfo> stringArrayList = new ArrayList<URLInfo>();
-
 
 
         QueryResult queryResult = new QueryResult(queryWords);
