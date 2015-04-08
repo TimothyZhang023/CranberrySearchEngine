@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.segmentation.common;
 
+import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

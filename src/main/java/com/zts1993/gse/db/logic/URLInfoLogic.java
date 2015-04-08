@@ -5,9 +5,10 @@
 package com.zts1993.gse.db.logic;
 
 import com.zts1993.gse.bean.Factors;
+import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.bean.URLInfo;
+import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.redis.RedisDB;
-import com.zts1993.gse.encrypt.StringEncrypt;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
@@ -20,31 +21,28 @@ import java.util.Date;
 public class URLInfoLogic {
 
 
-    public static URLInfo genURLInfo(String url, int wordCount) {
-        String hash = new StringEncrypt(StringEncrypt.SHA_256).encrypt(url);
-        String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
-        double rank = 10.0;
-
+    public static void storeURLInfo(HtmlDoc htmlDoc) {
+        String hash = htmlDoc.getDocId();
         Jedis jedis = RedisDB.getJedis();
 
         if (!jedis.exists("wordCount:" + hash)) {
-            KVCache.set("url:" + hash, url, jedis);
+
+            int wordCount = htmlDoc.getWordCount();
+            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+
+
+            KVCache.set("url:" + hash, hash, jedis);
             KVCache.set("date:" + hash, date, jedis);
             KVCache.set("wordCount:" + hash, wordCount + "", jedis);
-            jedis.set("rank:" + hash, rank + "");
         }
 
         RedisDB.closeJedis(jedis);
-
-        return new URLInfo(hash, url, date, rank, wordCount);
 
     }
 
 
     public static URLInfo getURLInfo(Tuple tuple, double idf) {
         String hash = tuple.getElement();
-        //double rank = tuple.getScore()*idf;
-
 
         Jedis jedis = RedisDB.getJedis();
 

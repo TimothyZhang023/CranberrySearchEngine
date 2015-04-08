@@ -2,14 +2,14 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.counter;
+package com.zts1993.gse.index;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by TianShuo on 2015/3/29.
  */
-public class GenIndexThreadSemaphore {
+public class InvertedIndexThreadSemaphore {
 
 
     public static final int Threads = Runtime.getRuntime().availableProcessors();

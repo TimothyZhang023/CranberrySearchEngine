@@ -6,11 +6,9 @@ package com.zts1993.gse.thread;
 
 import com.alibaba.fastjson.JSON;
 import com.zts1993.gse.bean.IndexNotify;
-import com.zts1993.gse.counter.GenIndexThreadSemaphore;
-import com.zts1993.gse.index.GenIndexFromFileTask;
-import com.zts1993.gse.index.InvertedIndex;
-import com.zts1993.gse.util.ConfigurationUtil;
+import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import com.zts1993.gse.db.redis.RedisQueue;
+import com.zts1993.gse.index.InvertedIndexGenerationTask;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -41,9 +39,7 @@ public class IndexServiceThread extends Thread {
 
         //InvertedIndexTestTool.genIndex();
 
-
-        InvertedIndex invertedIndex = new InvertedIndex();
-        ExecutorService executor = Executors.newFixedThreadPool(GenIndexThreadSemaphore.Threads);
+        ExecutorService executor = Executors.newFixedThreadPool(InvertedIndexThreadSemaphore.Threads);
         RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
         while (true) {
@@ -59,40 +55,29 @@ public class IndexServiceThread extends Thread {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 } else {
-
-                    IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
-
                     try {
+                        IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
 
-                        String filePath = ConfigurationUtil.getValue("HTMLPATH") + indexNotify.getHash_key() + ".html";
-
-                        Runnable runner = new GenIndexFromFileTask(invertedIndex, filePath,indexNotify);
+                        Runnable runner = new InvertedIndexGenerationTask(indexNotify);
                         executor.execute(runner);
 
+                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
 
-                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(),GenIndexThreadSemaphore.sum()));
-
-                        while (GenIndexThreadSemaphore.sum() < 1) {
+                        while (InvertedIndexThreadSemaphore.sum() < 1) {
                             Thread.sleep(100);
                         }
-
                     } catch (Exception e) {
-
                         logger.info(e.getMessage());
-                        logger.info(e.getStackTrace());
-
+                        e.printStackTrace();
                     }
 
                 }
 
 
             } catch (Exception e) {
-
                 //Check if redis got problem
                 logger.info(e.getMessage());
-
                 e.printStackTrace();
             }
 

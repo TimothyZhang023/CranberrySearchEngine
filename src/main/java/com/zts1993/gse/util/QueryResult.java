@@ -6,13 +6,19 @@ package com.zts1993.gse.util;
 
 import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.db.logic.URLInfoLogic;
-import com.zts1993.gse.index.InvertedIndex;
+import com.zts1993.gse.db.redis.RedisDB;
+import com.zts1993.gse.filter.TermFilter;
+import com.zts1993.gse.segmentation.ISegmentation;
+import com.zts1993.gse.segmentation.SegmentationFactory;
+import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,35 +28,44 @@ public class QueryResult {
 
     private static final Logger logger = LogManager.getLogger("QueryResult");
 
+    private String queryKey;
+
     private Set<String> queryWordsSet = new HashSet<String>();
-    private int totolPages = 1;
 
-    public QueryResult(Set<String> queryWordsSet) {
-        this.queryWordsSet = queryWordsSet;
+
+    public QueryResult(String queryKey) {
+        this.queryKey = queryKey;
     }
 
 
-    public QueryResult(Set<String> queryWordsSet, int totolPages) {
-        this.queryWordsSet = queryWordsSet;
-        this.totolPages = totolPages;
+    public void divide() {
+
+        ISegmentation iSegmentation = SegmentationFactory.getDefaultSegmentation();
+        List<Term> termList = iSegmentation.parse(queryKey);
+        termList = TermFilter.process(termList);
 
 
-    }
+        queryWordsSet = new HashSet<String>();
+        for (Term term : termList) {
+            queryWordsSet.add(term.getRealName());
+        }
 
-    public static Set<Tuple> queryKeys(String key) {
-        InvertedIndex invertedIndex = new InvertedIndex();
-        return invertedIndex.queryKeys(key);
     }
 
 
     public ArrayList<URLInfo> queryResult() {
 
+        Jedis jedis = RedisDB.getJedis();
         ArrayList<URLInfo> urlInfoArrayList = new ArrayList<URLInfo>();
 
+
+        int totolPages = Integer.parseInt(jedis.get("totolPages"));
         int queryWordsCount = queryWordsSet.size();
 
+
         for (String eachKeywords : queryWordsSet) {
-            Set<Tuple> st = queryKeys(eachKeywords);
+
+            Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, 5000);
 
             double idf = java.lang.Math.log(totolPages * 1.0 - st.size() + 0.5 / st.size() + 0.5);
 //            double idf = java.lang.Math.log(totolPages * 1.0 / st.size() + 1);
@@ -64,7 +79,6 @@ public class QueryResult {
                     int index = urlInfoArrayList.indexOf(newUrlInfo);
                     URLInfo preUrlInfo = urlInfoArrayList.get(index);
                     preUrlInfo.addHit();
-                    //  logger.info(String.format("newUrlInfo Rank %s IDF: ,newUrlInfo Rank%s", newUrlInfo.getRank(), preUrlInfo.getRank()));
 
                     preUrlInfo.addRank(newUrlInfo.getRank());
                     urlInfoArrayList.set(index, preUrlInfo);
@@ -87,6 +101,7 @@ public class QueryResult {
 
         }
 
+        RedisDB.closeJedis(jedis);
 
         return urlInfoArrayList;
 

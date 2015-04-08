@@ -4,6 +4,8 @@
 
 package com.zts1993.gse.encrypt;
 
+import com.zts1993.gse.util.StringEncrypt;
+
 /**
  * Created by TianShuo on 2015/3/21.
  */

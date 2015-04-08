@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.encrypt;
+package com.zts1993.gse.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

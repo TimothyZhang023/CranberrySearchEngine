@@ -9,7 +9,7 @@ package com.zts1993.gse.bean;
  */
 public class URLInfo implements Comparable<Object> {
 
-    private String hash;
+    private String docId;
     private String url;
     private String date;
     private double rank;
@@ -18,8 +18,8 @@ public class URLInfo implements Comparable<Object> {
     private int hits = 1;
 
 
-    public URLInfo(String hash, String url, String date, double rank, int wordCount) {
-        this.hash = hash;
+    public URLInfo(String docId, String url, String date, double rank, int wordCount) {
+        this.docId = docId;
         this.url = url;
         this.date = date;
         this.rank = rank;
@@ -49,14 +49,14 @@ public class URLInfo implements Comparable<Object> {
         this.rank = rank;
     }
 
-    public String getHash() {
-        return hash;
+    public String getDocId() {
+        return docId;
     }
 
     @Override
     public String toString() {
         return "URLInfo{" +
-                "hash='" + hash + '\'' +
+                "docId='" + docId + '\'' +
                 ", url='" + url + '\'' +
                 ", date='" + date + '\'' +
                 ", rank='" + rank + '\'' +
@@ -71,13 +71,13 @@ public class URLInfo implements Comparable<Object> {
 
         URLInfo urlInfo = (URLInfo) o;
 
-        return hash.equals(urlInfo.hash);
+        return docId.equals(urlInfo.docId);
 
     }
 
     @Override
     public int hashCode() {
-        int result = hash.hashCode();
+        int result = docId.hashCode();
         result = 31 * result;
         return result;
     }

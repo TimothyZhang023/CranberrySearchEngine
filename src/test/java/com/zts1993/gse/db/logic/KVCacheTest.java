@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.db.logic;
 
+import com.zts1993.gse.db.cache.KVCache;
 import org.junit.Test;
 
 public class KVCacheTest {
@@ -12,7 +13,7 @@ public class KVCacheTest {
 
     @Test
     public void testSet() throws Exception {
-        KVCache.set("KVCacheTest_test","sss");
+        KVCache.set("KVCacheTest_test", "sss");
 
     }
 

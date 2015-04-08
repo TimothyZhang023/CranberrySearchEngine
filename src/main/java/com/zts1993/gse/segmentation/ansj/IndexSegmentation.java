@@ -4,8 +4,7 @@
 
 package com.zts1993.gse.segmentation.ansj;
 
-import com.zts1993.gse.filter.TermFilter;
-import com.zts1993.gse.segmentation.common.ISegmentation;
+import com.zts1993.gse.segmentation.ISegmentation;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.IndexAnalysis;
 
@@ -20,7 +19,7 @@ public class IndexSegmentation implements ISegmentation {
     @Override
     public List<Term> parse(String input) {
 
-        return TermFilter.process(IndexAnalysis.parse(input));
+        return IndexAnalysis.parse(input);
 
     }
 

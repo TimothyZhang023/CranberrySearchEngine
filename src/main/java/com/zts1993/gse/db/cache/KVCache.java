@@ -2,9 +2,8 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.db.logic;
+package com.zts1993.gse.db.cache;
 
-import com.zts1993.gse.db.cache.LRUCache;
 import com.zts1993.gse.db.redis.RedisDB;
 import redis.clients.jedis.Jedis;
 
@@ -14,7 +13,7 @@ import redis.clients.jedis.Jedis;
 public class KVCache {
 
     private static LRUCache<String, String> urlInfoLRUCache;
-    private static final int DEFAULT_CAPACITY = 10000;
+    private static final int DEFAULT_CAPACITY = 50000;
 
     static {
         init();

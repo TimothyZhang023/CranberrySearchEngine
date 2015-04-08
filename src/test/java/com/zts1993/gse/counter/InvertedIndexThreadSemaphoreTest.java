@@ -1,23 +1,24 @@
 package com.zts1993.gse.counter;
 
+import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import org.junit.Test;
 
-public class GenIndexThreadSemaphoreTest {
+public class InvertedIndexThreadSemaphoreTest {
 
 
 
     @Test
     public void testSum() throws Exception {
-        GenIndexThreadSemaphore.sum();
+        InvertedIndexThreadSemaphore.sum();
     }
 
     @Test
     public void testIncr() throws Exception {
-        GenIndexThreadSemaphore.incr();
+        InvertedIndexThreadSemaphore.incr();
     }
 
     @Test
     public void testDecr() throws Exception {
-        GenIndexThreadSemaphore.decr();
+        InvertedIndexThreadSemaphore.decr();
     }
 }

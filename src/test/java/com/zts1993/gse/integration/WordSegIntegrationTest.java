@@ -4,8 +4,8 @@
 
 package com.zts1993.gse.integration;
 
-import com.zts1993.gse.util.HtmlParser;
-import com.zts1993.gse.segmentation.common.SegmentationFactory;
+import com.zts1993.gse.html.HtmlParser;
+import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 
 import java.io.*;

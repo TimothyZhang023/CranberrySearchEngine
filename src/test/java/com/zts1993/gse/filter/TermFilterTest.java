@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.filter;
 
-import com.zts1993.gse.segmentation.common.SegmentationFactory;
+import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 import org.junit.Test;
 

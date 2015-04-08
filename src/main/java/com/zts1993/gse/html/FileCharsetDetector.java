@@ -2,8 +2,9 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.util;
+package com.zts1993.gse.html;
 
+import com.zts1993.gse.util.ConfigurationUtil;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.mozilla.intl.chardet.HtmlCharsetDetector;

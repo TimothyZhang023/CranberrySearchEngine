@@ -5,8 +5,8 @@
 package com.zts1993.gse.webservice;
 
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.index.InvertedIndex;
-import com.zts1993.gse.util.Pager;
+import com.zts1993.gse.index.InvertedIndexTool;
+import com.zts1993.gse.bean.Pager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -50,8 +50,8 @@ public class QueryApi {
 
 
 
-        InvertedIndex invertedIndex = new InvertedIndex();
-        ArrayList<URLInfo> urlInfoArrayList = invertedIndex.query(keyword);
+        InvertedIndexTool invertedIndexTool = new InvertedIndexTool();
+        ArrayList<URLInfo> urlInfoArrayList = invertedIndexTool.query(keyword);
 
 
         endMili = System.currentTimeMillis();

@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.util;
+package com.zts1993.gse.bean;
 
 /**
  * Created by TianShuo on 2015/4/4.
@@ -44,7 +44,6 @@ public class Pager {
     }
 
     public int getEnd() {
-
         return end;
     }
 
@@ -53,20 +52,18 @@ public class Pager {
         return totalRow;
     }
 
-    public void setTotalRow(int totalRow) {
-        totalPage = (totalRow + pageSize - 1) / pageSize;
-        this.totalRow = totalRow;
-        if (totalPage < curPage) {
-            curPage = totalPage;
-            start = pageSize * (curPage - 1);
-            end = totalRow;
-        }
-        end = start + pageSize > totalRow ? totalRow : start + pageSize;
-    }
+//    public void setTotalRow(int totalRow) {
+//        totalPage = (totalRow + pageSize - 1) / pageSize;
+//        this.totalRow = totalRow;
+//        if (totalPage < curPage) {
+//            curPage = totalPage;
+//            start = pageSize * (curPage - 1);
+//            end = totalRow;
+//        }
+//        end = start + pageSize > totalRow ? totalRow : start + pageSize;
+//    }
 
     public int getTotalPage() {
-
-
         return this.totalPage;
     }
 

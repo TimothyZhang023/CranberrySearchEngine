@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.segmentation.common;
+package com.zts1993.gse.segmentation;
 
 
 import com.zts1993.gse.segmentation.ansj.BaseSegmentation;
