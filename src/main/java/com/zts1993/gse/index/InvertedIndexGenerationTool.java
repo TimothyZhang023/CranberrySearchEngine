@@ -6,25 +6,26 @@ package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.Factors;
 import com.zts1993.gse.bean.HtmlDoc;
-import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.db.logic.URLInfoLogic;
 import com.zts1993.gse.db.redis.RedisDB;
-import com.zts1993.gse.util.QueryResult;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class InvertedIndexTool {
+public class InvertedIndexGenerationTool {
 
     private static final Logger logger = LogManager.getLogger("InvertedIndex");
 
-    public InvertedIndexTool() {
+    public InvertedIndexGenerationTool() {
     }
 
     public void addToInvertedIndex(HtmlDoc htmlDoc) {
@@ -121,19 +122,23 @@ public class InvertedIndexTool {
 
     }
 
-
-    public ArrayList<URLInfo> query(String queryWords) {
-        ArrayList<URLInfo> stringArrayList = new ArrayList<URLInfo>();
-
-
-        QueryResult queryResult = new QueryResult(queryWords);
-        queryResult.divide();
-        stringArrayList = queryResult.queryResult();
-
-
-        return stringArrayList;
-
-    }
+//
+//    public ArrayList<URLInfo> query(String queryWords) {
+//        ArrayList<URLInfo> stringArrayList = new ArrayList<URLInfo>();
+//
+//
+//        QueryResult queryResult = new QueryResult(queryWords);
+//        queryResult.divide();
+//
+//        queryResult.getQueryWordsSet();
+//
+//
+//        stringArrayList = queryResult.queryResult();
+//
+//
+//        return stringArrayList;
+//
+//    }
 
 
 }

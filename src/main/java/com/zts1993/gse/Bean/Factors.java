@@ -37,4 +37,14 @@ public class Factors {
      */
     public static int PunishThreshold = 200;
     public static int PunishMultiplier = 1000;
+
+
+    /**
+     * int const
+     */
+    public static int MaxFetchPerWord = 1000;
+    public static int MaxFetchPerRequest = 1000;
+
+
+
 }

@@ -31,7 +31,7 @@ public class URLInfoLogic {
             String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
 
 
-            KVCache.set("url:" + hash, hash, jedis);
+            KVCache.set("url:" + hash, htmlDoc.getUrl(), jedis);
             KVCache.set("date:" + hash, date, jedis);
             KVCache.set("wordCount:" + hash, wordCount + "", jedis);
         }

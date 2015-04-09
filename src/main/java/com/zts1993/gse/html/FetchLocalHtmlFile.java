@@ -27,7 +27,7 @@ public class FetchLocalHtmlFile implements IFetchHtml {
         String line;
 
         try {
-            System.out.println(filePath);
+//            System.out.println(filePath);
             String fileEncode = FileCharsetDetector.getFileEncode(filePath);
             br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), fileEncode));
             while ((line = br.readLine()) != null) {

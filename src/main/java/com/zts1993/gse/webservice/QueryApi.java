@@ -4,12 +4,15 @@
 
 package com.zts1993.gse.webservice;
 
+import com.alibaba.fastjson.JSON;
 import com.zts1993.gse.bean.Pager;
+import com.zts1993.gse.bean.QueryResult;
+import com.zts1993.gse.bean.QueryResultItem;
 import com.zts1993.gse.bean.URLInfo;
 import com.zts1993.gse.html.FetchLocalHtmlFile;
 import com.zts1993.gse.html.HtmlParser;
 import com.zts1993.gse.html.IFetchHtml;
-import com.zts1993.gse.index.InvertedIndexTool;
+import com.zts1993.gse.index.InvertedIndexQueryTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -22,6 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by TianShuo on 2015/3/23.
@@ -38,7 +42,7 @@ public class QueryApi {
     // The Java method will process HTTP GET requests
     @GET
     // The Java method will produce content identified by the MIME Media type "text/plain"
-    @Produces("text/plain")
+    @Produces("application/json")
     public String getQueryResult(@Context UriInfo ui, @PathParam("keyword") String keyword) {
 
 
@@ -47,41 +51,35 @@ public class QueryApi {
             curPage = Integer.valueOf(queryParams.getFirst("p"));
         }
 
+        InvertedIndexQueryTool invertedIndexQueryTool = new InvertedIndexQueryTool(keyword);
+        invertedIndexQueryTool.divide();
 
-        InvertedIndexTool invertedIndexTool = new InvertedIndexTool();
-        ArrayList<URLInfo> urlInfoArrayList = invertedIndexTool.query(keyword);
+        Set<String> keyWordsSet = invertedIndexQueryTool.getQueryWordsSet();
+        ArrayList<URLInfo> urlInfoArrayList = invertedIndexQueryTool.queryResult();
 
 
-        //render page
-        StringBuilder resStringBuilder = getRenderedResult(keyword, pageSize, curPage, urlInfoArrayList);
-        return resStringBuilder.toString();
-    }
-
-    private StringBuilder getRenderedResult(String keyword, int pageSize, int curPage, ArrayList<URLInfo> urlInfoArrayList) {
         int totalRow = urlInfoArrayList.size();
         Pager pager = new Pager(pageSize, totalRow);
         pager.setCurPage(curPage);
+//        logger.debug("Pager Info:" + pager.toString());
 
-        logger.info("Pager Info:" + pager.toString());
-
-        StringBuilder resStringBuilder = new StringBuilder(
-
-        );
-        resStringBuilder.append( String.format("Query %s with %s Result :\n", keyword, totalRow) );
 
         List<URLInfo> urlInfoList = urlInfoArrayList.subList(pager.getStart(), pager.getEnd());
+        ArrayList<QueryResultItem> queryResultItems=new ArrayList<QueryResultItem>();
 
         for (URLInfo urlInfo : urlInfoList) {
-            resStringBuilder.append("\n\n");
-            resStringBuilder.append(urlInfo.toString());
-
+//            logger.debug(urlInfo.toString());
             IFetchHtml iFetchHtml = new FetchLocalHtmlFile(urlInfo.getDocId());
-            resStringBuilder.append(new HtmlParser().html2SimpleText(iFetchHtml.fetch()));
 
+            QueryResultItem queryResultItem=new QueryResultItem(urlInfo,new HtmlParser().html2SimpleText(iFetchHtml.fetch()));
+            queryResultItems.add(queryResultItem);
         }
-        resStringBuilder.append(String.format("\nCurrent page %s with total %s pages", pager.getCurPage(), pager.getTotalPage()));
-        return resStringBuilder;
-    }
 
+        QueryResult queryResult=new QueryResult(keyword,pager,queryResultItems);
+        String jsonRes= JSON.toJSONString(queryResult);
+
+
+        return jsonRes;
+    }
 
 }

@@ -43,7 +43,17 @@ public class URLInfo implements Comparable<Object> {
         return this.rank;
     }
 
+    public String getUrl() {
+        return url;
+    }
 
+    public String getDate() {
+        return date;
+    }
+
+    public int getWordCount() {
+        return wordCount;
+    }
 
     public void setRank(double rank) {
         this.rank = rank;

@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.util;
+package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.Factors;
 import com.zts1993.gse.bean.URLInfo;
@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * Created by TianShuo on 2015/3/28.
  */
-public class QueryResult {
+public class InvertedIndexQueryTool {
 
     private static final Logger logger = LogManager.getLogger("QueryResult");
 
@@ -31,7 +31,7 @@ public class QueryResult {
     private Set<String> queryWordsSet = new HashSet<String>();
 
 
-    public QueryResult(String queryKey) {
+    public InvertedIndexQueryTool(String queryKey) {
         this.queryKey = queryKey;
     }
 
@@ -50,6 +50,9 @@ public class QueryResult {
 
     }
 
+    public Set<String> getQueryWordsSet() {
+        return queryWordsSet;
+    }
 
     public ArrayList<URLInfo> queryResult() {
 

@@ -48,8 +48,8 @@ public class InvertedIndexGenerationTask implements Runnable {
 
         HtmlDoc htmlDoc = getHtmlDoc();
 
-        InvertedIndexTool invertedIndexTool = new InvertedIndexTool();
-        invertedIndexTool.addToInvertedIndex(htmlDoc);
+        InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
+        invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
 
     }
 
