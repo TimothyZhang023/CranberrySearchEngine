@@ -6,8 +6,8 @@ package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.bean.IndexNotify;
-import com.zts1993.gse.html.FetchLocalHtmlFile;
-import com.zts1993.gse.html.IFetchHtml;
+import com.zts1993.gse.html.LocalFsHtmlContentProvider;
+import com.zts1993.gse.html.IHtmlContentProvider;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -56,8 +56,8 @@ public class InvertedIndexGenerationTask implements Runnable {
 
     public HtmlDoc getHtmlDoc() {
 
-        IFetchHtml iFetchHtml = new FetchLocalHtmlFile(indexNotify.getHash_key());
-        String htmlContent = iFetchHtml.fetch();
+        IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(indexNotify.getHash_key());
+        String htmlContent = iHtmlContentProvider.Html();
 
         HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), indexNotify.getTitle(), htmlContent);
         htmlDoc.clean();

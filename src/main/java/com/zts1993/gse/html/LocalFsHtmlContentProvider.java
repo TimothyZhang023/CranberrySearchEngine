@@ -12,15 +12,16 @@ import java.io.*;
 /**
  * Created by TianShuo on 2015/4/8.
  */
-public class FetchLocalHtmlFile implements IFetchHtml {
+public class LocalFsHtmlContentProvider implements IHtmlContentProvider {
 
     private String filePath;
 
-    public FetchLocalHtmlFile(String docId) {
+    public LocalFsHtmlContentProvider(String docId) {
         this.filePath = ConfigurationUtil.getValue("HTMLPATH") + docId + ".html";
     }
 
-    public String fetch() {
+    @Override
+    public String Html() {
 
         BufferedReader br;
         StringBuilder buffer = new StringBuilder();
@@ -40,6 +41,16 @@ public class FetchLocalHtmlFile implements IFetchHtml {
         }
 
         return buffer.toString();
+    }
+
+    @Override
+    public String fetchCleanText() {
+        return new HtmlParser().html2SimpleText(this.Html());
+    }
+
+    @Override
+    public String fetchMarkedCleanText() {
+        return null;
     }
 
 

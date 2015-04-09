@@ -1,6 +1,5 @@
-package com.zts1993.gse.counter;
+package com.zts1993.gse.index;
 
-import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import org.junit.Test;
 
 public class InvertedIndexThreadSemaphoreTest {

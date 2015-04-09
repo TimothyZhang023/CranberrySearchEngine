@@ -6,7 +6,6 @@ package com.zts1993.gse;
 
 import com.zts1993.gse.db.RedisClientTest;
 import com.zts1993.gse.encrypt.StringEncryptTest;
-import com.zts1993.gse.integration.WordSegIntegrationTest;
 import com.zts1993.gse.util.ConfigurationTest;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -50,11 +49,6 @@ public class MainTest {
 
 
 
-        try {
-            WordSegIntegrationTest.main(args);
-        } catch (Exception ex) {
-            logger.info("WordSegIntegration Test failed");
-        }
 
 //        try {
 //            InvertedIndexTest.main(args);

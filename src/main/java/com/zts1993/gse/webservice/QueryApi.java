@@ -9,9 +9,8 @@ import com.zts1993.gse.bean.Pager;
 import com.zts1993.gse.bean.QueryResult;
 import com.zts1993.gse.bean.QueryResultItem;
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.html.FetchLocalHtmlFile;
-import com.zts1993.gse.html.HtmlParser;
-import com.zts1993.gse.html.IFetchHtml;
+import com.zts1993.gse.html.LocalFsHtmlContentProvider;
+import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.index.InvertedIndexQueryTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -65,18 +64,19 @@ public class QueryApi {
 
 
         List<URLInfo> urlInfoList = urlInfoArrayList.subList(pager.getStart(), pager.getEnd());
-        ArrayList<QueryResultItem> queryResultItems=new ArrayList<QueryResultItem>();
+        ArrayList<QueryResultItem> queryResultItems = new ArrayList<QueryResultItem>();
 
         for (URLInfo urlInfo : urlInfoList) {
 //            logger.debug(urlInfo.toString());
-            IFetchHtml iFetchHtml = new FetchLocalHtmlFile(urlInfo.getDocId());
+            IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(urlInfo.getDocId());
+            String content = iHtmlContentProvider.fetchCleanText();
 
-            QueryResultItem queryResultItem=new QueryResultItem(urlInfo,new HtmlParser().html2SimpleText(iFetchHtml.fetch()));
+            QueryResultItem queryResultItem = new QueryResultItem(urlInfo, content);
             queryResultItems.add(queryResultItem);
         }
 
-        QueryResult queryResult=new QueryResult(keyword,pager,queryResultItems);
-        String jsonRes= JSON.toJSONString(queryResult);
+        QueryResult queryResult = new QueryResult(keyword, pager, queryResultItems);
+        String jsonRes = JSON.toJSONString(queryResult);
 
 
         return jsonRes;

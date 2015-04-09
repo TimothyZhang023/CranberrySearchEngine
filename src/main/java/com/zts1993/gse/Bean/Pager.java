@@ -19,7 +19,7 @@ public class Pager {
     public Pager(int pageSize, int totalRow) {
         this.pageSize = pageSize;
         this.totalRow = totalRow;
-        this.totalPage=totalRow/pageSize+1;
+        this.totalPage = totalRow / pageSize + 1;
 
     }
 
@@ -65,6 +65,11 @@ public class Pager {
     public int getTotalPage() {
         return this.totalPage;
     }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
 
     @Override
     public String toString() {
