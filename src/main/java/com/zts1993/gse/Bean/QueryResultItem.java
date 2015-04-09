@@ -28,8 +28,7 @@ public class QueryResultItem {
     }
 
 
-
-    public QueryResultItem(URLInfo urlInfo,String content) {
+    public QueryResultItem(URLInfo urlInfo, String content) {
         this.docId = urlInfo.getDocId();
         this.url = urlInfo.getUrl();
         this.date = urlInfo.getDate();
