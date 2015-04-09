@@ -85,7 +85,7 @@ public class FileCharsetDetector {
         File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
         File[] fs = root.listFiles();
 
-        logger.debug("Html files to be processed : " + fs.length);
+        logger.debug("fetchHtml files to be processed : " + fs.length);
 
 
         for (int i = 0; i < fs.length; i++) {

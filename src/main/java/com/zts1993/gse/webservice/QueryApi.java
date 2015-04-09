@@ -9,8 +9,8 @@ import com.zts1993.gse.bean.Pager;
 import com.zts1993.gse.bean.QueryResult;
 import com.zts1993.gse.bean.QueryResultItem;
 import com.zts1993.gse.bean.URLInfo;
-import com.zts1993.gse.html.LocalFsHtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
+import com.zts1993.gse.html.LocalFsHtmlContentProvider;
 import com.zts1993.gse.index.InvertedIndexQueryTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -69,7 +69,7 @@ public class QueryApi {
         for (URLInfo urlInfo : urlInfoList) {
 //            logger.debug(urlInfo.toString());
             IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(urlInfo.getDocId());
-            String content = iHtmlContentProvider.fetchCleanText();
+            String content = iHtmlContentProvider.fetchMarkedText(keyWordsSet);
 
             QueryResultItem queryResultItem = new QueryResultItem(urlInfo, content);
             queryResultItems.add(queryResultItem);

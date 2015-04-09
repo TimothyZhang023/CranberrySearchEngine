@@ -105,7 +105,7 @@ public class InvertedIndexQueryTool {
         }
 
         //update rank
-        for (int position = 0; position < urlInfoArrayList.size()&&position < Factors.MaxFetchPerRequest ; position++) {
+        for (int position = 0; position < urlInfoArrayList.size() && position < Factors.MaxFetchPerRequest; position++) {
             double coord = urlInfoArrayList.get(position).getHits() * 1.0 / queryWordsCount * 1.0;
             URLInfo preUrlInfo = urlInfoArrayList.get(position);
             preUrlInfo.setRank(preUrlInfo.getRank() * coord);

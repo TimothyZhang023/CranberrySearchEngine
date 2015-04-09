@@ -4,16 +4,18 @@
 
 package com.zts1993.gse.html;
 
+import java.util.Set;
+
 /**
  * Created by TianShuo on 2015/4/8.
  */
 public interface IHtmlContentProvider {
 
-    String Html();
+    String fetchHtml();
 
-    String fetchCleanText();
+    String fetchText();
 
-    String fetchMarkedCleanText();
+    String fetchMarkedText(Set<String> st);
 
 
 }

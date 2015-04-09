@@ -95,7 +95,7 @@ public class HtmlParser {
             }
 
 
-            textStr =  htmlStr.replaceAll("\\s*", "");
+            textStr = htmlStr.replaceAll("\\s*", "");
 
         } catch (Exception e) {
             System.err.println("Html2Text: " + e.getMessage());

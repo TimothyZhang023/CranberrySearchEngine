@@ -22,10 +22,11 @@ public class StopWordsFilter {
     }
 
     public boolean isPuncOrStopWords(String words) {
-        if (vector.contains(words)) {
-            return true;
+        if (vector == null) {
+            initStopWordsList();
         }
-        return false;
+
+        return vector.contains(words);
     }
 
 
@@ -34,16 +35,12 @@ public class StopWordsFilter {
             vector = new Vector<String>();
 
             // read file content from file
-            StringBuffer sb = new StringBuffer("");
-
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("stopwords.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-            String str = null;
+            String str;
 
             while ((str = br.readLine()) != null) {
-                sb.append(str + "/n");
-
                 vector.add(str);
             }
 
