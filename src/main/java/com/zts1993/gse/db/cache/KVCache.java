@@ -12,6 +12,7 @@ import redis.clients.jedis.Jedis;
  */
 public class KVCache {
 
+
     private static LRUCache<String, String> urlInfoLRUCache;
     private static final int DEFAULT_CAPACITY = 50000;
 
@@ -53,6 +54,8 @@ public class KVCache {
         if (value == null) {
             value = jedis.get(key);
             getURLInfoCache().put(key, value);
+
+
         }
         return value;
     }
@@ -72,6 +75,10 @@ public class KVCache {
         getURLInfoCache().put(key, value);
 
         jedis.set(key, value);
+    }
+
+    public static int size() {
+        return getURLInfoCache().size();
     }
 
 

@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by TianShuo on 2015/4/9.
  */
-public class LRUCache<K, V> implements Serializable {
+public class TTLLRUCache<K, V> implements Serializable {
 
     private static final int DEFAULT_CAPACITY = 100;
 
@@ -25,11 +25,11 @@ public class LRUCache<K, V> implements Serializable {
     private static int MINI_ACCESS = 10;
 
 
-    public LRUCache() {
+    public TTLLRUCache() {
         this(DEFAULT_CAPACITY);
     }
 
-    public LRUCache(int capacity) {
+    public TTLLRUCache(int capacity) {
         if (capacity <= 0)
             throw new RuntimeException("缓存容量不得小于0");
         this.maxCapacity = capacity;
