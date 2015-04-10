@@ -59,8 +59,9 @@ public class InvertedIndexGenerationTask implements Runnable {
         IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(indexNotify.getHash_key());
 
         String htmlContent = iHtmlContentProvider.fetchText();
+        String title = iHtmlContentProvider.fetchTitle();
 
-        HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), indexNotify.getTitle(), htmlContent);
+        HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
         htmlDoc.parse();
         htmlDoc.filter();
 

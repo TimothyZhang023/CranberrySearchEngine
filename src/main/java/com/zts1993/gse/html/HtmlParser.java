@@ -58,17 +58,25 @@ public class HtmlParser {
         return textStr;//返回文本字符串
     }
 
+
     public String getHtmlTitle(String inputString) {
         String htmlStr = inputString;
         String textStr = "";
 
-        Pattern p = Pattern.compile("<title>([^</title>].*)</title>");
-        Matcher m = p.matcher(htmlStr);
-        while(m.find()){
-            textStr+= m.group();
+        Matcher matcher;
+
+        matcher = Pattern.compile("<h1>([^</h1>].*?)</h1>").matcher(htmlStr);
+        if (matcher.find()) {
+            return matcher.group().toLowerCase().replace("<h1>", "").replace("</h1>", "");
         }
 
-        return textStr.replace("<title>","").replace("</title>","");
+        matcher = Pattern.compile("<title>([^</title>].*?)</title>").matcher(htmlStr);
+        if (matcher.find()) {
+            return matcher.group().toLowerCase().replace("<title>", "").replace("</title>", "");
+        }
+
+
+        return textStr;
     }
 
 

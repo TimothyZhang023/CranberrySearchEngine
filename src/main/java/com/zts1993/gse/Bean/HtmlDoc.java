@@ -19,7 +19,6 @@ public class HtmlDoc {
     private String url;
     private String title;
     private String content;
-    private String cleanContent;
     private int wordCount;
     private int filteredWordCount;
 
@@ -36,7 +35,7 @@ public class HtmlDoc {
 
     public void parse() {
         parsedTitle = SegmentationFactory.getDefaultSegmentation().parse(title);
-        parsedContent = SegmentationFactory.getDefaultSegmentation().parse(cleanContent);
+        parsedContent = SegmentationFactory.getDefaultSegmentation().parse(content);
         wordCount = parsedContent.size();
 
         //wordCount punish
