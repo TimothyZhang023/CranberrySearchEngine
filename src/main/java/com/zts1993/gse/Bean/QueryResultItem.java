@@ -12,15 +12,17 @@ public class QueryResultItem {
 
     private String docId;
     private String url;
+    private String title;
     private String description;
     private String date;
     private double rank;
     private int wordCount;
 
 
-    public QueryResultItem(String docId, String url, String description, String date, double rank, int wordCount) {
+    public QueryResultItem(String docId, String url,String title, String description, String date, double rank, int wordCount) {
         this.docId = docId;
         this.url = url;
+        this.title = title;
         this.description = description;
         this.date = date;
         this.rank = rank;
@@ -28,13 +30,14 @@ public class QueryResultItem {
     }
 
 
-    public QueryResultItem(URLInfo urlInfo, String content) {
+    public QueryResultItem(URLInfo urlInfo, String content, String title) {
         this.docId = urlInfo.getDocId();
         this.url = urlInfo.getUrl();
         this.date = urlInfo.getDate();
         this.rank = urlInfo.getRank();
         this.wordCount = urlInfo.getWordCount();
         this.description = content;
+        this.title = title;
 
     }
 
@@ -86,11 +89,20 @@ public class QueryResultItem {
         this.wordCount = wordCount;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "QueryResultItem{" +
                 "docId='" + docId + '\'' +
                 ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", date='" + date + '\'' +
                 ", rank=" + rank +

@@ -70,8 +70,9 @@ public class QueryApi {
 //            logger.debug(urlInfo.toString());
             IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(urlInfo.getDocId());
             String content = iHtmlContentProvider.fetchMarkedText(keyWordsSet);
+            String title = iHtmlContentProvider.fetchTitle();
 
-            QueryResultItem queryResultItem = new QueryResultItem(urlInfo, content);
+            QueryResultItem queryResultItem = new QueryResultItem(urlInfo, content, title);
             queryResultItems.add(queryResultItem);
         }
 

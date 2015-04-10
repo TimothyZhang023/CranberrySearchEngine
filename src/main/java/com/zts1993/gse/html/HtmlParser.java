@@ -58,6 +58,19 @@ public class HtmlParser {
         return textStr;//返回文本字符串
     }
 
+    public String getHtmlTitle(String inputString) {
+        String htmlStr = inputString;
+        String textStr = "";
+
+        Pattern p = Pattern.compile("<title>([^</title>].*)</title>");
+        Matcher m = p.matcher(htmlStr);
+        while(m.find()){
+            textStr+= m.group();
+        }
+
+        return textStr.replace("<title>","").replace("</title>","");
+    }
+
 
     //&quot;&nbsp;
     public String html2SimpleText(String inputString) {

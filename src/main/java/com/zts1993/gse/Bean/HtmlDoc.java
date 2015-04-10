@@ -5,7 +5,6 @@
 package com.zts1993.gse.bean;
 
 import com.zts1993.gse.filter.TermFilter;
-import com.zts1993.gse.html.HtmlParser;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 
@@ -34,10 +33,6 @@ public class HtmlDoc {
         this.content = content;
     }
 
-    public void clean() {
-        HtmlParser htmlParser = new HtmlParser();
-        this.cleanContent = htmlParser.html2Text(content);
-    }
 
     public void parse() {
         parsedTitle = SegmentationFactory.getDefaultSegmentation().parse(title);

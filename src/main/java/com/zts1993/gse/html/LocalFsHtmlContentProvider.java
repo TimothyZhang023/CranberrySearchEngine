@@ -16,6 +16,7 @@ import java.util.Set;
 public class LocalFsHtmlContentProvider implements IHtmlContentProvider {
 
     private String filePath;
+    private String content;
 
     public LocalFsHtmlContentProvider(String docId) {
         this.filePath = ConfigurationUtil.getValue("HTMLPATH") + docId + ".html";
@@ -40,14 +41,30 @@ public class LocalFsHtmlContentProvider implements IHtmlContentProvider {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        content = buffer.toString();
         return buffer.toString();
     }
 
     @Override
     public String fetchText() {
-        return new HtmlParser().html2SimpleText(this.fetchHtml());
+        if (this.content == null) {
+            this.fetchHtml();
+        }
+        return new HtmlParser().html2SimpleText(content);
     }
+
+
+
+    @Override
+    public String fetchTitle() {
+        if (this.content == null) {
+            this.fetchHtml();
+        }
+        return new HtmlParser().getHtmlTitle(content);
+    }
+
+
+
 
     @Override
     public String fetchMarkedText(Set<String> st) {

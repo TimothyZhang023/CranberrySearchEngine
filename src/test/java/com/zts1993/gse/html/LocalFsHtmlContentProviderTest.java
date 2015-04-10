@@ -27,8 +27,7 @@ public class LocalFsHtmlContentProviderTest {
 
     @Test
     public void testFetchHtml() throws Exception {
-        String content = fetchLocalHtmlFile.fetchHtml();
-       logger.info(content);
+        fetchLocalHtmlFile.fetchHtml();
     }
 
     @Test

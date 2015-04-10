@@ -15,6 +15,8 @@ public interface IHtmlContentProvider {
 
     String fetchText();
 
+    String fetchTitle();
+
     String fetchMarkedText(Set<String> st);
 
 
