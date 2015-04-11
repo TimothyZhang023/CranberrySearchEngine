@@ -46,5 +46,7 @@ public class Factors {
     public static int MaxRecordPerRequest = 1000;
     public static int MaxRecordPerKey = 1000;
 
+    public static int PageSize = 10;
+
 
 }

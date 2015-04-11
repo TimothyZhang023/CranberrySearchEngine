@@ -19,7 +19,11 @@ public class Pager {
     public Pager(int pageSize, int totalRow) {
         this.pageSize = pageSize;
         this.totalRow = totalRow;
-        this.totalPage = totalRow / pageSize + 1;
+        if( totalRow % pageSize ==0){
+            this.totalPage = totalRow / pageSize ;
+        }else{
+            this.totalPage = totalRow / pageSize + 1;
+        }
 
     }
 

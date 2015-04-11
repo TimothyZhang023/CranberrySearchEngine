@@ -14,7 +14,7 @@ import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.html.LocalFsHtmlContentProvider;
 import com.zts1993.gse.index.comparator.UrlScoreComparator;
 import com.zts1993.gse.index.score.IScore;
-import com.zts1993.gse.index.score.TfIdf;
+import com.zts1993.gse.index.score.Tf_Idf;
 import com.zts1993.gse.segmentation.ISegmentation;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
@@ -75,7 +75,7 @@ public class InvertedIndexQueryTool {
     public void preQueryProcess() {
 
         Jedis jedis = RedisDB.getJedis();
-        IScore scroeCalculator = new TfIdf();
+        IScore scroeCalculator = new Tf_Idf();
 
         int totolPages = Integer.parseInt(jedis.get("totolPages"));
         int queryWordsCount = queryWordsSet.size();
@@ -89,7 +89,7 @@ public class InvertedIndexQueryTool {
             Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, Factors.MaxRecordPerWord);
 
             Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
-            totalResultCount = totalResultCount + stSize;
+
 
             //double idf = java.lang.Math.log((totolPages * 1.0 - stSize + 0.5) / (stSize + 0.5));
 
@@ -136,6 +136,8 @@ public class InvertedIndexQueryTool {
 
 
         }
+
+        totalResultCount = urlScores.size();
 
         //update coord rank
         for (String key : urlScores.keySet()) {

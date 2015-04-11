@@ -5,6 +5,7 @@
 package com.zts1993.gse.webservice;
 
 import com.alibaba.fastjson.JSON;
+import com.zts1993.gse.bean.Factors;
 import com.zts1993.gse.bean.Pager;
 import com.zts1993.gse.bean.QueryResult;
 import com.zts1993.gse.bean.QueryResultItem;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class QueryApi {
 
     private int curPage = 1;
-    private int pageSize = 40;
+    private int pageSize = Factors.PageSize;
 
     long timeQueryStart = System.currentTimeMillis();
 
