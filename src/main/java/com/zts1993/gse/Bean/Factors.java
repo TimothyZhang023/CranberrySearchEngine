@@ -35,15 +35,16 @@ public class Factors {
     /**
      * Word Count Punish
      */
-    public static int PunishThreshold = 200;
+    public static int PunishThreshold = 150;
     public static int PunishMultiplier = 1000;
 
 
     /**
      * int const
      */
-    public static int MaxFetchPerWord = 1000;
-    public static int MaxFetchPerRequest = 1000;
+    public static int MaxRecordPerWord =1000;
+    public static int MaxRecordPerRequest = 1000;
+    public static int MaxRecordPerKey = 1000;
 
 
 }

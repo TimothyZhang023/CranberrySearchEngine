@@ -21,7 +21,8 @@ public class LocalFsHtmlContentProviderTest {
 
     @Before
     public void setUp() throws Exception {
-        fetchLocalHtmlFile = new LocalFsHtmlContentProvider("00005ae1c39d731fc344f93eddf84dd10d0dea00eb4e70510e73aa3881bc1028");;
+        fetchLocalHtmlFile = new LocalFsHtmlContentProvider("00005ae1c39d731fc344f93eddf84dd10d0dea00eb4e70510e73aa3881bc1028");
+        ;
 
     }
 
@@ -32,18 +33,18 @@ public class LocalFsHtmlContentProviderTest {
 
     @Test
     public void testFetchText() throws Exception {
-        String content = fetchLocalHtmlFile.fetchText();
+        String content = fetchLocalHtmlFile.fetchText().toLowerCase();
         logger.info(content);
     }
 
     @Test
     public void testFetchMarkedText() throws Exception {
 
-        Set<String> stringSet=new HashSet<String>();
+        Set<String> stringSet = new HashSet<String>();
         stringSet.add("美国");
         stringSet.add("澳大利亚");
 
-        String content = fetchLocalHtmlFile.fetchMarkedText(stringSet);
+        String content = fetchLocalHtmlFile.fetchMarkedText(stringSet).toLowerCase();
         logger.info(content);
     }
 }

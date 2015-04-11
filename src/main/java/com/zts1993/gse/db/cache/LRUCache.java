@@ -56,8 +56,7 @@ public class LRUCache<K, V> implements Serializable {
     /**
      * 移除最近最少访问
      */
-    protected void removeRencentlyLeastAccess(
-            Set<Map.Entry<K, ValueEntry>> entries) {
+    protected void removeRencentlyLeastAccess( Set<Map.Entry<K, ValueEntry>> entries) {
         // 最小使用次数
         int least = 0;
         // 最久没有被访问

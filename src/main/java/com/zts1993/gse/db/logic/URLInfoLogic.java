@@ -12,9 +12,6 @@ import com.zts1993.gse.db.redis.RedisDB;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by TianShuo on 2015/4/6.
  */
@@ -25,19 +22,14 @@ public class URLInfoLogic {
         String hash = htmlDoc.getDocId();
         Jedis jedis = RedisDB.getJedis();
 
-        if (!jedis.exists("wordCount:" + hash)) {
-
-            int wordCount = htmlDoc.getWordCount();
-            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
-
-
+        if (!jedis.exists("url:" + hash)) {
+//            int wordCount = htmlDoc.getWordCount();
+//            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
             KVCache.set("url:" + hash, htmlDoc.getUrl(), jedis);
-            KVCache.set("date:" + hash, date, jedis);
-            KVCache.set("wordCount:" + hash, wordCount + "", jedis);
+//            KVCache.set("date:" + hash, date, jedis);
+//            KVCache.set("wordCount:" + hash, wordCount + "", jedis);
         }
-
         RedisDB.closeJedis(jedis);
-
     }
 
 

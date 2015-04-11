@@ -14,28 +14,27 @@ public class QueryResultItem {
     private String url;
     private String title;
     private String description;
-    private String date;
+    //    private String date;
     private double rank;
     private int wordCount;
 
-
-    public QueryResultItem(String docId, String url,String title, String description, String date, double rank, int wordCount) {
+    public QueryResultItem(String docId, String url, String title, String description, double rank) {
         this.docId = docId;
         this.url = url;
         this.title = title;
         this.description = description;
-        this.date = date;
+//        this.date = date;
         this.rank = rank;
-        this.wordCount = wordCount;
+//        this.wordCount = wordCount;
     }
 
 
     public QueryResultItem(URLInfo urlInfo, String content, String title) {
         this.docId = urlInfo.getDocId();
         this.url = urlInfo.getUrl();
-        this.date = urlInfo.getDate();
+//        this.date = urlInfo.getDate();
         this.rank = urlInfo.getRank();
-        this.wordCount = urlInfo.getWordCount();
+//        this.wordCount = urlInfo.getWordCount();
         this.description = content;
         this.title = title;
 
@@ -65,13 +64,13 @@ public class QueryResultItem {
         this.description = description;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
+//    public String getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(String date) {
+//        this.date = date;
+//    }
 
     public double getRank() {
         return rank;
@@ -80,14 +79,14 @@ public class QueryResultItem {
     public void setRank(double rank) {
         this.rank = rank;
     }
-
-    public int getWordCount() {
-        return wordCount;
-    }
-
-    public void setWordCount(int wordCount) {
-        this.wordCount = wordCount;
-    }
+//
+//    public int getWordCount() {
+//        return wordCount;
+//    }
+//
+//    public void setWordCount(int wordCount) {
+//        this.wordCount = wordCount;
+//    }
 
     public String getTitle() {
         return title;
@@ -104,9 +103,9 @@ public class QueryResultItem {
                 ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", date='" + date + '\'' +
+//                ", date='" + date + '\'' +
                 ", rank=" + rank +
-                ", wordCount=" + wordCount +
+//                ", wordCount=" + wordCount +
                 '}';
     }
 }

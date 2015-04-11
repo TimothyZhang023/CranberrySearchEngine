@@ -36,17 +36,15 @@ public class HtmlDoc {
     public void parse() {
         parsedTitle = SegmentationFactory.getDefaultSegmentation().parse(title);
         parsedContent = SegmentationFactory.getDefaultSegmentation().parse(content);
-        wordCount = parsedContent.size();
-
         //wordCount punish
-        wordCount = wordCountPunish(wordCount);
+        wordCount = wordCountPunish(parsedContent.size());
 
     }
 
     //wordCount punish
     private int wordCountPunish(int count) {
         if (count < Factors.PunishThreshold) {
-            count = (int) ((1 / Math.log(count * 1.0)) * Factors.PunishMultiplier);
+            count = (int) ((1 / Math.log((count + 1) * 1.0)) * Factors.PunishMultiplier);
         }
         return count;
     }

@@ -30,7 +30,7 @@ public class KVCache {
         }
     }
 
-    public static LRUCache<String, String> getURLInfoCache() {
+    public static LRUCache<String, String> getKVCache() {
         init();
         return urlInfoLRUCache;
     }
@@ -38,22 +38,22 @@ public class KVCache {
 
     public static String get(String key) {
 
-        String value = getURLInfoCache().get(key);
+        String value = getKVCache().get(key);
         if (value == null) {
             Jedis jedis = RedisDB.getJedis();
             value = jedis.get(key);
             RedisDB.closeJedis(jedis);
-            getURLInfoCache().put(key, value);
+            getKVCache().put(key, value);
         }
         return value;
     }
 
     public static String get(String key, Jedis jedis) {
 
-        String value = getURLInfoCache().get(key);
+        String value = getKVCache().get(key);
         if (value == null) {
             value = jedis.get(key);
-            getURLInfoCache().put(key, value);
+            getKVCache().put(key, value);
 
 
         }
@@ -63,7 +63,7 @@ public class KVCache {
 
     public static void set(String key, String value) {
 
-        getURLInfoCache().put(key, value);
+        getKVCache().put(key, value);
 
         Jedis jedis = RedisDB.getJedis();
         jedis.set(key, value);
@@ -72,13 +72,13 @@ public class KVCache {
 
     public static void set(String key, String value, Jedis jedis) {
 
-        getURLInfoCache().put(key, value);
+        getKVCache().put(key, value);
 
         jedis.set(key, value);
     }
 
     public static int size() {
-        return getURLInfoCache().size();
+        return getKVCache().size();
     }
 
 

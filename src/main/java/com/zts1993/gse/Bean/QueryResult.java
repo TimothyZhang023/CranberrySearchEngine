@@ -15,16 +15,30 @@ public class QueryResult {
 
     Pager pager;
 
+    long timeSpeed;
+
+    Long totalResultCount;
+
     ArrayList<QueryResultItem> queryResultItems;
 
 
-    public QueryResult(String keyWord, Pager pager, ArrayList<QueryResultItem> queryResultItems) {
+    public QueryResult(String keyWord,long totalResultCount,long timeSpeed, Pager pager, ArrayList<QueryResultItem> queryResultItems) {
         this.keyWord = keyWord;
+        this.totalResultCount = totalResultCount;
+        this.timeSpeed = timeSpeed;
         this.pager = pager;
         this.queryResultItems = queryResultItems;
     }
 
     public QueryResult() {
+    }
+
+    public Long getTotalResultCount() {
+        return totalResultCount;
+    }
+
+    public void setTotalResultCount(Long totalResultCount) {
+        this.totalResultCount = totalResultCount;
     }
 
     public String getKeyWord() {
@@ -51,10 +65,20 @@ public class QueryResult {
         this.queryResultItems = queryResultItems;
     }
 
+    public long getTimeSpeed() {
+        return timeSpeed;
+    }
+
+    public void setTimeSpeed(long timeSpeed) {
+        this.timeSpeed = timeSpeed;
+    }
+
     @Override
     public String toString() {
         return "QueryResult{" +
                 "keyWord='" + keyWord + '\'' +
+                "totalResultCount='" + totalResultCount + '\'' +
+                "timeSpeed='" + timeSpeed + '\'' +
                 ", pager=" + pager +
                 ", queryResultItems=" + queryResultItems +
                 '}';
