@@ -4,6 +4,8 @@
 
 package com.zts1993.gse.index;
 
+import com.zts1993.gse.bean.Factors;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -12,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InvertedIndexThreadSemaphore {
 
 
-    public static final int Threads = Runtime.getRuntime().availableProcessors();
+    public static final int Threads = (int) (Runtime.getRuntime().availableProcessors() * Factors.CpuOverUse);
 
     private static AtomicInteger counter_integer = new AtomicInteger(Threads);
 

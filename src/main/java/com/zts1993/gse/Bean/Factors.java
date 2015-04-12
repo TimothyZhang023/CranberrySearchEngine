@@ -13,7 +13,6 @@ public class Factors {
     /**
      * double const
      */
-    public static double cpuOverUse = 1.0;
     public static int titleWeight = 10;
     public static int contentWeight = 1;
 
@@ -47,6 +46,10 @@ public class Factors {
     public static int MaxRecordPerKey = 1000;
 
     public static int PageSize = 10;
+
+
+    public static double CpuOverUse = 2.0;
+    public static int InvertedIndexThreadSemaphoreThreshold = 1;
 
 
 }
