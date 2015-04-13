@@ -11,23 +11,23 @@ import java.util.ArrayList;
  */
 public class QueryResult {
 
-    String keyWord;
+    private String keyWord;
 
-    Pager pager;
+    private Pagination paginationInfo;
 
-    long timeSpeed;
+    private long processTime;
 
-    Long totalResultCount;
+    private Long totalResultCount;
 
-    ArrayList<QueryResultItem> queryResultItems;
+    private ArrayList<HtmlItem> htmlItems;
 
 
-    public QueryResult(String keyWord,long totalResultCount,long timeSpeed, Pager pager, ArrayList<QueryResultItem> queryResultItems) {
+    public QueryResult(String keyWord, long totalResultCount, long processTime, Pagination paginationInfo, ArrayList<HtmlItem> htmlItems) {
         this.keyWord = keyWord;
         this.totalResultCount = totalResultCount;
-        this.timeSpeed = timeSpeed;
-        this.pager = pager;
-        this.queryResultItems = queryResultItems;
+        this.processTime = processTime;
+        this.paginationInfo = paginationInfo;
+        this.htmlItems = htmlItems;
     }
 
     public QueryResult() {
@@ -49,28 +49,28 @@ public class QueryResult {
         this.keyWord = keyWord;
     }
 
-    public Pager getPager() {
-        return pager;
+    public Pagination getPaginationInfo() {
+        return paginationInfo;
     }
 
-    public void setPager(Pager pager) {
-        this.pager = pager;
+    public void setPaginationInfo(Pagination paginationInfo) {
+        this.paginationInfo = paginationInfo;
     }
 
-    public ArrayList<QueryResultItem> getQueryResultItems() {
-        return queryResultItems;
+    public ArrayList<HtmlItem> getHtmlItems() {
+        return htmlItems;
     }
 
-    public void setQueryResultItems(ArrayList<QueryResultItem> queryResultItems) {
-        this.queryResultItems = queryResultItems;
+    public void setHtmlItems(ArrayList<HtmlItem> htmlItems) {
+        this.htmlItems = htmlItems;
     }
 
-    public long getTimeSpeed() {
-        return timeSpeed;
+    public long getProcessTime() {
+        return processTime;
     }
 
-    public void setTimeSpeed(long timeSpeed) {
-        this.timeSpeed = timeSpeed;
+    public void setProcessTime(long processTime) {
+        this.processTime = processTime;
     }
 
     @Override
@@ -78,9 +78,9 @@ public class QueryResult {
         return "QueryResult{" +
                 "keyWord='" + keyWord + '\'' +
                 "totalResultCount='" + totalResultCount + '\'' +
-                "timeSpeed='" + timeSpeed + '\'' +
-                ", pager=" + pager +
-                ", queryResultItems=" + queryResultItems +
+                "processTime='" + processTime + '\'' +
+                ", pagerInfo=" + paginationInfo +
+                ", queryResultItems=" + htmlItems +
                 '}';
     }
 }

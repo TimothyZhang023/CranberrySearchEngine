@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.index;
 
-import com.zts1993.gse.bean.Factors;
+import com.zts1993.gse.util.Factors;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

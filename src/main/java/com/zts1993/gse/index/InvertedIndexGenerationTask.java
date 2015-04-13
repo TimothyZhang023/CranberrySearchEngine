@@ -6,8 +6,8 @@ package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.bean.IndexNotify;
+import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
-import com.zts1993.gse.html.LocalFsHtmlContentProvider;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -31,7 +31,20 @@ public class InvertedIndexGenerationTask implements Runnable {
         try {
             InvertedIndexThreadSemaphore.decr();
 
-            genIndexFromFile();
+
+            IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(indexNotify.getHash_key());
+
+            String htmlContent = iHtmlContentProvider.fetchText();
+            String title = iHtmlContentProvider.fetchTitle();
+
+            HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
+            htmlDoc.parse();
+            htmlDoc.filter();
+
+
+            InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
+            invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
+
 
         } catch (Exception e) {
 
@@ -43,29 +56,5 @@ public class InvertedIndexGenerationTask implements Runnable {
 
     }
 
-
-    private void genIndexFromFile() {
-
-        HtmlDoc htmlDoc = getHtmlDoc();
-
-        InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
-        invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
-
-    }
-
-
-    public HtmlDoc getHtmlDoc() {
-
-        IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(indexNotify.getHash_key());
-
-        String htmlContent = iHtmlContentProvider.fetchText();
-        String title = iHtmlContentProvider.fetchTitle();
-
-        HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
-        htmlDoc.parse();
-        htmlDoc.filter();
-
-        return htmlDoc;
-    }
 
 }

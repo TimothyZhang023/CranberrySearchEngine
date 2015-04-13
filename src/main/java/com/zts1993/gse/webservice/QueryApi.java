@@ -5,10 +5,10 @@
 package com.zts1993.gse.webservice;
 
 import com.alibaba.fastjson.JSON;
-import com.zts1993.gse.bean.Factors;
-import com.zts1993.gse.bean.Pager;
+import com.zts1993.gse.util.Factors;
+import com.zts1993.gse.bean.Pagination;
 import com.zts1993.gse.bean.QueryResult;
-import com.zts1993.gse.bean.QueryResultItem;
+import com.zts1993.gse.bean.HtmlItem;
 import com.zts1993.gse.index.InvertedIndexQueryTool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -58,18 +58,18 @@ public class QueryApi {
         long totalResultCount = invertedIndexQueryTool.getTotalResultCount();
 
 
-        Pager pager = new Pager(pageSize, (int) totalResultCount);
-        pager.setCurPage(curPage);
+        Pagination pagination = new Pagination(pageSize, (int) totalResultCount);
+        pagination.setCurPage(curPage);
 
-        invertedIndexQueryTool.processQuery(pager.getStart(), pager.getEnd());
+        invertedIndexQueryTool.processQuery(pagination.getStart(), pagination.getEnd());
 
-        ArrayList<QueryResultItem> queryResultItems = invertedIndexQueryTool.getQueryResultItems();
+        ArrayList<HtmlItem> htmlItems = invertedIndexQueryTool.getHtmlItems();
 
 
         long timeSpend = System.currentTimeMillis() - timeQueryStart;
 
 
-        QueryResult queryResult = new QueryResult(keyword, totalResultCount, timeSpend, pager, queryResultItems);
+        QueryResult queryResult = new QueryResult(keyword, totalResultCount, timeSpend, pagination, htmlItems);
         String jsonRes = JSON.toJSONString(queryResult);
 
 

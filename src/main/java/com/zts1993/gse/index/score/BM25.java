@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.index.score;
 
-import com.zts1993.gse.bean.Factors;
+import com.zts1993.gse.util.Factors;
 
 /**
  * Created by TianShuo on 2015/4/11.

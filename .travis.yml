@@ -5,6 +5,7 @@ jdk:
 
 services:
   - redis-server
+  - mongodb
 
 before_install:
   - mysql -e "create database IF NOT EXISTS gse_test;" -uroot
@@ -16,3 +17,4 @@ install:
 env:
   global:
     - RedisServerIp=127.0.0.1
+    - RedisIndexNotifyServerIp=127.0.0.1

@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.bean;
+package com.zts1993.gse.util;
 
 /**
  * Created by TianShuo on 2015/4/6.

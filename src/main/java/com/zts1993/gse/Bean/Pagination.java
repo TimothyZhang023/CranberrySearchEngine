@@ -5,9 +5,10 @@
 package com.zts1993.gse.bean;
 
 /**
+ *
  * Created by TianShuo on 2015/4/4.
  */
-public class Pager {
+public class Pagination {
 
     private int curPage = 1; // 当前页
     private int pageSize = 10; // 每页多少行
@@ -16,7 +17,7 @@ public class Pager {
     private int end;// 结束行
     private int totalPage; // 共多少页
 
-    public Pager(int pageSize, int totalRow) {
+    public Pagination(int pageSize, int totalRow) {
         this.pageSize = pageSize;
         this.totalRow = totalRow;
         if( totalRow % pageSize ==0){

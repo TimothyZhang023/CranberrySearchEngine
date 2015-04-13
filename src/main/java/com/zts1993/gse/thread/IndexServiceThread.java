@@ -5,7 +5,7 @@
 package com.zts1993.gse.thread;
 
 import com.alibaba.fastjson.JSON;
-import com.zts1993.gse.bean.Factors;
+import com.zts1993.gse.util.Factors;
 import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.db.redis.RedisQueue;
 import com.zts1993.gse.index.InvertedIndexGenerationTask;
@@ -44,7 +44,12 @@ public class IndexServiceThread extends Thread {
         RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
         while (true) {
+
             try {
+
+                while (InvertedIndexThreadSemaphore.sum() < Factors.InvertedIndexThreadSemaphoreThreshold) {
+                    Thread.sleep(50);
+                }
 
                 String jsonText = redisQueue.pop();
                 if (jsonText == null) {
@@ -65,9 +70,7 @@ public class IndexServiceThread extends Thread {
 
                         logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
 
-                        while (InvertedIndexThreadSemaphore.sum() < Factors.InvertedIndexThreadSemaphoreThreshold) {
-                            Thread.sleep(50);
-                        }
+
                     } catch (Exception e) {
                         logger.info(e.getMessage());
                         e.printStackTrace();

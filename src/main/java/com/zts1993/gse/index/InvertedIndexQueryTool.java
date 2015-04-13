@@ -4,19 +4,18 @@
 
 package com.zts1993.gse.index;
 
-import com.zts1993.gse.bean.Factors;
-import com.zts1993.gse.bean.QueryResultItem;
-import com.zts1993.gse.bean.URLInfo;
+import com.zts1993.gse.bean.HtmlItem;
 import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.redis.RedisDB;
 import com.zts1993.gse.filter.TermFilter;
+import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
-import com.zts1993.gse.html.LocalFsHtmlContentProvider;
 import com.zts1993.gse.index.comparator.UrlScoreComparator;
 import com.zts1993.gse.index.score.IScore;
 import com.zts1993.gse.index.score.Tf_Idf;
 import com.zts1993.gse.segmentation.ISegmentation;
 import com.zts1993.gse.segmentation.SegmentationFactory;
+import com.zts1993.gse.util.Factors;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -44,13 +43,12 @@ public class InvertedIndexQueryTool {
     private HashMap<String, Double> urlScores = new HashMap<String, Double>();
     private HashMap<String, Integer> urlHits = new HashMap<String, Integer>();
 
-    private ArrayList<URLInfo> urlInfoArrayList = new ArrayList<URLInfo>();
 
-    public ArrayList<QueryResultItem> getQueryResultItems() {
-        return queryResultItems;
+    public ArrayList<HtmlItem> getHtmlItems() {
+        return htmlItems;
     }
 
-    private ArrayList<QueryResultItem> queryResultItems = new ArrayList<QueryResultItem>();
+    private ArrayList<HtmlItem> htmlItems = new ArrayList<HtmlItem>();
 
     public InvertedIndexQueryTool(String queryKey) {
         this.queryKey = queryKey;
@@ -77,7 +75,7 @@ public class InvertedIndexQueryTool {
         Jedis jedis = RedisDB.getJedis();
         IScore scroeCalculator = new Tf_Idf();
 
-        int totolPages = Integer.parseInt(jedis.get("totolPages"));
+        int totolPages = Integer.parseInt(jedis.get("totalPages"));
         int queryWordsCount = queryWordsSet.size();
 
 
@@ -91,10 +89,8 @@ public class InvertedIndexQueryTool {
             Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
 
-            //double idf = java.lang.Math.log((totolPages * 1.0 - stSize + 0.5) / (stSize + 0.5));
 
-            //inverse frequency smooth
-            double idf = java.lang.Math.log(totolPages * 1.0 / stSize + 1);
+            double idf = Tf_Idf.getIdfScoreM1(totolPages, stSize);
 
             for (Tuple tuple : st) {
 //                URLInfo newUrlInfo = URLInfoLogic.getSimpleURLInfo(tuple, idf);
@@ -169,12 +165,12 @@ public class InvertedIndexQueryTool {
             String url = KVCache.get("url:" + docId, jedis);
             double value = resIds.get(i).getValue();
 
-            IHtmlContentProvider iHtmlContentProvider = new LocalFsHtmlContentProvider(docId);
+            IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(docId);
             String content = iHtmlContentProvider.fetchMarkedText(queryWordsSet);
             String title = iHtmlContentProvider.fetchTitle();
 
-            QueryResultItem queryResultItem = new QueryResultItem(docId, url, title, content, value);
-            queryResultItems.add(queryResultItem);
+            HtmlItem htmlItem = new HtmlItem(docId, url, title, content, value);
+            htmlItems.add(htmlItem);
         }
 
         RedisDB.closeJedis(jedis);
@@ -190,10 +186,6 @@ public class InvertedIndexQueryTool {
         return queryWordsSet;
     }
 
-
-    public ArrayList<URLInfo> getUrlInfoArrayList() {
-        return urlInfoArrayList;
-    }
 
     public long getTotalResultCount() {
         return totalResultCount;

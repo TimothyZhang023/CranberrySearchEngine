@@ -7,10 +7,10 @@
 
     <groupId>com.zts1993</groupId>
     <artifactId>CSE</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
 
     <name>Cranberry Search Engine Kernel</name>
-    <description>Cranberry Search Engine Kernel - Base On Java and Redis</description>
+    <content>Cranberry Search Engine Kernel - Base On Java and Redis</content>
     <url>http://cse.greencms.net</url>
 
 
@@ -24,6 +24,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>

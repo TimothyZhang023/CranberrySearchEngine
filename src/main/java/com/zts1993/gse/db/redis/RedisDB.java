@@ -5,6 +5,8 @@
 package com.zts1993.gse.db.redis;
 
 import com.zts1993.gse.util.ConfigurationUtil;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -12,6 +14,7 @@ import redis.clients.jedis.JedisPool;
  * Created by TianShuo on 2015/3/22.
  */
 public class RedisDB {
+
 
     private static RedisClient redisClient;
 
