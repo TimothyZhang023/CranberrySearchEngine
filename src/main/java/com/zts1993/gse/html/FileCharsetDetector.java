@@ -4,7 +4,6 @@
 
 package com.zts1993.gse.html;
 
-import com.zts1993.gse.util.ConfigurationUtil;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.mozilla.intl.chardet.HtmlCharsetDetector;
@@ -13,7 +12,6 @@ import org.mozilla.intl.chardet.nsICharsetDetectionObserver;
 import org.mozilla.intl.chardet.nsPSMDetector;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -80,31 +78,4 @@ public class FileCharsetDetector {
     }
 
 
-    public static void main(String[] args) {
-
-        File root = new File(ConfigurationUtil.getValue("HTMLPATH"));
-        File[] fs = root.listFiles();
-
-        logger.debug("fetchHtml files to be processed : " + fs.length);
-
-
-        for (int i = 0; i < fs.length; i++) {
-
-
-            if (!fs[i].isDirectory()) {
-                try {
-
-                    String path = fs[i].getAbsolutePath();
-                    logger.debug(String.format("Path: %s Encode %s", path, FileCharsetDetector.getFileEncode(path)));
-
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                    logger.error(e.getStackTrace());
-                }
-
-            }
-
-
-        }
-    }
 }

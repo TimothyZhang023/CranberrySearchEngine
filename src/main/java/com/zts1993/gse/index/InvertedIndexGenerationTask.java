@@ -31,20 +31,7 @@ public class InvertedIndexGenerationTask implements Runnable {
         try {
             InvertedIndexThreadSemaphore.decr();
 
-
-            IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(indexNotify.getHash_key());
-
-            String htmlContent = iHtmlContentProvider.fetchText();
-            String title = iHtmlContentProvider.fetchTitle();
-
-            HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
-            htmlDoc.parse();
-            htmlDoc.filter();
-
-
-            InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
-            invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
-
+            generateIndex();
 
         } catch (Exception e) {
 
@@ -56,5 +43,29 @@ public class InvertedIndexGenerationTask implements Runnable {
 
     }
 
+
+    private void generateIndex() {
+
+        HtmlDoc htmlDoc = getHtmlDoc();
+
+        InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
+        invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
+
+    }
+
+
+    public HtmlDoc getHtmlDoc() {
+
+        IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(indexNotify.getHash_key());
+
+        String htmlContent = iHtmlContentProvider.fetchText();
+        String title = iHtmlContentProvider.fetchTitle();
+
+        HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
+        htmlDoc.parse();
+        htmlDoc.filter();
+
+        return htmlDoc;
+    }
 
 }

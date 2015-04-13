@@ -14,7 +14,7 @@ public class InvertedIndexGenerationTaskTest {
     public void testGetSegmentation() throws Exception {
         String url = "http://www.zts1993.com";
         String title = "Timothy Blog";
-        String hash_key = "1";
+        String hash_key = "00005ae1c39d731fc344f93eddf84dd10d0dea00eb4e70510e73aa3881bc1028";
         String storage_type = "local_fs";
         String page_encoding = "utf-8";
         String queue_time = "2014-4-6 14:30:00";
