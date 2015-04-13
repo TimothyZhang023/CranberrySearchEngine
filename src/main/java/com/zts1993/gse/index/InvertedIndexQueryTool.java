@@ -12,7 +12,7 @@ import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.index.comparator.UrlScoreComparator;
 import com.zts1993.gse.index.score.IScore;
-import com.zts1993.gse.index.score.Tf_Idf;
+import com.zts1993.gse.index.score.TfIdf;
 import com.zts1993.gse.segmentation.ISegmentation;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import com.zts1993.gse.util.Factors;
@@ -73,7 +73,7 @@ public class InvertedIndexQueryTool {
     public void preQueryProcess() {
 
         Jedis jedis = RedisDB.getJedis();
-        IScore scroeCalculator = new Tf_Idf();
+        IScore scroeCalculator = new TfIdf();
 
         int totolPages = Integer.parseInt(jedis.get("totalPages"));
         int queryWordsCount = queryWordsSet.size();
@@ -89,8 +89,7 @@ public class InvertedIndexQueryTool {
             Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
 
-
-            double idf = Tf_Idf.getIdfScoreM1(totolPages, stSize);
+            double idf = TfIdf.getIdfScoreM1(totolPages, stSize);
 
             for (Tuple tuple : st) {
 //                URLInfo newUrlInfo = URLInfoLogic.getSimpleURLInfo(tuple, idf);

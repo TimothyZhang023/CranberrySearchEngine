@@ -6,7 +6,7 @@ package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.db.redis.RedisDB;
-import com.zts1993.gse.index.score.Tf_Idf;
+import com.zts1993.gse.index.score.TfIdf;
 import com.zts1993.gse.util.Factors;
 import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
@@ -89,7 +89,7 @@ public class InvertedIndexGenerationTool {
 
                 String cWord = entry.getKey().toString();
                 Integer termCount = (Integer) entry.getValue();
-                double tf = Tf_Idf.getTfScoreM1(termCount, htmlDoc.getWordCount());
+                double tf = TfIdf.getTfScoreM1(termCount, htmlDoc.getWordCount());
 
                 try {
                     jedis.zadd(cWord, tf, htmlDoc.getDocId());
