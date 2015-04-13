@@ -64,7 +64,7 @@ public class InvertedIndexQueryTool {
 
         queryWordsSet = new HashSet<String>();
         for (Term term : termList) {
-            queryWordsSet.add(term.getRealName());
+            queryWordsSet.add(term.getRealName().toLowerCase());
         }
 
     }
@@ -73,63 +73,34 @@ public class InvertedIndexQueryTool {
     public void preQueryProcess() {
 
         Jedis jedis = RedisDB.getJedis();
-        IScore scroeCalculator = new TfIdf();
+        IScore scoreCalculator = new TfIdf();
 
-        int totolPages = Integer.parseInt(jedis.get("totalPages"));
+        int totalPages = Integer.parseInt(jedis.get("totalPages"));
         int queryWordsCount = queryWordsSet.size();
-
 
         for (String eachKeywords : queryWordsSet) {
 
-
-            eachKeywords = eachKeywords.toLowerCase();
-
             Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, Factors.MaxRecordPerWord);
-
             Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
-
-            double idf = TfIdf.getIdfScoreM1(totolPages, stSize);
+            double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
 
             for (Tuple tuple : st) {
-//                URLInfo newUrlInfo = URLInfoLogic.getSimpleURLInfo(tuple, idf);
-//
-//                if (urlInfoArrayList.contains(newUrlInfo)) {
-//                    newUrlInfo = URLInfoLogic.getURLInfo(tuple, idf);
-//
-//                    int index = urlInfoArrayList.indexOf(newUrlInfo);
-//                    URLInfo preUrlInfo = urlInfoArrayList.get(index);
-//                    preUrlInfo.addHit();
-//
-//                    preUrlInfo.addRank(newUrlInfo.getRank());
-//                    urlInfoArrayList.set(index, preUrlInfo);
-//
-//                } else {
-//                    newUrlInfo = URLInfoLogic.getURLInfo(tuple, idf);
-//                    urlInfoArrayList.add(newUrlInfo);
-//                }
                 // int wordCount = Integer.valueOf(KVCache.get("wordCount:" + tuple.getElement(), jedis));
-                double rank = scroeCalculator.getScore(tuple.getScore(), idf, 0);
+                double rank = scoreCalculator.getScore(tuple.getScore(), idf, 0);
                 String key = tuple.getElement();
-                //double rank = tuple.getScore() * idf;
-                if (urlScores.containsKey(key)) {
 
+                if (urlScores.containsKey(key)) {
                     rank = urlScores.get(key) + rank;
                     urlScores.put(key, rank);
 
                     int hits = urlHits.get(key);
                     urlHits.put(key, hits + 1);
-
                 } else {
-
                     urlScores.put(key, rank);
                     urlHits.put(key, 1);
-
                 }
-
             }
-
-
         }
 
         totalResultCount = urlScores.size();
@@ -140,29 +111,26 @@ public class InvertedIndexQueryTool {
             urlScores.put(key, val);
         }
 
-
-//        for (int position = 0; position < urlInfoArrayList.size() && position < Factors.MaxRecordPerRequest; position++) {
-//            double coord = urlInfoArrayList.get(position).getHits() * 1.0 / queryWordsCount * 1.0;
-//            URLInfo preUrlInfo = urlInfoArrayList.get(position);
-//            preUrlInfo.setRank(preUrlInfo.getRank() * coord);
-//            urlInfoArrayList.set(position, preUrlInfo);
-//        }
-
         RedisDB.closeJedis(jedis);
     }
 
 
     public void processQuery(int start, int end) {
-        Jedis jedis = RedisDB.getJedis();
 
-        Sort();
+        //Sort
+        infoIds = new ArrayList<Map.Entry<String, Double>>(urlScores.entrySet());
+        Collections.sort(infoIds, new UrlScoreComparator());
 
-        List<Map.Entry<String, Double>> resIds = infoIds.subList(start, end);
+        //Pagination
+        List<Map.Entry<String, Double>> resultDocIds = infoIds.subList(start, end);
 
-        for (int i = 0; i < resIds.size(); i++) {
-            String docId = resIds.get(i).getKey();
-            String url = KVCache.get("url:" + docId, jedis);
-            double value = resIds.get(i).getValue();
+        //Fetch Html info
+        for (Map.Entry<String, Double> resultDocIdEntry : resultDocIds) {
+
+            String docId = resultDocIdEntry.getKey();
+            double value = resultDocIdEntry.getValue();
+
+            String url = KVCache.get("url:" + docId);
 
             IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(docId);
             String content = iHtmlContentProvider.fetchMarkedText(queryWordsSet);
@@ -172,14 +140,8 @@ public class InvertedIndexQueryTool {
             htmlItems.add(htmlItem);
         }
 
-        RedisDB.closeJedis(jedis);
     }
 
-
-    public void Sort() {
-        infoIds = new ArrayList<Map.Entry<String, Double>>(urlScores.entrySet());
-        Collections.sort(infoIds, new UrlScoreComparator());
-    }
 
     public Set<String> getQueryWordsSet() {
         return queryWordsSet;
