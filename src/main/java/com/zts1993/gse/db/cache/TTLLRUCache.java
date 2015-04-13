@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * 这还是不是TTLCache 我还没有写。。这个是LRUCache
  * Created by TianShuo on 2015/4/9.
  */
 public class TTLLRUCache<K, V> implements Serializable {

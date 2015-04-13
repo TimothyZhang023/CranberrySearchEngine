@@ -13,11 +13,18 @@ import redis.clients.jedis.JedisPool;
  */
 public class RedisQueue {
 
-    private static RedisClient redisQueueClient;
+    private String key;
 
-    public static RedisClient getRedisQueueClient() {
+    public RedisQueue(String key) {
+        this.key = key;
+                
+    }
+
+    private static RedisPoolClient redisQueueClient;
+
+    public static RedisPoolClient getRedisQueueClient() {
         if (redisQueueClient == null) {
-            redisQueueClient = new RedisClient(
+            redisQueueClient = new RedisPoolClient(
                     ConfigurationUtil.getValue("RedisIndexNotifyServerIp", "127.0.0.1"),
                     Integer.parseInt(ConfigurationUtil.getValue("RedisIndexNotifyServerPort", "6379")),
                     50
@@ -28,57 +35,73 @@ public class RedisQueue {
     }
 
 
-    public static Jedis getJedis() {
-        return getRedisQueueClient().getJedis();
-    }
-
 
     public static JedisPool getJedisPool() {
         return getRedisQueueClient().getJedisPool();
     }
 
 
-    public static void closeJedis(Jedis jedis) {
-        getJedisPool().returnResource(jedis);
-    }
-
-
-    private String key;
-
-    public RedisQueue(String key) {
-        this.key = key;
-    }
 
     public void push(String string) {
-        Jedis jedis = RedisQueue.getJedis();
-        jedis.lpush(this.key, string);
-        RedisQueue.closeJedis(jedis);
-
+        JedisPool pool = RedisQueue.getJedisPool();
+        Jedis jedis = null;
+        String res = null;
+        try {
+            jedis = pool.getResource();
+            jedis.lpush(this.key, string);
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            e.printStackTrace();
+        } finally {
+            returnResource(pool, jedis);
+        }
     }
-
-    public void push(String[] string) {
-        Jedis jedis = RedisQueue.getJedis();
-        jedis.lpush(this.key, string);
-        RedisQueue.closeJedis(jedis);
-
-    }
-
 
     public String pop() {
-        Jedis jedis = RedisQueue.getJedis();
-        String value = jedis.lpop(this.key);
-        RedisQueue.closeJedis(jedis);
-
-
-        return value;
+        JedisPool pool = RedisQueue.getJedisPool();
+        Jedis jedis = null;
+        String res = null;
+        try {
+            jedis = pool.getResource();
+            res = jedis.lpop(key);
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            e.printStackTrace();
+        } finally {
+            returnResource(pool, jedis);
+        }
+        return res;
     }
 
     public long size() {
-        Jedis jedis = RedisQueue.getJedis();
-        long size = jedis.llen(this.key);
-        RedisQueue.closeJedis(jedis);
+
+        JedisPool pool = RedisQueue.getJedisPool();
+        Jedis jedis = null;
+        long size = 0;
+        try {
+            jedis = pool.getResource();
+            size = jedis.llen(key);
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            e.printStackTrace();
+        } finally {
+            returnResource(pool, jedis);
+        }
         return size;
+
     }
 
+
+    /**
+     * 返还到连接池
+     *
+     * @param pool
+     * @param jedis
+     */
+    public static void returnResource(JedisPool pool, Jedis jedis) {
+        if (jedis != null) {
+            pool.returnResource(jedis);
+        }
+    }
 
 }

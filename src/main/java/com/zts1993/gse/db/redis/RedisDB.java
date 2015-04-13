@@ -5,8 +5,6 @@
 package com.zts1993.gse.db.redis;
 
 import com.zts1993.gse.util.ConfigurationUtil;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -16,17 +14,17 @@ import redis.clients.jedis.JedisPool;
 public class RedisDB {
 
 
-    private static RedisClient redisClient;
+    private static RedisPoolClient redisPoolClient;
 
     private RedisDB() {
     }
 
-    public static RedisClient getRedisClient() {
+    public static RedisPoolClient getRedisPoolClient() {
 
-        if (redisClient == null) {
+        if (redisPoolClient == null) {
             synchronized (RedisDB.class) {
-                if (redisClient == null) {
-                    redisClient = new RedisClient(
+                if (redisPoolClient == null) {
+                    redisPoolClient = new RedisPoolClient(
                             ConfigurationUtil.getValue("RedisServerIp", "127.0.0.1"),
                             Integer.parseInt(ConfigurationUtil.getValue("RedisServerPort", "6379")),
                             Integer.parseInt(ConfigurationUtil.getValue("RedisServerPoolSize", "5000"))
@@ -34,22 +32,26 @@ public class RedisDB {
                 }
             }
         }
-        return redisClient;
+        return redisPoolClient;
     }
 
 
     public static Jedis getJedis() {
-        return getRedisClient().getJedis();
+        return getRedisPoolClient().getJedis();
     }
 
 
     public static JedisPool getJedisPool() {
-        return getRedisClient().getJedisPool();
+        return getRedisPoolClient().getJedisPool();
     }
 
 
     public static void closeJedis(Jedis jedis) {
         getJedisPool().returnResource(jedis);
+    }
+
+    public static void closeBrokenJedis(Jedis jedis) {
+        getJedisPool().returnBrokenResource(jedis);
     }
 
 

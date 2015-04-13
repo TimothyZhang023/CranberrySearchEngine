@@ -78,40 +78,50 @@ public class InvertedIndexQueryTool {
         int totalPages = Integer.parseInt(jedis.get("totalPages"));
         int queryWordsCount = queryWordsSet.size();
 
-        for (String eachKeywords : queryWordsSet) {
+        try {
 
-            Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, Factors.MaxRecordPerWord);
-            Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
-            double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
 
-            for (Tuple tuple : st) {
-                // int wordCount = Integer.valueOf(KVCache.get("wordCount:" + tuple.getElement(), jedis));
-                double rank = scoreCalculator.getScore(tuple.getScore(), idf, 0);
-                String key = tuple.getElement();
+            for (String eachKeywords : queryWordsSet) {
 
-                if (urlScores.containsKey(key)) {
-                    rank = urlScores.get(key) + rank;
-                    urlScores.put(key, rank);
+                Set<Tuple> st = jedis.zrevrangeWithScores(eachKeywords, 0, Factors.MaxRecordPerWord);
+                Long stSize = jedis.zcount(eachKeywords, -1000.0, 1000.0);
 
-                    int hits = urlHits.get(key);
-                    urlHits.put(key, hits + 1);
-                } else {
-                    urlScores.put(key, rank);
-                    urlHits.put(key, 1);
+                double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
+
+                for (Tuple tuple : st) {
+                    // int wordCount = Integer.valueOf(KVCache.get("wordCount:" + tuple.getElement(), jedis));
+                    double rank = scoreCalculator.getScore(tuple.getScore(), idf, 0);
+                    String key = tuple.getElement();
+
+                    if (urlScores.containsKey(key)) {
+                        rank = urlScores.get(key) + rank;
+                        urlScores.put(key, rank);
+
+                        int hits = urlHits.get(key);
+                        urlHits.put(key, hits + 1);
+                    } else {
+                        urlScores.put(key, rank);
+                        urlHits.put(key, 1);
+                    }
                 }
             }
+
+            totalResultCount = urlScores.size();
+
+            //update coord rank
+            for (String key : urlScores.keySet()) {
+                double val = urlScores.get(key) * (urlHits.get(key) * 1.0 / queryWordsCount * 1.0);
+                urlScores.put(key, val);
+            }
+
+        } catch (Exception e) {
+            logger.error("Process preQueryProcess error");
+            RedisDB.closeBrokenJedis(jedis);
+            e.printStackTrace();
+        } finally {
+            RedisDB.closeJedis(jedis);
         }
-
-        totalResultCount = urlScores.size();
-
-        //update coord rank
-        for (String key : urlScores.keySet()) {
-            double val = urlScores.get(key) * (urlHits.get(key) * 1.0 / queryWordsCount * 1.0);
-            urlScores.put(key, val);
-        }
-
-        RedisDB.closeJedis(jedis);
     }
 
 

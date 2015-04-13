@@ -9,9 +9,9 @@
     <artifactId>CSE</artifactId>
     <version>0.4-SNAPSHOT</version>
 
-    <name>Cranberry Search Engine Kernel</name>
-    <content>Cranberry Search Engine Kernel - Base On Java and Redis</content>
-    <url>http://cse.greencms.net</url>
+    <name>Cranberry Search Engine</name>
+    <description>Cranberry Search Engine Kernel</description>
+    <url>http://cse.zts1993.com</url>
 
 
     <repositories>

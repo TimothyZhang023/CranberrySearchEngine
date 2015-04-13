@@ -15,24 +15,24 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 
-public class RedisClient {
+public class RedisPoolClient {
 
-    private static final Logger logger = LogManager.getLogger("RedisClient");
+    private static final Logger logger = LogManager.getLogger("RedisPoolClient");
 
     private JedisPool jedisPool;//非切片连接池
 
-    public RedisClient(String ip, int port, int poolsize) {
-        logger.info("Init RedisClient with " + ip + ":" + port);
+    public RedisPoolClient(String ip, int port, int poolsize) {
+        logger.info("Init RedisPoolClient with " + ip + ":" + port);
         initialPool(ip, port, poolsize);
     }
 
     /**
      * 初始化非切片池
      */
-    private void initialPool(String ip, int port, int poolsize) {
+    private void initialPool(String ip, int port, int poolSize) {
         // 池基本配置
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(poolsize);
+        config.setMaxTotal(poolSize);
         config.setMaxIdle(10);
         // config.setMaxWait(1000l);
         config.setTestOnBorrow(true);

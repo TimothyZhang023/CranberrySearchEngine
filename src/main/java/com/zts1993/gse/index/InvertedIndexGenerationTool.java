@@ -104,6 +104,7 @@ public class InvertedIndexGenerationTool {
 
         } catch (Exception e) {
             logger.error("Process addToInvertedIndex error");
+            RedisDB.closeBrokenJedis(jedis);
             e.printStackTrace();
         } finally {
             RedisDB.closeJedis(jedis);
