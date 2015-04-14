@@ -12,16 +12,16 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LocalFsHtmlContentProviderTest {
+public class LocalFsContentProviderTest {
 
     private static final Logger logger = LogManager.getLogger("LocalFsHtmlContentProviderTest");
 
-    LocalFsHtmlContentProvider fetchLocalHtmlFile;
+    LocalFsContentProvider fetchLocalHtmlFile;
 
 
     @Before
     public void setUp() throws Exception {
-        fetchLocalHtmlFile = new LocalFsHtmlContentProvider("00005ae1c39d731fc344f93eddf84dd10d0dea00eb4e70510e73aa3881bc1028");
+        fetchLocalHtmlFile = new LocalFsContentProvider("00005ae1c39d731fc344f93eddf84dd10d0dea00eb4e70510e73aa3881bc1028");
         ;
 
     }

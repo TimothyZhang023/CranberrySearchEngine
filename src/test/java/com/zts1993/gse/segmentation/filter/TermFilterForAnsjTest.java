@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.filter;
+package com.zts1993.gse.segmentation.filter;
 
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class TermFilterTest {
+public class TermFilterForAnsjTest {
 
 
     @Test
@@ -33,9 +33,12 @@ public class TermFilterTest {
                 "2013年12月12日 - 文章标题:删除/清除/过滤标点(所有中英文标点)的正则表达式——DesktopSearch开发笔记[经验积累]。希赛网JAVA频道是一个专业的JAVA技术平台,着眼于业...\n" +
                 "www.educity.cn/java/50...  - 百度快照 - 75%好评";
 
-        List<Term> parse = SegmentationFactory.getDefaultSegmentation().parse(demo2);
+        List<Term> parse = SegmentationFactory.getNlpSegmentation().parse(demo2);
 
-        TermFilter.process(parse);
+
+        TermFilterForAnsj termFilterForAnsj = new TermFilterForAnsj(parse, 1).process();
+
+        System.out.println(termFilterForAnsj.toString());
 
     }
 }

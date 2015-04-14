@@ -2,7 +2,7 @@
  * Copyright (c) 2015 By Timothy Zhang
  */
 
-package com.zts1993.gse.filter;
+package com.zts1993.gse.segmentation.filter;
 
 import java.io.*;
 import java.util.Vector;
@@ -22,11 +22,7 @@ public class StopWordsFilter {
     }
 
     public boolean isPuncOrStopWords(String words) {
-        if (vector == null) {
-            initStopWordsList();
-        }
-
-        return vector.contains(words);
+         return vector.contains(words);
     }
 
 
@@ -54,9 +50,5 @@ public class StopWordsFilter {
         }
     }
 
-    public static void main(String[] args) {
-        StopWordsFilter stopWordsFilter = new StopWordsFilter();
-        System.out.println(stopWordsFilter.isPuncOrStopWords("？"));
-    }
 
 }

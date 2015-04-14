@@ -13,12 +13,12 @@ import java.util.Set;
 /**
  * Created by TianShuo on 2015/4/8.
  */
-public class LocalFsHtmlContentProvider implements IHtmlContentProvider {
+public class LocalFsContentProvider implements IHtmlContentProvider {
 
     private String filePath;
     private String content;
 
-    public LocalFsHtmlContentProvider(String docId) {
+    public LocalFsContentProvider(String docId) {
         this.filePath = ConfigurationUtil.getValue("HTMLPATH") + docId + ".html";
     }
 

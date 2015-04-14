@@ -8,14 +8,11 @@ import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.db.redis.RedisDB;
 import com.zts1993.gse.index.score.TfIdf;
 import com.zts1993.gse.util.Factors;
-import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,55 +29,16 @@ public class InvertedIndexGenerationTool {
 
         Jedis jedis = RedisDB.getJedis();
 
-        List<Term> contentTermList = htmlDoc.getParsedContent();
-        List<Term> titleTermList = htmlDoc.getParsedTitle();
-//            int totalWordCount = htmlDoc.getWordCount();
+        HashMap<String, Integer> wordFreqMap = htmlDoc.getWordFreqMap();
 
-        HashMap<String, Integer> wordFreqMap = new HashMap<String, Integer>();
-        Term term;
-        String word;
-        Iterator<Term> termIterator;
+
+        if (wordFreqMap.size() < Factors.LowerQuality) {
+            //low quality web pages reject
+            return;
+        }
+
 
         try {
-
-
-            if (contentTermList.size() < Factors.LowerQuality) {
-                //low quality web pages reject
-                return;
-            }
-
-            /**
-             * header
-             */
-            termIterator = titleTermList.iterator();
-            while (termIterator.hasNext()) {
-                term = termIterator.next();
-                word = term.getRealName().toLowerCase();
-
-                if (wordFreqMap.containsKey(word)) {
-                    int newCount = wordFreqMap.get(word) * Factors.titleWeight;
-                    wordFreqMap.put(word, newCount);
-                } else {
-                    wordFreqMap.put(word, Factors.titleWeight);
-                }
-            }
-
-            /**
-             * body
-             */
-            termIterator = contentTermList.iterator();
-            while (termIterator.hasNext()) {
-                term = termIterator.next();
-                word = term.getRealName().toLowerCase();
-
-                if (wordFreqMap.containsKey(word)) {
-                    int newCount = wordFreqMap.get(word) * Factors.contentWeight;
-                    wordFreqMap.put(word, newCount);
-                } else {
-                    wordFreqMap.put(word, Factors.contentWeight);
-                }
-            }
-
             jedis.incr("totalPages");
             jedis.set("url:" + htmlDoc.getDocId(), htmlDoc.getUrl());
 //            jedis.set("wordCount:" + htmlDoc.getDocId(), htmlDoc.getWordCount() + "");
@@ -89,6 +47,7 @@ public class InvertedIndexGenerationTool {
 
                 String cWord = entry.getKey().toString();
                 Integer termCount = (Integer) entry.getValue();
+
                 double tf = TfIdf.getTfScoreM1(termCount, htmlDoc.getWordCount());
 
                 try {

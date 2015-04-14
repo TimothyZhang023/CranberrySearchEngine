@@ -27,22 +27,18 @@ public class InvertedIndexGenerationTask implements Runnable {
     }
 
     public void run() {
-
         try {
-            InvertedIndexThreadSemaphore.decr();
 
+            InvertedIndexThreadSemaphore.decr();
             generateIndex();
 
         } catch (Exception e) {
-
             logger.error(e.getMessage());
             e.printStackTrace();
         } finally {
             InvertedIndexThreadSemaphore.incr();
         }
-
     }
-
 
     private void generateIndex() {
 
@@ -53,7 +49,6 @@ public class InvertedIndexGenerationTask implements Runnable {
 
     }
 
-
     public HtmlDoc getHtmlDoc() {
 
         IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(indexNotify.getHash_key());
@@ -61,11 +56,7 @@ public class InvertedIndexGenerationTask implements Runnable {
         String htmlContent = iHtmlContentProvider.fetchText();
         String title = iHtmlContentProvider.fetchTitle();
 
-        HtmlDoc htmlDoc = new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent);
-        htmlDoc.parse();
-        htmlDoc.filter();
-
-        return htmlDoc;
+        return new HtmlDoc(indexNotify.getHash_key(), indexNotify.getUrl(), title, htmlContent).parse();
     }
 
 }
