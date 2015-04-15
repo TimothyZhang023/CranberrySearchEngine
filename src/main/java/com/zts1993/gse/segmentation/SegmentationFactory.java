@@ -16,7 +16,7 @@ import com.zts1993.gse.segmentation.ansj.ToSegmentation;
 public class SegmentationFactory {
 
     public static ISegmentation getDefaultSegmentation() {
-        return getNlpSegmentation();
+        return getToSegmentation();
     }
 
     public static ISegmentation getBaseSegmentation() {

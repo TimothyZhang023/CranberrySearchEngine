@@ -5,13 +5,20 @@
 package com.zts1993.gse.db.redis;
 
 import com.zts1993.gse.util.ConfigurationUtil;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Created by TianShuo on 2015/3/31.
  */
 public class RedisQueue {
+
+    private static final Logger logger = LogManager.getLogger("RedisQueue");
 
     private String key;
 
@@ -27,7 +34,7 @@ public class RedisQueue {
             redisQueueClient = new RedisPoolClient(
                     ConfigurationUtil.getValue("RedisIndexNotifyServerIp", "127.0.0.1"),
                     Integer.parseInt(ConfigurationUtil.getValue("RedisIndexNotifyServerPort", "6379")),
-                    50
+                    100
             );
 
         }
@@ -43,6 +50,7 @@ public class RedisQueue {
 
 
     public void push(String string) {
+
         JedisPool pool = RedisQueue.getJedisPool();
         Jedis jedis = null;
         String res = null;
@@ -51,7 +59,7 @@ public class RedisQueue {
             jedis.lpush(this.key, string);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
-            e.printStackTrace();
+            logException(e);
         } finally {
             returnResource(pool, jedis);
         }
@@ -66,7 +74,7 @@ public class RedisQueue {
             res = jedis.lpop(key);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
-            e.printStackTrace();
+            logException(e);
         } finally {
             returnResource(pool, jedis);
         }
@@ -83,7 +91,7 @@ public class RedisQueue {
             size = jedis.llen(key);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
-            e.printStackTrace();
+            logException(e);
         } finally {
             returnResource(pool, jedis);
         }
@@ -103,5 +111,15 @@ public class RedisQueue {
             pool.returnResource(jedis);
         }
     }
+
+
+    private static void logException(Exception e) {
+        logger.info(e.getMessage());
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        String str = sw.toString();
+        logger.error("Exception : " + str);
+    }
+
 
 }

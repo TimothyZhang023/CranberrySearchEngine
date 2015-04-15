@@ -32,7 +32,7 @@ public class ReGenerateIndexNotifyQueue {
         FindIterable<Document> it = html_detail.find();
 
         Iterator<Document> iterator = it.iterator();
-        if (iterator.hasNext()) {
+        while (iterator.hasNext()) {
             try {
                 Document doc = iterator.next();
 

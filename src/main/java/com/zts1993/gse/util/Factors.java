@@ -48,8 +48,16 @@ public class Factors {
     public static int PageSize = 10;
 
 
-    public static double CpuOverUse = 2.0;
+    public static double CpuOverUse = 1.5;
     public static int InvertedIndexThreadSemaphoreThreshold = 1;
+
+
+    /**
+     * SimilarDegree
+     */
+    public static int checkWordCount = 20;
+    public static int checkUrlCount = 20;
+
 
 
 }

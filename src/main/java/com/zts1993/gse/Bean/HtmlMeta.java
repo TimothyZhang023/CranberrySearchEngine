@@ -30,6 +30,14 @@ public class HtmlMeta {
         return url;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
     @Override
     public String toString() {
         return "HtmlInfo{" +

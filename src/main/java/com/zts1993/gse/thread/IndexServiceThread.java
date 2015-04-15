@@ -48,7 +48,8 @@ public class IndexServiceThread extends Thread {
             try {
 
                 while (InvertedIndexThreadSemaphore.sum() < Factors.InvertedIndexThreadSemaphoreThreshold) {
-                    Thread.sleep(50);
+                    logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
+                    Thread.sleep(100);
                 }
 
                 String jsonText = redisQueue.pop();
@@ -59,6 +60,7 @@ public class IndexServiceThread extends Thread {
                         Thread.sleep(1000);
 
                     } catch (InterruptedException e) {
+                        logger.info(e.getMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -68,7 +70,6 @@ public class IndexServiceThread extends Thread {
                         Runnable runner = new InvertedIndexGenerationTask(indexNotify);
                         executor.execute(runner);
 
-                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
 
 
                     } catch (Exception e) {
@@ -101,6 +102,7 @@ public class IndexServiceThread extends Thread {
                 Thread.sleep(1000000);
 
             } catch (InterruptedException e) {
+                logger.info(e.getMessage());
                 e.printStackTrace();
             }
 

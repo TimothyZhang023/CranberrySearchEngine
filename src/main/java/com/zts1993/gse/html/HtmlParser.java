@@ -70,6 +70,11 @@ public class HtmlParser {
             return matcher.group().toLowerCase().replace("<h1>", "").replace("</h1>", "");
         }
 
+        matcher = Pattern.compile("<h2>([^</h2>].*?)</h2>").matcher(htmlStr);
+        if (matcher.find()) {
+            return matcher.group().toLowerCase().replace("<h2>", "").replace("</h2>", "");
+        }
+
         matcher = Pattern.compile("<title>([^</title>].*?)</title>").matcher(htmlStr);
         if (matcher.find()) {
             return matcher.group().toLowerCase().replace("<title>", "").replace("</title>", "");

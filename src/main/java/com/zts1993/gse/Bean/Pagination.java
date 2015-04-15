@@ -5,7 +5,6 @@
 package com.zts1993.gse.bean;
 
 /**
- *
  * Created by TianShuo on 2015/4/4.
  */
 public class Pagination {
@@ -20,9 +19,9 @@ public class Pagination {
     public Pagination(int pageSize, int totalRow) {
         this.pageSize = pageSize;
         this.totalRow = totalRow;
-        if( totalRow % pageSize ==0){
-            this.totalPage = totalRow / pageSize ;
-        }else{
+        if (totalRow % pageSize == 0) {
+            this.totalPage = totalRow / pageSize;
+        } else {
             this.totalPage = totalRow / pageSize + 1;
         }
 

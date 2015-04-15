@@ -23,8 +23,12 @@ public class InvertedIndexThreadSemaphore {
         return counter_integer.get();
     }
 
-    public synchronized static int incr() {
-        return counter_integer.getAndIncrement();
+    public synchronized static void incr() {
+        if (sum() > Threads) {
+            return ;
+        }
+        counter_integer.getAndIncrement();
+
     }
 
     public synchronized static int decr() {

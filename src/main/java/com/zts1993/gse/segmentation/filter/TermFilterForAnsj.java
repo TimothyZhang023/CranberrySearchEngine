@@ -85,4 +85,8 @@ public class TermFilterForAnsj {
                 ", wordCount=" + wordCount +
                 '}';
     }
+
+
+
+
 }
