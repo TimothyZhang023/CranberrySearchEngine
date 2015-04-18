@@ -35,20 +35,4 @@ public class SimilarDegreeByCosTest {
 
     }
 
-    @Test
-    public void testGetSimilarDegree2() throws Exception {
-        String str1 = "gold silver truck";
-        String str2 = "Shipment of gold damaged in a fire";
-        String str3 = "Delivery of silver arrived in a silver truck";
-        String str4 = "Shipment of gold arrived in a truck";
-        String str5 = "gold gold gold gold gold gold";
-
-        System.out.println(SimilarDegreeByCos.getSimilarDegreeTesy(str1, str2));
-        System.out.println(SimilarDegreeByCos.getSimilarDegreeTesy(str1, str3));
-        System.out.println(SimilarDegreeByCos.getSimilarDegreeTesy(str1, str4));
-        System.out.println(SimilarDegreeByCos.getSimilarDegreeTesy(str1, str5));
-
-        System.out.println(SimilarDegreeByCos.getSimilarDegreeTesy(str5, str5));
-
-    }
-    }
+}

@@ -7,7 +7,7 @@
 
     <groupId>com.zts1993</groupId>
     <artifactId>CSE</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
 
     <name>Cranberry Search Engine</name>
     <description>Cranberry Search Engine Kernel</description>
@@ -93,71 +93,6 @@
 
 
     <build>
-        <!--<plugins>-->
-            <!--&lt;!&ndash; The configuration of maven-jar-plugin &ndash;&gt;-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-jar-plugin</artifactId>-->
-                <!--<version>2.4</version>-->
-                <!--&lt;!&ndash; The configuration of the plugin &ndash;&gt;-->
-                <!--<configuration>-->
-                    <!--&lt;!&ndash; Configuration of the archiver &ndash;&gt;-->
-                    <!--<archive>-->
-                        <!--&lt;!&ndash;-->
-                            <!--生成的jar中，不要包含pom.xml和pom.properties这两个文件-->
-                        <!--&ndash;&gt;-->
-                        <!--<addMavenDescriptor>false</addMavenDescriptor>-->
-
-                        <!--&lt;!&ndash; Manifest specific configuration &ndash;&gt;-->
-                        <!--<manifest>-->
-                            <!--&lt;!&ndash;-->
-                                <!--是否要把第三方jar放到manifest的classpath中-->
-                            <!--&ndash;&gt;-->
-                            <!--<addClasspath>true</addClasspath>-->
-                            <!--&lt;!&ndash;-->
-                               <!--生成的manifest中classpath的前缀，因为要把第三方jar放到lib目录下，所以classpath的前缀是lib/-->
-                           <!--&ndash;&gt;-->
-                            <!--<classpathPrefix>lib/</classpathPrefix>-->
-                            <!--&lt;!&ndash;-->
-                                <!--应用的main class-->
-                            <!--&ndash;&gt;-->
-                            <!--<mainClass>com.zts1993.gse.Main</mainClass>-->
-                        <!--</manifest>-->
-                    <!--</archive>-->
-                    <!--&lt;!&ndash;-->
-                        <!--过滤掉不希望包含在jar中的文件-->
-                    <!--&ndash;&gt;-->
-                    <!--<excludes>-->
-                        <!--<exclude>${project.basedir}/xml/*</exclude>-->
-                    <!--</excludes>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-
-            <!--&lt;!&ndash; The configuration of maven-assembly-plugin &ndash;&gt;-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-assembly-plugin</artifactId>-->
-                <!--<version>2.4</version>-->
-                <!--&lt;!&ndash; The configuration of the plugin &ndash;&gt;-->
-                <!--<configuration>-->
-                    <!--&lt;!&ndash; Specifies the configuration file of the resources plugin &ndash;&gt;-->
-                    <!--<descriptors>-->
-                        <!--<descriptor>src/main/resources/package.xml</descriptor>-->
-                    <!--</descriptors>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>make-assembly</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>single</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-
-
 
         <plugins>
             <plugin>
@@ -199,6 +134,20 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>attach-javadocs</id>-->
+            <!--<goals>-->
+            <!--<goal>jar</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
+
         </plugins>
 
 

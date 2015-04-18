@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.segmentation.filter;
 
+import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 
 import java.util.HashMap;
@@ -13,19 +14,25 @@ import java.util.List;
 /**
  * Created by TianShuo on 2015/3/22.
  */
-public class TermFilterForAnsj {
+public class TermFilterForAnsj implements TermFilter {
 
     private int weight;
     private List<Term> termListInput;
 
+    private HashMap<String, Integer> wordFreqMap = new HashMap<String, Integer>();
+    private int wordCount = -1;
+
+
+    public TermFilterForAnsj(String stringInput, int weight) {
+        this.termListInput = SegmentationFactory.getHtmlParseSegmentation().parse(stringInput);
+        this.weight = weight;
+    }
 
     public TermFilterForAnsj(List<Term> termListInput, int weight) {
         this.termListInput = termListInput;
         this.weight = weight;
     }
 
-    private HashMap<String, Integer> wordFreqMap = new HashMap<String, Integer>();
-    private int wordCount=0;
 
     public TermFilterForAnsj process() {
 
@@ -62,15 +69,17 @@ public class TermFilterForAnsj {
     }
 
 
+    @Override
     public HashMap<String, Integer> getWordFreqMap() {
-        if(wordFreqMap.size()==0){
+        if (wordFreqMap.size() == -1) {
             process();
         }
         return wordFreqMap;
     }
 
+    @Override
     public int getWordCount() {
-        if(wordCount==0){
+        if (wordCount == -1) {
             process();
         }
         return wordCount;
@@ -85,8 +94,6 @@ public class TermFilterForAnsj {
                 ", wordCount=" + wordCount +
                 '}';
     }
-
-
 
 
 }

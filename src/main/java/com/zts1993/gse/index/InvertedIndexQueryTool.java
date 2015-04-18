@@ -7,13 +7,14 @@ package com.zts1993.gse.index;
 import com.zts1993.gse.bean.HtmlItem;
 import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.redis.RedisDB;
-import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
 import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.index.comparator.UrlScoreComparator;
 import com.zts1993.gse.index.score.IScore;
 import com.zts1993.gse.index.score.TfIdf;
 import com.zts1993.gse.segmentation.SegmentationFactory;
+import com.zts1993.gse.segmentation.filter.TermFilter;
+import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
 import com.zts1993.gse.util.Factors;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -55,9 +56,9 @@ public class InvertedIndexQueryTool {
 
     public void divide() {
 
-        TermFilterForAnsj termFilterForAnsj = new TermFilterForAnsj(SegmentationFactory.getDefaultSegmentation().parse(queryKey), 1);
+        TermFilter termFilterForAnsj = new TermFilterForAnsj(SegmentationFactory.getNlpSegmentation().parse(queryKey), 1);
 
-        HashMap<String, Integer> wordFreqMap = termFilterForAnsj.process().getWordFreqMap();
+        HashMap<String, Integer> wordFreqMap = termFilterForAnsj.getWordFreqMap();
 
         queryWordsSet = new HashSet<String>();
         for (Map.Entry wordFreq : wordFreqMap.entrySet()) {

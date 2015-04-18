@@ -4,7 +4,7 @@
 
 package com.zts1993.gse.bean;
 
-import com.zts1993.gse.segmentation.SegmentationFactory;
+import com.zts1993.gse.segmentation.filter.TermFilter;
 import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
 import com.zts1993.gse.util.Factors;
 
@@ -16,11 +16,12 @@ import java.util.Map;
  */
 public class HtmlDoc extends HtmlMeta {
 
-    private int wordCount;
+    private int wordCount=-1;
+    private int rawWordCount=-1;
     HashMap<String, Integer> wordFreqMap = new HashMap<String, Integer>();
+    HashMap<String, Integer> titleWordFreqMap = new HashMap<String, Integer>();
+    HashMap<String, Integer> contentWordFreqMap = new HashMap<String, Integer>();
 
-    TermFilterForAnsj termTitleFilter;
-    TermFilterForAnsj termContentFilter;
 
     public HtmlDoc(String docId, String url, String title, String content) {
         super(docId, url, title, content);
@@ -28,20 +29,25 @@ public class HtmlDoc extends HtmlMeta {
 
     public HtmlDoc parse() {
 
-        termTitleFilter = new TermFilterForAnsj(SegmentationFactory.getDefaultSegmentation().parse(this.title), Factors.titleWeight);
-        termContentFilter = new TermFilterForAnsj(SegmentationFactory.getDefaultSegmentation().parse(this.content), Factors.contentWeight);
+        TermFilter termTitleFilter = new TermFilterForAnsj(this.title, Factors.titleWeight);
+        TermFilter termContentFilter = new TermFilterForAnsj(this.content, Factors.contentWeight);
 
-        mergeWordFreqMap(termTitleFilter.process().getWordFreqMap(), termContentFilter.process().getWordFreqMap());
+        titleWordFreqMap = termTitleFilter.getWordFreqMap();
+        contentWordFreqMap = termContentFilter.getWordFreqMap();
+
+        mergeWordFreqMap();
+
+        rawWordCount = termContentFilter.getWordCount() + termTitleFilter.getWordCount();
         wordCount = wordCountPunish(termContentFilter.getWordCount());
 
         return this;
     }
 
-    private void mergeWordFreqMap(HashMap<String, Integer> titleMap, HashMap<String, Integer> contentMap) {
+    private void mergeWordFreqMap() {
 
-        wordFreqMap.putAll(contentMap);
+        wordFreqMap.putAll(contentWordFreqMap);
 
-        for (Map.Entry titleEntry : titleMap.entrySet()) {
+        for (Map.Entry titleEntry : titleWordFreqMap.entrySet()) {
             String key = titleEntry.getKey().toString();
             if (wordFreqMap.containsKey(key)) {
                 Integer termCount = (Integer) titleEntry.getValue() + wordFreqMap.get(key);
@@ -60,16 +66,19 @@ public class HtmlDoc extends HtmlMeta {
 
 
     public int getWordCount() {
-        return wordCount;
+        if(wordCount==-1){
+            parse();
+        }
+        return wordCount+1;
     }
 
     public HashMap<String, Integer> getWordFreqMap() {
+        if(wordCount==-1){
+            parse();
+        }
         return wordFreqMap;
     }
 
-    public TermFilterForAnsj getTermContentFilter() {
-        return termContentFilter;
-    }
 
     @Override
     public String toString() {
@@ -79,5 +88,12 @@ public class HtmlDoc extends HtmlMeta {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public int getRawWordCount() {
+        if(wordCount==-1){
+            parse();
+        }
+        return rawWordCount+1;
     }
 }

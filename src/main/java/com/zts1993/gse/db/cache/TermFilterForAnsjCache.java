@@ -13,7 +13,7 @@ public class TermFilterForAnsjCache {
 
 
     private static LRUCache<String, TermFilterForAnsj> termFilterForAnsjCache;
-    private static final int DEFAULT_CAPACITY = 500;
+    private static final int DEFAULT_CAPACITY = 100;
 
     static {
         init();

@@ -36,9 +36,9 @@ public class TermFilterForAnsjTest {
         List<Term> parse = SegmentationFactory.getNlpSegmentation().parse(demo2);
 
 
-        TermFilterForAnsj termFilterForAnsj = new TermFilterForAnsj(parse, 1).process();
+        TermFilter termFilter = new TermFilterForAnsj(parse, 1).process();
 
-        System.out.println(termFilterForAnsj.toString());
+        System.out.println(termFilter.toString());
 
     }
 }

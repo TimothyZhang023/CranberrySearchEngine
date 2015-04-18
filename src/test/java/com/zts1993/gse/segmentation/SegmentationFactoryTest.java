@@ -40,7 +40,7 @@ public class SegmentationFactoryTest {
 
     @Test
     public void testGetDefaultSegmentation() throws Exception {
-        parse = SegmentationFactory.getDefaultSegmentation().parse(demo);
+        parse = SegmentationFactory.getHtmlParseSegmentation().parse(demo);
 
     }
 

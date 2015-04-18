@@ -106,6 +106,31 @@ public class RedisSafe {
     }
 
     /**
+     * <p>通过key获取储存在redis中的value</p>
+     * <p>并释放连接</p>
+     *
+     * @param key
+     * @return 成功返回value 失败返回null
+     */
+    public String get(String key,String defaultValue) {
+        Jedis jedis = null;
+        String value = defaultValue;
+        try {
+            jedis = pool.getResource();
+            value = jedis.get(key);
+            if(value==null){
+                value = defaultValue;
+            }
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            logException(e);
+        } finally {
+            returnResource(pool, jedis);
+        }
+        return value;
+    }
+
+    /**
      * <p>向redis存入key和value,并释放连接资源</p>
      * <p>如果key已经存在 则覆盖</p>
      *

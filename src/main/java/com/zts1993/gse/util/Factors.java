@@ -13,7 +13,7 @@ public class Factors {
     /**
      * double const
      */
-    public static int titleWeight = 10;
+    public static int titleWeight = 9;
     public static int contentWeight = 1;
 
 
@@ -56,7 +56,7 @@ public class Factors {
      * SimilarDegree
      */
     public static int checkWordCount = 20;
-    public static int checkUrlCount = 20;
+    public static int checkUrlCount = 10;
 
 
 
