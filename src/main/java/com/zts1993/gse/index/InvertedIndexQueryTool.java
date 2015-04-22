@@ -7,6 +7,7 @@ package com.zts1993.gse.index;
 import com.zts1993.gse.bean.HtmlItem;
 import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.redis.RedisDB;
+import com.zts1993.gse.db.redis.RedisSafe;
 import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.index.comparator.UrlScoreComparator;
@@ -70,10 +71,11 @@ public class InvertedIndexQueryTool {
 
     public void preQueryProcess() {
 
+        RedisSafe redisSafe = new RedisSafe();
         Jedis jedis = RedisDB.getJedis();
         IScore scoreCalculator = new TfIdf();
 
-        int totalPages = Integer.parseInt(jedis.get("totalPages"));
+        int totalPages = Integer.parseInt(redisSafe.get("totalPages", "1")) + 1;
         int queryWordsCount = queryWordsSet.size();
 
         try {

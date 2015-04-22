@@ -26,12 +26,12 @@ public class TfIdf implements IScore {
         ) + 1;
     }
 
-    public static double getIdfScoreM1(int totolPages, long stSize) {
-        return java.lang.Math.log(totolPages * 1.0 / stSize + 1);
+    public static double getIdfScoreM1(int totalPages, long stSize) {
+        return java.lang.Math.log(totalPages * 1.0 / stSize + 1);
     }
 
-    public static double getIdfScoreM2(int totolPages, long stSize) {
-        return java.lang.Math.log((totolPages * 1.0 - stSize + 0.5) / (stSize + 0.5));
+    public static double getIdfScoreM2(int totalPages, long stSize) {
+        return java.lang.Math.log((totalPages * 1.0 - stSize + 0.5) / (stSize + 0.5));
     }
 
 }
