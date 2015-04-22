@@ -29,47 +29,47 @@ public class InvertedIndexGenerationTool {
 
     public boolean checkSimilarity(HtmlDoc htmlDoc) {
         long timeQueryStart = System.currentTimeMillis();
-
+        Jedis jedis = null;
         RedisSafe redisSafe = new RedisSafe();
 
-        int totalPages = Integer.parseInt(redisSafe.get("totalPages", "1")) + 1;
-
-        int wordCount = htmlDoc.getRawWordCount();
-        HashMap<String, Integer> wordCountMap = htmlDoc.getWordFreqMap();
+        try {
+            jedis = RedisDB.getJedis();
 
 
-        HashMap<String, Double> wordFreqMap = new HashMap<String, Double>();
+            int totalPages = Integer.parseInt(redisSafe.get("totalPages", "1")) + 1;
 
-        for (Map.Entry entry : wordCountMap.entrySet()) {
-            String key = (String) entry.getKey();
-            Integer val = (Integer) entry.getValue();
-
-            Long stSize = redisSafe.zcount(key, -1000.0, 1000.0);
-
-            double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
-
-            wordFreqMap.put(key, idf * idf * val / wordCount);
-        }
+            int wordCount = htmlDoc.getRawWordCount();
+            HashMap<String, Integer> wordCountMap = htmlDoc.getWordFreqMap();
 
 
-        List<Map.Entry<String, Double>> wordMapList = new ArrayList<Map.Entry<String, Double>>(wordFreqMap.entrySet());
-        Collections.sort(wordMapList, new WordFreqComparator());
+            HashMap<String, Double> wordFreqMap = new HashMap<String, Double>();
 
-        int wordCountTobeChecked = wordMapList.size() > Factors.checkWordCount ? Factors.checkWordCount : wordMapList.size();
-        wordMapList = wordMapList.subList(0, wordCountTobeChecked);
+            for (Map.Entry entry : wordCountMap.entrySet()) {
+                String key = (String) entry.getKey();
+                Integer val = (Integer) entry.getValue();
 
-        Jedis jedis = null;
-        HashMap<String, Double> urlIdHitsMap = new HashMap<String, Double>();
+                Long stSize = jedis.zcount(key, -1000.0, 1000.0);
 
-        for (Map.Entry<String, Double> entry : wordMapList) {
+                double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
 
-            String keyWord = entry.getKey();
-            //      logger.info(keyWord + " " + entry.getValue());
+                wordFreqMap.put(key, idf * idf * val / wordCount);
+            }
 
-            double tf = entry.getValue() * 1.0 / wordCount * 1.0;
 
-            try {
-                jedis = RedisDB.getJedis();
+            List<Map.Entry<String, Double>> wordMapList = new ArrayList<Map.Entry<String, Double>>(wordFreqMap.entrySet());
+            Collections.sort(wordMapList, new WordFreqComparator());
+
+            int wordCountTobeChecked = wordMapList.size() > Factors.checkWordCount ? Factors.checkWordCount : wordMapList.size();
+            wordMapList = wordMapList.subList(0, wordCountTobeChecked);
+
+            HashMap<String, Double> urlIdHitsMap = new HashMap<String, Double>();
+
+            for (Map.Entry<String, Double> entry : wordMapList) {
+
+                String keyWord = entry.getKey();
+                //      logger.info(keyWord + " " + entry.getValue());
+
+                double tf = entry.getValue() * 1.0 / wordCount * 1.0;
 
                 Long stSize = jedis.zcount(keyWord, -1000.0, 1000.0);
                 double idf = TfIdf.getIdfScoreM1(totalPages, stSize);
@@ -85,49 +85,52 @@ public class InvertedIndexGenerationTool {
                     }
                 }
 
-            } catch (Exception e) {
-                if (jedis != null) {
-                    RedisDB.closeBrokenJedis(jedis);
-                }
-            } finally {
-                if (jedis != null) {
-                    RedisDB.closeJedis(jedis);
-
-                }
             }
 
 
-        }
-
-        long preparationUrlIdHitsMapTime = System.currentTimeMillis() - timeQueryStart;
+            long preparationUrlIdHitsMapTime = System.currentTimeMillis() - timeQueryStart;
 
 
-        List<Map.Entry<String, Double>> urlIdHitsList = new ArrayList<Map.Entry<String, Double>>(urlIdHitsMap.entrySet());
-        Collections.sort(urlIdHitsList, new WordFreqComparator());
+            List<Map.Entry<String, Double>> urlIdHitsList = new ArrayList<Map.Entry<String, Double>>(urlIdHitsMap.entrySet());
+            Collections.sort(urlIdHitsList, new WordFreqComparator());
 
-        urlIdHitsList = urlIdHitsList.subList(0, urlIdHitsList.size() > Factors.checkUrlCount ? Factors.checkUrlCount : urlIdHitsList.size());
+            urlIdHitsList = urlIdHitsList.subList(0, urlIdHitsList.size() > Factors.checkUrlCount ? Factors.checkUrlCount : urlIdHitsList.size());
 
 
-        for (int i = 0, urlIdHitsListSize = urlIdHitsList.size(); i < urlIdHitsListSize; i++) {
-            String urlIdToBeChecked =  urlIdHitsList.get(i).getKey();
-            double rank = SimilarDegreeByCos.getSimilarDegree(htmlDoc.getDocId(), urlIdToBeChecked);
-            if (rank > 0.80) {
-                long timeSpend = System.currentTimeMillis() - timeQueryStart;
-                logger.info("Found " + htmlDoc.getDocId() + " and " + urlIdToBeChecked +
-                                " with rank " + rank +
-                                " costs " + timeSpend + " ms" +
-                                " preparationurlIdHitsMapTime " + preparationUrlIdHitsMapTime + " ms" +
-                                " urlIdHitsMap " + urlIdHitsMap.size() +
-                                " in NO." + i
-                );
+            for (int i = 0, urlIdHitsListSize = urlIdHitsList.size(); i < urlIdHitsListSize; i++) {
+                String urlIdToBeChecked = urlIdHitsList.get(i).getKey();
+                double rank = SimilarDegreeByCos.getSimilarDegree(htmlDoc.getDocId(), urlIdToBeChecked);
+                if (rank > 0.80) {
+                    long timeSpend = System.currentTimeMillis() - timeQueryStart;
+                    logger.info("Found " + htmlDoc.getDocId() + " and " + urlIdToBeChecked +
+                                    " with rank " + rank +
+                                    " costs " + timeSpend + " ms" +
+                                    " preparationurlIdHitsMapTime " + preparationUrlIdHitsMapTime + " ms" +
+                                    " urlIdHitsMap " + urlIdHitsMap.size() +
+                                    " in NO." + i
+                    );
 
-                return true;
+                    return true;
+                }
+            }
+            //long timeSpend = System.currentTimeMillis() - timeQueryStart;
+            //logger.info("Similarity check costs " + timeSpend + " ms");
+
+
+        } catch (Exception e) {
+            if (jedis != null) {
+                RedisDB.closeBrokenJedis(jedis);
+            }
+        } finally {
+            if (jedis != null) {
+                RedisDB.closeJedis(jedis);
+
             }
         }
-        long timeSpend = System.currentTimeMillis() - timeQueryStart;
-        logger.info("Similarity check costs " + timeSpend + " ms");
 
         return false;
+
+
     }
 
 
@@ -146,6 +149,8 @@ public class InvertedIndexGenerationTool {
 
         if (wordFreqMap.size() < Factors.LowerQuality) {
             //low quality web pages reject
+            logger.info("Lower Quality page" + htmlDoc.getUrl() + "with " + wordFreqMap.size() + " words");
+
             return;
         }
 

@@ -30,7 +30,10 @@ public class InvertedIndexGenerationTask implements Runnable {
         try {
 
             InvertedIndexThreadSemaphore.decr();
+
+
             generateIndex();
+
 
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -41,12 +44,16 @@ public class InvertedIndexGenerationTask implements Runnable {
     }
 
     private void generateIndex() {
+        long taskTimeStart = System.currentTimeMillis();
 
         HtmlDoc htmlDoc = getHtmlDoc();
 
         InvertedIndexGenerationTool invertedIndexGenerationTool = new InvertedIndexGenerationTool();
         invertedIndexGenerationTool.addToInvertedIndex(htmlDoc);
 
+        long taskTimeStop = System.currentTimeMillis();
+
+        logger.info("Costs " + (taskTimeStop - taskTimeStart) + " ms to process: "+htmlDoc.getUrl());
     }
 
     public HtmlDoc getHtmlDoc() {

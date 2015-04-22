@@ -48,8 +48,7 @@ public class IndexServiceThread extends Thread {
             try {
 
                 while (InvertedIndexThreadSemaphore.sum() < Factors.InvertedIndexThreadSemaphoreThreshold) {
-                    logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 }
 
                 String jsonText = redisQueue.pop();
@@ -65,6 +64,9 @@ public class IndexServiceThread extends Thread {
                     }
                 } else {
                     try {
+
+                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
+
                         IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
 
                         Runnable runner = new InvertedIndexGenerationTask(indexNotify);

@@ -24,7 +24,6 @@ public class RedisQueue {
 
     public RedisQueue(String key) {
         this.key = key;
-                
     }
 
     private static RedisPoolClient redisQueueClient;

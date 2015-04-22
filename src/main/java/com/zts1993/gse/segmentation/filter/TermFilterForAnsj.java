@@ -71,7 +71,7 @@ public class TermFilterForAnsj implements TermFilter {
 
     @Override
     public HashMap<String, Integer> getWordFreqMap() {
-        if (wordFreqMap.size() == -1) {
+        if (wordCount == -1) {
             process();
         }
         return wordFreqMap;
