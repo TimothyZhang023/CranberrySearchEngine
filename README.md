@@ -11,6 +11,11 @@ Cranberry Search Engine Kernel
  - Maven 4.0.0
  - Redis 2.8
 
+# 3rd component
+ - Ansj4J
+ - Jersey
+ - Fastjson
+ - Jchardet
 
 # Contact:
 Email: cse(@)zts1993.com
@@ -22,10 +27,20 @@ Email: cse(@)zts1993.com
 # Milestone:
  - v0.1 2015.3.22 First init
  - v0.2 2015.3.28 First integration (no spider)
- - v0.3 2015.4.2 Integration with spiders
+ - v0.3 2015.4.2  Integration with spiders
+ - v0.4 2015.4.22 Add function Similarity Check into work flow
 
-
-2015/4/5
+# Q&A:
+  nothing yet
+  
+  
+# Usage
+  1. use mvn install to build and result can be found in directory target
+  2. modify configure.properties if you need
+  3. use java -jar CSE-{version}-SNAPSHOT.jar to start 
+  4. if you are going to deploy into other server , don not to forget copy directory lib
+ 
+2015/4/25
 
 
 ![GreenStudio](http://green.njut.asia/Public/share/img/logo-png.png "GreenStudio logo")

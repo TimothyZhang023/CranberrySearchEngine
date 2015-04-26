@@ -42,12 +42,11 @@ public class QueryApi {
     @Produces("application/json")
     public String getQueryResult(@Context UriInfo ui, @PathParam("keyword") String keyword) {
 
+        logger.info("Query words: " + keyword);
 
-        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
-        if (queryParams.containsKey("p")) {
-            curPage = Integer.valueOf(queryParams.getFirst("p"));
-        }
+        String jsonRes;
 
+        getCurrentPage(ui);
 
         InvertedIndexQueryTool invertedIndexQueryTool = new InvertedIndexQueryTool(keyword);
 
@@ -70,10 +69,17 @@ public class QueryApi {
 
 
         QueryResult queryResult = new QueryResult(keyword, totalResultCount, timeSpend, pagination, htmlItems);
-        String jsonRes = JSON.toJSONString(queryResult);
+        jsonRes = JSON.toJSONString(queryResult);
 
 
         return jsonRes;
+    }
+
+    private void getCurrentPage(UriInfo ui) {
+        MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+        if (queryParams.containsKey("p")) {
+            curPage = Integer.valueOf(queryParams.getFirst("p"));
+        }
     }
 
 }

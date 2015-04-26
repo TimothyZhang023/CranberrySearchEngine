@@ -41,11 +41,9 @@ public class RedisQueue {
     }
 
 
-
     public static JedisPool getJedisPool() {
         return getRedisQueueClient().getJedisPool();
     }
-
 
 
     public void push(String string) {
@@ -95,6 +93,23 @@ public class RedisQueue {
             returnResource(pool, jedis);
         }
         return size;
+
+    }
+
+
+    public void flushAll() {
+
+        JedisPool pool = RedisQueue.getJedisPool();
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.del(key);
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            logException(e);
+        } finally {
+            returnResource(pool, jedis);
+        }
 
     }
 

@@ -56,7 +56,8 @@ public class Factors {
      * SimilarDegree
      */
     public static int checkWordCount = 20;
-    public static int checkUrlCount = 10;
+    public static int checkSimWordCount = 20;
+    public static int checkUrlCount = 20;
 
 
 

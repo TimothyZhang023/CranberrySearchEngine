@@ -60,7 +60,7 @@ public class SimilarDegreeByCos {
 
 
        int minSize = map1List.size() > map2List.size() ? map2List.size() : map1List.size();
-       int finalSize = minSize > Factors.checkWordCount ? Factors.checkWordCount : minSize;
+       int finalSize = minSize > Factors.checkSimWordCount ? Factors.checkSimWordCount : minSize;
 
 
        map1List = map1List.subList(0, finalSize);

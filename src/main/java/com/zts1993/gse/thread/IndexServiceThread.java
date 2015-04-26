@@ -24,7 +24,13 @@ public class IndexServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
 
-    private static final int DEFAULT_INTERVAL = 1000000;
+    private static final int DEFAULT_INTERVAL = 30*1000;
+
+    public RedisQueue getRedisQueue() {
+        return redisQueue;
+    }
+
+    RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
     public IndexServiceThread(String name) {
 
@@ -41,14 +47,13 @@ public class IndexServiceThread extends Thread {
         //InvertedIndexTestTool.genIndex();
 
         ExecutorService executor = Executors.newFixedThreadPool(InvertedIndexThreadSemaphore.Threads);
-        RedisQueue redisQueue = new RedisQueue("IndexNotifyQueue");
 
         while (true) {
 
             try {
 
                 while (InvertedIndexThreadSemaphore.sum() < Factors.InvertedIndexThreadSemaphoreThreshold) {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 }
 
                 String jsonText = redisQueue.pop();
@@ -65,7 +70,6 @@ public class IndexServiceThread extends Thread {
                 } else {
                     try {
 
-                        logger.info(String.format("Queue Size: %s and Semaphore: %s ", redisQueue.size(), InvertedIndexThreadSemaphore.sum()));
 
                         IndexNotify indexNotify = JSON.parseObject(jsonText, IndexNotify.class);
 
@@ -101,7 +105,8 @@ public class IndexServiceThread extends Thread {
 
         while (true) {
             try {
-                Thread.sleep(1000000);
+                Thread.sleep(DEFAULT_INTERVAL);
+                logger.info(String.format("Queue Size: %s and Semaphore: %s ", indexServiceThread.getRedisQueue().size(), InvertedIndexThreadSemaphore.sum()));
 
             } catch (InterruptedException e) {
                 logger.info(e.getMessage());

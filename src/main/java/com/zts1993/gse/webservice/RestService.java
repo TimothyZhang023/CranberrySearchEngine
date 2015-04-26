@@ -22,7 +22,7 @@ public class RestService {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
 
-        logger.info("Server running");
+        logger.info("Api Service Starting");
         logger.info("Visit: http://localhost:9998/");
         //server.stop(0);
         //logger.info("Server stopped");

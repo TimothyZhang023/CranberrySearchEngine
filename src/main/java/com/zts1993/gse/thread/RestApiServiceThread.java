@@ -4,6 +4,8 @@
 
 package com.zts1993.gse.thread;
 
+import com.zts1993.gse.Main;
+import com.zts1993.gse.util.ExceptionHandler;
 import com.zts1993.gse.webservice.RestService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -30,12 +32,11 @@ public class RestApiServiceThread extends Thread {
         try {
             logger.info("RestApiThread working~ ");
 
-            String[] args = new String[0];
-
-            RestService.main(args);
+            RestService.main(Main.globalArgs);
 
         } catch (IOException e) {
-            e.printStackTrace();
+
+            new ExceptionHandler(e).process();
         }
 
 
