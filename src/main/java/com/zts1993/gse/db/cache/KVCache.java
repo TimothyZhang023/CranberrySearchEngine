@@ -7,7 +7,7 @@ package com.zts1993.gse.db.cache;
 /**
  * Created by TianShuo on 2015/4/7.
  */
-public class KvCache {
+public class KVCache {
 
 
     private static LRUCache<String, String> kvLRUCache;
@@ -19,7 +19,7 @@ public class KvCache {
 
     public static void init() {
         if (kvLRUCache == null) {
-            synchronized (KvCache.class) {
+            synchronized (KVCache.class) {
                 if (kvLRUCache == null) {
                     kvLRUCache = new LRUCache<String, String>(DEFAULT_CAPACITY);
                 }

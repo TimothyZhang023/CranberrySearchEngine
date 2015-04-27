@@ -8,7 +8,7 @@ package com.zts1993.gse.util;
  * Created by TianShuo on 2015/4/14.
  */
 
-import com.zts1993.gse.db.cache.KvCache;
+import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
 import com.zts1993.gse.index.comparator.WordCountComparator;
@@ -28,12 +28,12 @@ public class SimilarDegreeByCos {
 
     public static TermFilter getTermFilterForAnsj(String docId) {
 
-        String textContent = KvCache.get("textContent:" + docId);
+        String textContent = KVCache.get("textContent:" + docId);
 
         if (textContent == null) {
             IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(docId);
             textContent = iHtmlContentProvider.fetchText();
-            KvCache.set("textContent:" + docId,textContent);
+            KVCache.set("textContent:" + docId, textContent);
         }
 
         List<Term> termList = SegmentationFactory.getNlpSegmentation().parse(textContent);

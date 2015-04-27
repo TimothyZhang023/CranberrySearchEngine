@@ -4,14 +4,14 @@
 
 package com.zts1993.gse.db.logic;
 
-import com.zts1993.gse.db.cache.KvCache;
+import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.cache.LRUCache;
 import com.zts1993.gse.db.cache.TTLCache;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class KvCacheTest {
+public class KVCacheTest {
 
     final private static Logger logger = LogManager.getLogger("KVCacheTest");
 
@@ -20,7 +20,7 @@ public class KvCacheTest {
 
     @Test
     public void testSet() throws Exception {
-        KvCache.set("KVCacheTest_test", "sss");
+        KVCache.set("KVCacheTest_test", "sss");
 
 
     }
