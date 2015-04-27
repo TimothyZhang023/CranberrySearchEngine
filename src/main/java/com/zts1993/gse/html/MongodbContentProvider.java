@@ -19,18 +19,17 @@ import java.util.Set;
  */
 public class MongodbContentProvider implements IHtmlContentProvider {
 
-    private String content;
+    private String url="";
+    private String content="";
+    private String title="";
     private String docId;
 
     public MongodbContentProvider(String docId) {
         this.docId = docId;
+        preProcess();
     }
 
-    @Override
-    public String fetchHtml() {
-
-        content = "";
-
+    public void preProcess(){
         MongoCollection<Document> html_detail = MongoDB.getMongoCollection("html", "html_detail");
         FindIterable<Document> it = html_detail.find(new BasicDBObject("docId", docId));
 
@@ -38,28 +37,30 @@ public class MongodbContentProvider implements IHtmlContentProvider {
         if (iterator.hasNext()) {
             Document doc = iterator.next();
             content = doc.get("content").toString();
+            url = doc.get("url").toString();
         }
+        title=new HtmlParser().getHtmlTitle(content);
+    }
 
+    @Override
+    public String fetchUrl() {
+        return url;
+    }
+
+    @Override
+    public String fetchHtml() {
         return content;
     }
 
     @Override
     public String fetchText() {
-        if (this.content == null) {
-            this.fetchHtml();
-        }
         return new HtmlParser().html2SimpleText(content);
     }
 
-
     @Override
     public String fetchTitle() {
-        if (this.content == null) {
-            this.fetchHtml();
-        }
-        return new HtmlParser().getHtmlTitle(content);
+        return title;
     }
-
 
     @Override
     public String fetchMarkedText(Set<String> st) {
@@ -69,9 +70,7 @@ public class MongodbContentProvider implements IHtmlContentProvider {
             content = content.replaceAll(s, "<em>" + s + "</em>");
         }
 
-
         return content;
     }
-
 
 }

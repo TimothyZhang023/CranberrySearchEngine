@@ -4,58 +4,47 @@
 
 package com.zts1993.gse.db.cache;
 
-import com.zts1993.gse.db.redis.RedisSafe;
-
 /**
  * Created by TianShuo on 2015/4/7.
  */
-public class KVCache {
+public class KvCache {
 
 
-    private static LRUCache<String, String> urlInfoLRUCache;
-    private static final int DEFAULT_CAPACITY = 50000;
+    private static LRUCache<String, String> kvLRUCache;
+    private static final int DEFAULT_CAPACITY = 10000;
 
     static {
         init();
     }
 
     public static void init() {
-        if (urlInfoLRUCache == null) {
-            synchronized (KVCache.class) {
-                if (urlInfoLRUCache == null) {
-                    urlInfoLRUCache = new LRUCache<String, String>(DEFAULT_CAPACITY);
+        if (kvLRUCache == null) {
+            synchronized (KvCache.class) {
+                if (kvLRUCache == null) {
+                    kvLRUCache = new LRUCache<String, String>(DEFAULT_CAPACITY);
                 }
             }
         }
     }
 
-    public static LRUCache<String, String> getKVCache() {
-        return urlInfoLRUCache;
+
+    public static LRUCache<String, String> getKvCache() {
+        return kvLRUCache;
     }
 
 
     public static String get(String key) {
-
-        String value = getKVCache().get(key);
-        if (value == null) {
-            RedisSafe redisSafe=new RedisSafe();
-            value = redisSafe.get(key);
-            getKVCache().put(key, value);
-        }
-        return value;
+        return getKvCache().get(key);
     }
 
 
     public static void set(String key, String value) {
-        getKVCache().put(key, value);
-
-        RedisSafe redisSafe=new RedisSafe();
-        redisSafe.set(key, value);
+        getKvCache().put(key, value);
     }
 
 
     public static int size() {
-        return getKVCache().size();
+        return getKvCache().size();
     }
 
 

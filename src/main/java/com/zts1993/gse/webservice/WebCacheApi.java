@@ -6,7 +6,6 @@ package com.zts1993.gse.webservice;
 
 import com.alibaba.fastjson.JSON;
 import com.zts1993.gse.bean.HtmlItem;
-import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
 
@@ -32,9 +31,9 @@ public class WebCacheApi {
 
         IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(docId);
 
-        String url = KVCache.get("url:" + docId);
         String content = iHtmlContentProvider.fetchHtml();
         String title = iHtmlContentProvider.fetchTitle();
+        String url = iHtmlContentProvider.fetchUrl();
         HtmlItem htmlItem = new HtmlItem(docId, url, title, content, 0);
 
         String jsonRes = JSON.toJSONString(htmlItem);

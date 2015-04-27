@@ -19,6 +19,7 @@ public class RestApiServiceThread extends Thread {
 
     private static final Logger logger = LogManager.getLogger("RestApiThread");
 
+    private static final int DEFAULT_INTERVAL = 30*1000;
 
     public RestApiServiceThread(String name) {
 
@@ -37,6 +38,27 @@ public class RestApiServiceThread extends Thread {
         } catch (IOException e) {
 
             new ExceptionHandler(e).process();
+        }
+
+
+    }
+
+
+    public static void main(String[] args) {
+        RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
+        restApiServiceThread.setDaemon(true);
+        restApiServiceThread.start();
+
+
+        while (true) {
+            try {
+                Thread.sleep(DEFAULT_INTERVAL);
+
+            } catch (InterruptedException e) {
+                logger.info(e.getMessage());
+                e.printStackTrace();
+            }
+
         }
 
 

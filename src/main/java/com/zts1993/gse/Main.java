@@ -7,18 +7,20 @@ package com.zts1993.gse;
 
 import com.zts1993.gse.thread.IndexServiceThread;
 import com.zts1993.gse.thread.RestApiServiceThread;
-import com.zts1993.gse.util.Args;
 import com.zts1993.gse.util.ReGenerateIndexNotifyQueue;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class Main {
 
     /**
-     * add arg " -api disable " to disable RestApiService
-     * add arg " -index disable " to disable IndexService
-     * add arg " -genIndexQueue enable " to enable BuildIndexNotifyQueue
+     * add arg " -api " to enable RestApiService
+     * add arg " -index " to enable IndexService
+     * add arg " -genIndexQueue " to enable BuildIndexNotifyQueue
      */
 
     private static final Logger logger = LogManager.getLogger("MainServiceThread");
@@ -26,9 +28,9 @@ public class Main {
     private static final int DEFAULT_INTERVAL = 30 * 1000;
 
 
+    private static boolean enableApi = false;
+    private static boolean enableIndex = false;
     private static boolean enableBuildIndexNotifyQueue = false;
-    private static boolean enableApi = true;
-    private static boolean enableIndex = true;
 
 
     public static String[] globalArgs = new String[0];
@@ -40,44 +42,30 @@ public class Main {
             globalArgs = args;
 
             Options options = new Options();
-            options.addOption("api", true, "if RestApiService is enable");//参数不可用
-            options.addOption("index", true, "if IndexService  is enable");//参数可用
-            options.addOption("genIndexQueue", true, "if BuildIndexNotifyQueue is enable");//参数可用
+            options.addOption("api", false, "if RestApiService is enable");//参数可用
+            options.addOption("index", false, "if IndexService  is enable");//参数可用
+            options.addOption("genIndexQueue", false, "if BuildIndexNotifyQueue is enable");//参数可用
 
 
             CommandLineParser parser = new PosixParser();
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("api")) {
-                String apiCheck = cmd.getOptionValue("api");
-
-                if (apiCheck.equals("disable")) {
-                    logger.info("RestApiServiceThread will not start up due to args");
-                    enableApi = false;
-                }
+                logger.info("RestApiServiceThread will not start up due to args");
+                enableApi = true;
 
             }
 
             if (cmd.hasOption("index")) {
-                String indexCheck = cmd.getOptionValue("index");
-                System.out.println(indexCheck);
-
-                if (indexCheck.equals("disable")) {
-                    logger.info("IndexServiceThread will not start up due to args");
-                    enableIndex = false;
-                }
+                logger.info("IndexServiceThread will not start up due to args");
+                enableIndex = true;
 
             }
 
 
             if (cmd.hasOption("genIndexQueue")) {
-                String indexCheck = cmd.getOptionValue("genIndexQueue");
-                System.out.println(indexCheck);
-
-                if (indexCheck.equals("enable")) {
-                    logger.info("Gen IndexQueue will start up due to args");
-                    enableBuildIndexNotifyQueue = true;
-                }
+                logger.info("Gen IndexQueue will start up due to args");
+                enableBuildIndexNotifyQueue = true;
 
             }
 
@@ -87,9 +75,7 @@ public class Main {
             }
 
             if (enableApi) {
-                RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
-                restApiServiceThread.setDaemon(true);
-                restApiServiceThread.start();
+                RestApiServiceThread.main(args);
             }
 
             if (enableIndex) {

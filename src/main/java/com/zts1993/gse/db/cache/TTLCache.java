@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 这还是不是TTLCache 我还没有写。。这个是LRUCache
  * Created by TianShuo on 2015/4/9.
  */
-public class TTLLRUCache<K, V> implements Serializable {
+public class TTLCache<K, V> implements Serializable {
 
     private static final int DEFAULT_CAPACITY = 100;
 
@@ -26,11 +26,11 @@ public class TTLLRUCache<K, V> implements Serializable {
     private static int MINI_ACCESS = 10;
 
 
-    public TTLLRUCache() {
+    public TTLCache() {
         this(DEFAULT_CAPACITY);
     }
 
-    public TTLLRUCache(int capacity) {
+    public TTLCache(int capacity) {
         if (capacity <= 0)
             throw new RuntimeException("缓存容量不得小于0");
         this.maxCapacity = capacity;

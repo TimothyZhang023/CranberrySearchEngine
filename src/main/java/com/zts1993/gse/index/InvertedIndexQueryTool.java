@@ -5,7 +5,6 @@
 package com.zts1993.gse.index;
 
 import com.zts1993.gse.bean.HtmlItem;
-import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.redis.RedisDB;
 import com.zts1993.gse.db.redis.RedisSafe;
 import com.zts1993.gse.html.HtmlContentProvider;
@@ -139,11 +138,11 @@ public class InvertedIndexQueryTool {
             String docId = resultDocIdEntry.getKey();
             double value = resultDocIdEntry.getValue();
 
-            String url = KVCache.get("url:" + docId);
 
             IHtmlContentProvider iHtmlContentProvider = HtmlContentProvider.getHtmlContentProvider(docId);
             String content = iHtmlContentProvider.fetchMarkedText(queryWordsSet);
             String title = iHtmlContentProvider.fetchTitle();
+            String url = iHtmlContentProvider.fetchUrl();
 
             HtmlItem htmlItem = new HtmlItem(docId, url, title, content, value);
             htmlItems.add(htmlItem);

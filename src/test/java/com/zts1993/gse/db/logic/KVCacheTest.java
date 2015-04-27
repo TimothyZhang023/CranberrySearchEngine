@@ -4,23 +4,23 @@
 
 package com.zts1993.gse.db.logic;
 
-import com.zts1993.gse.db.cache.KVCache;
+import com.zts1993.gse.db.cache.KvCache;
 import com.zts1993.gse.db.cache.LRUCache;
-import com.zts1993.gse.db.cache.TTLLRUCache;
+import com.zts1993.gse.db.cache.TTLCache;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class KVCacheTest {
+public class KvCacheTest {
 
     final private static Logger logger = LogManager.getLogger("KVCacheTest");
 
     private static LRUCache<String, String> lruCache = new LRUCache<String, String>(10000);
-    private static TTLLRUCache<String, String> TTLLRUCache = new TTLLRUCache<String, String>(10000);
+    private static TTLCache<String, String> TTLCache = new TTLCache<String, String>(10000);
 
     @Test
     public void testSet() throws Exception {
-        KVCache.set("KVCacheTest_test", "sss");
+        KvCache.set("KVCacheTest_test", "sss");
 
 
     }
@@ -28,7 +28,7 @@ public class KVCacheTest {
     @Test
     public void testGet() throws Exception {
         lruCache.get("KVCacheTest_test");
-        TTLLRUCache.get("KVCacheTest_test");
+        TTLCache.get("KVCacheTest_test");
     }
 
 
@@ -54,7 +54,7 @@ public class KVCacheTest {
 
     @Test
     public void testBenchmark2() throws Exception {
-        TTLLRUCache.put("KVCacheTest_test", "sss");
+        TTLCache.put("KVCacheTest_test", "sss");
 
         /**
          *  double timePass = (System.nanoTime() - valueEntry.lastAccess.get()) / 1000000;
@@ -113,13 +113,13 @@ public class KVCacheTest {
         long time1 = System.nanoTime();
 
         for (int i = 0; i < 50000; i++) {
-            TTLLRUCache.put("KVCacheTest_test" + i, "sss");
+            TTLCache.put("KVCacheTest_test" + i, "sss");
 
         }
         long time2 = System.nanoTime();
 
         for (int i = 0; i < 50000; i++) {
-            TTLLRUCache.get("KVCacheTest_test" + i);
+            TTLCache.get("KVCacheTest_test" + i);
         }
 
         long time3 = System.nanoTime();

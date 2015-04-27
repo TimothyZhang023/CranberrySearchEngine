@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public interface IHtmlContentProvider {
 
+    String fetchUrl();
+
     String fetchHtml();
 
     String fetchText();
@@ -18,6 +20,5 @@ public interface IHtmlContentProvider {
     String fetchTitle();
 
     String fetchMarkedText(Set<String> st);
-
 
 }

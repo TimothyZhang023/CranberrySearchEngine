@@ -15,7 +15,6 @@ Cranberry Search Engine Kernel
  - Ansj4J
  - Jersey
  - Fastjson
- - Jchardet
 
 # Contact:
 Email: cse(@)zts1993.com
