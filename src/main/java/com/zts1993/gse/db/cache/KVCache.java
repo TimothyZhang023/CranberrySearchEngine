@@ -11,7 +11,7 @@ public class KVCache {
 
 
     private static LRUCache<String, String> kvLRUCache;
-    private static final int DEFAULT_CAPACITY = 100;
+    private static final int DEFAULT_CAPACITY = 500;
 
     static {
         init();
