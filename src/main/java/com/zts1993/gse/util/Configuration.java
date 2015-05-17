@@ -19,8 +19,8 @@ public class Configuration {
      * 初始化Configuration类
      */
     public Configuration() {
-        properties = new Properties();
         try {
+            properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("configure.properties"));
         } catch (FileNotFoundException ex) {
             System.out.println("No such file configure.properties");

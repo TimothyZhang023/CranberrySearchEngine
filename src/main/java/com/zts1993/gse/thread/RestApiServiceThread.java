@@ -45,22 +45,6 @@ public class RestApiServiceThread extends Thread {
 
 
     public static void main(String[] args) {
-        RestApiServiceThread restApiServiceThread = new RestApiServiceThread("Main");
-        restApiServiceThread.setDaemon(true);
-        restApiServiceThread.start();
-
-
-        while (true) {
-            try {
-                Thread.sleep(DEFAULT_INTERVAL);
-
-            } catch (InterruptedException e) {
-                logger.info(e.getMessage());
-                e.printStackTrace();
-            }
-
-        }
-
 
     }
 }

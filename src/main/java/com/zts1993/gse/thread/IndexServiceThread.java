@@ -98,22 +98,7 @@ public class IndexServiceThread extends Thread {
 
     public static void main(String[] args) {
 
-        IndexServiceThread indexServiceThread = new IndexServiceThread("Main");
-        indexServiceThread.setDaemon(true);
-        indexServiceThread.start();
 
-
-        while (true) {
-            try {
-                Thread.sleep(DEFAULT_INTERVAL);
-                logger.info(String.format("Queue Size: %s and Semaphore: %s ", indexServiceThread.getRedisQueue().size(), InvertedIndexThreadSemaphore.sum()));
-
-            } catch (InterruptedException e) {
-                logger.info(e.getMessage());
-                e.printStackTrace();
-            }
-
-        }
 
 
     }
