@@ -4,6 +4,8 @@
 
 package com.zts1993.gse.bean;
 
+import com.zts1993.gse.segmentation.ISegmentation;
+import com.zts1993.gse.segmentation.SegmentationFactory;
 import com.zts1993.gse.segmentation.filter.TermFilter;
 import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
 import com.zts1993.gse.util.Factors;
@@ -22,6 +24,7 @@ public class HtmlDoc extends HtmlMeta {
     HashMap<String, Integer> titleWordFreqMap = new HashMap<String, Integer>();
     HashMap<String, Integer> contentWordFreqMap = new HashMap<String, Integer>();
 
+    ISegmentation segmentationMethod= SegmentationFactory.getToSegmentation();
 
     public HtmlDoc(String docId, String url, String title, String content) {
         super(docId, url, title, content);
@@ -29,8 +32,8 @@ public class HtmlDoc extends HtmlMeta {
 
     public HtmlDoc parse() {
 
-        TermFilter termTitleFilter = new TermFilterForAnsj(this.title, Factors.titleWeight);
-        TermFilter termContentFilter = new TermFilterForAnsj(this.content, Factors.contentWeight);
+        TermFilter termTitleFilter = new TermFilterForAnsj(this.title, Factors.titleWeight,segmentationMethod);
+        TermFilter termContentFilter = new TermFilterForAnsj(this.content, Factors.contentWeight,segmentationMethod);
 
         titleWordFreqMap = termTitleFilter.getWordFreqMap();
         contentWordFreqMap = termContentFilter.getWordFreqMap();
@@ -78,6 +81,16 @@ public class HtmlDoc extends HtmlMeta {
         }
         return wordFreqMap;
     }
+
+
+    public HashMap<String, Integer> getIndexWordFreqMap() {
+        segmentationMethod=SegmentationFactory.getIndexSegmentation();
+
+            parse();
+
+        return wordFreqMap;
+    }
+
 
 
     @Override

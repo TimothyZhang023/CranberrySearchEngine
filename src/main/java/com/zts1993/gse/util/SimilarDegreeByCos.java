@@ -15,7 +15,6 @@ import com.zts1993.gse.index.comparator.WordCountComparator;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import com.zts1993.gse.segmentation.filter.TermFilter;
 import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
-import org.ansj.domain.Term;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -36,9 +35,9 @@ public class SimilarDegreeByCos {
             KVCache.set("textContent:" + docId, textContent);
         }
 
-        List<Term> termList = SegmentationFactory.getNlpSegmentation().parse(textContent);
+//        List<Term> termList = SegmentationFactory.getNlpSegmentation().parse(textContent);
 
-        return new TermFilterForAnsj(termList, 1).process();
+        return new TermFilterForAnsj(textContent, 1,SegmentationFactory.getToSegmentation()).process();
     }
 
 

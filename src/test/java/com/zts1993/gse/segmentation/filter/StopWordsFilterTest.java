@@ -8,9 +8,21 @@ import org.junit.Test;
 
 public class StopWordsFilterTest {
 
+    StopWordsFilter stopWordsFilter = new StopWordsFilter();
+
+
     @Test
     public void testIsPuncOrStopWords() throws Exception {
-        StopWordsFilter stopWordsFilter = new StopWordsFilter();
         System.out.println(stopWordsFilter.isPuncOrStopWords("？"));
+        System.out.println(stopWordsFilter.isPuncOrStopWords("："));
+        System.out.println(stopWordsFilter.isPuncOrStopWords("，"));
+        System.out.println(stopWordsFilter.isPuncOrStopWords("、"));
+        System.out.println(stopWordsFilter.isPuncOrStopWords("。"));
     }
+
+    @Test
+    public void testShowAllStopWords() throws Exception {
+        stopWordsFilter.showAllStopWords();
+    }
+
 }

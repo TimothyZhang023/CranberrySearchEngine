@@ -5,17 +5,14 @@
 package com.zts1993.gse.segmentation.filter;
 
 import com.zts1993.gse.segmentation.SegmentationFactory;
-import org.ansj.domain.Term;
 import org.junit.Test;
-
-import java.util.List;
 
 public class TermFilterForAnsjTest {
 
 
     @Test
     public void testProcess() throws Exception {
-        String demo2 = "让战士们过一个欢乐祥和的新春佳节。百度为您找到相关结果约3,350,000个\n" +
+        String demo2 = "让战士们过一个欢乐祥和，。的新春佳节。百度为您找到相关结果约3,350,000个\n" +
                 "java过滤内容只保留数字、字母、中文、标点符号|jqueryschool-...\n" +
                 "2014年7月9日 - java正则表达式过滤内容只保留数字、字母、中文、标点符号,使用场景如用户留言等操作。。。正则表达式: [^0-9a-zA-Z\\u4e00-\\u9fa5.,,。?“”]+用法: ...\n" +
                 "www.jq-school.com/Sh.....  - 百度快照 - 97%好评\n" +
@@ -33,10 +30,10 @@ public class TermFilterForAnsjTest {
                 "2013年12月12日 - 文章标题:删除/清除/过滤标点(所有中英文标点)的正则表达式——DesktopSearch开发笔记[经验积累]。希赛网JAVA频道是一个专业的JAVA技术平台,着眼于业...\n" +
                 "www.educity.cn/java/50...  - 百度快照 - 75%好评";
 
-        List<Term> parse = SegmentationFactory.getNlpSegmentation().parse(demo2);
+//        List<Term> parse = SegmentationFactory.getToSegmentation().parse(demo2);
 
 
-        TermFilter termFilter = new TermFilterForAnsj(parse, 1).process();
+        TermFilter termFilter = new TermFilterForAnsj(demo2, 1, SegmentationFactory.getToSegmentation()).process();
 
         System.out.println(termFilter.toString());
 

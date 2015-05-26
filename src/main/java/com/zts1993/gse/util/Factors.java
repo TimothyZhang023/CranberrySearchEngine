@@ -41,9 +41,9 @@ public class Factors {
     /**
      * int const
      */
-    public static int MaxRecordPerWord =1000;
-    public static int MaxRecordPerRequest = 1000;
-    public static int MaxRecordPerKey = 1000;
+    public static int MaxRecordPerWord =10000;
+    public static int MaxRecordPerRequest = 10000;
+    public static int MaxRecordPerKey = 10000;
 
     public static int PageSize = 10;
 
@@ -55,9 +55,9 @@ public class Factors {
     /**
      * SimilarDegree
      */
-    public static int checkWordCount = 20;
-    public static int checkSimWordCount = 20;
-    public static int checkUrlCount = 20;
+    public static int checkWordCount = 10;
+    public static int checkSimWordCount = 50;
+    public static int checkUrlCount = 12;
 
 
 

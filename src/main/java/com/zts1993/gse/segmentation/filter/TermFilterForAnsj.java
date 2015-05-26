@@ -4,6 +4,7 @@
 
 package com.zts1993.gse.segmentation.filter;
 
+import com.zts1993.gse.segmentation.ISegmentation;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import org.ansj.domain.Term;
 
@@ -23,8 +24,14 @@ public class TermFilterForAnsj implements TermFilter {
     private int wordCount = -1;
 
 
+
     public TermFilterForAnsj(String stringInput, int weight) {
-        this.termListInput = SegmentationFactory.getHtmlParseSegmentation().parse(stringInput);
+        this.termListInput = SegmentationFactory.getIndexSegmentation().parse(stringInput);
+        this.weight = weight;
+    }
+
+    public TermFilterForAnsj(String stringInput, int weight, ISegmentation segmentation) {
+        this.termListInput = segmentation.parse(stringInput);
         this.weight = weight;
     }
 
@@ -82,6 +89,8 @@ public class TermFilterForAnsj implements TermFilter {
         if (wordCount == -1) {
             process();
         }
+
+
         return wordCount;
     }
 

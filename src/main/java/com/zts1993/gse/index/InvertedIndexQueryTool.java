@@ -56,7 +56,7 @@ public class InvertedIndexQueryTool {
 
     public void divide() {
 
-        TermFilter termFilterForAnsj = new TermFilterForAnsj(SegmentationFactory.getNlpSegmentation().parse(queryKey), 1);
+        TermFilter termFilterForAnsj = new TermFilterForAnsj(queryKey, 1, SegmentationFactory.getIndexSegmentation());
 
         HashMap<String, Integer> wordFreqMap = termFilterForAnsj.getWordFreqMap();
 

@@ -143,9 +143,10 @@ public class InvertedIndexGenerationTool {
             return;
         }
 
-
         RedisSafe redisSafe = new RedisSafe();
+
         HashMap<String, Integer> wordFreqMap = htmlDoc.getWordFreqMap();
+        HashMap<String, Integer> indexWordFreqMap = htmlDoc.getIndexWordFreqMap();
 
         if (wordFreqMap.size() < Factors.LowerQuality) {
             //low quality web pages reject
@@ -155,10 +156,9 @@ public class InvertedIndexGenerationTool {
         }
 
         redisSafe.incr("totalPages");
-        redisSafe.set("url:" + htmlDoc.getDocId(), htmlDoc.getUrl());
-//            jedis.set("wordCount:" + htmlDoc.getDocId(), htmlDoc.getWordCount() + "");
+//        redisSafe.set("url:" + htmlDoc.getDocId(), htmlDoc.getUrl());
 
-        for (Map.Entry entry : wordFreqMap.entrySet()) {
+        for (Map.Entry entry : indexWordFreqMap.entrySet()) {
 
             String keyWord = entry.getKey().toString();
             Integer termCount = (Integer) entry.getValue();
@@ -166,10 +166,7 @@ public class InvertedIndexGenerationTool {
             double tf = TfIdf.getTfScoreM1(termCount, htmlDoc.getWordCount());
 
             redisSafe.zadd(keyWord, tf, htmlDoc.getDocId());
-//                jedis.zremrangeByRank(cWord, 0, -Factors.MaxRecordPerKey);
-
         }
-
 
     }
 

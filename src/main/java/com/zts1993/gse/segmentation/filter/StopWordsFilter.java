@@ -22,7 +22,15 @@ public class StopWordsFilter {
     }
 
     public boolean isPuncOrStopWords(String words) {
-         return vector.contains(words);
+        return vector.contains(words);
+    }
+
+
+    public void showAllStopWords() {
+
+        for (String aVector : vector) {
+            System.out.print(aVector+"\r\n");
+        }
     }
 
 
