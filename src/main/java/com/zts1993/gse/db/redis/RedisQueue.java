@@ -19,7 +19,6 @@ import java.io.StringWriter;
 public class RedisQueue {
 
     private static final Logger logger = LogManager.getLogger("RedisQueue");
-
     private String key;
 
     public RedisQueue(String key) {
@@ -35,7 +34,6 @@ public class RedisQueue {
                     Integer.parseInt(ConfigurationUtil.getValue("RedisIndexNotifyServerPort", "6379")),
                     100
             );
-
         }
         return redisQueueClient;
     }
@@ -45,94 +43,43 @@ public class RedisQueue {
         return getRedisQueueClient().getJedisPool();
     }
 
-
     public void push(String string) {
-
         JedisPool pool = RedisQueue.getJedisPool();
-        Jedis jedis = null;
-        String res = null;
-        try {
-            jedis = pool.getResource();
+        try (Jedis jedis = pool.getResource()) {
             jedis.lpush(this.key, string);
         } catch (Exception e) {
-            pool.returnBrokenResource(jedis);
-            logException(e);
-        } finally {
-            returnResource(pool, jedis);
+            logger.error(e.getLocalizedMessage(), e);
         }
     }
 
     public String pop() {
         JedisPool pool = RedisQueue.getJedisPool();
-        Jedis jedis = null;
-        String res = null;
-        try {
-            jedis = pool.getResource();
-            res = jedis.lpop(key);
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.lpop(key);
         } catch (Exception e) {
-            pool.returnBrokenResource(jedis);
-            logException(e);
-        } finally {
-            returnResource(pool, jedis);
+            logger.error(e.getLocalizedMessage(), e);
         }
-        return res;
+        return null;
     }
 
     public long size() {
-
         JedisPool pool = RedisQueue.getJedisPool();
-        Jedis jedis = null;
         long size = 0;
-        try {
-            jedis = pool.getResource();
+        try (Jedis jedis = pool.getResource()) {
             size = jedis.llen(key);
         } catch (Exception e) {
-            pool.returnBrokenResource(jedis);
-            logException(e);
-        } finally {
-            returnResource(pool, jedis);
+            logger.error(e.getLocalizedMessage(), e);
         }
         return size;
-
     }
-
 
     public void flushAll() {
-
         JedisPool pool = RedisQueue.getJedisPool();
-        Jedis jedis = null;
-        try {
-            jedis = pool.getResource();
+        try (Jedis jedis = pool.getResource()) {
             jedis.del(key);
         } catch (Exception e) {
-            pool.returnBrokenResource(jedis);
-            logException(e);
-        } finally {
-            returnResource(pool, jedis);
+            logger.error(e.getLocalizedMessage(), e);
         }
-
-    }
-
-
-    /**
-     * 返还到连接池
-     *
-     * @param pool
-     * @param jedis
-     */
-    public static void returnResource(JedisPool pool, Jedis jedis) {
-        if (jedis != null) {
-            pool.returnResource(jedis);
-        }
-    }
-
-
-    private static void logException(Exception e) {
-        logger.info(e.getMessage());
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw, true));
-        String str = sw.toString();
-        logger.error("Exception : " + str);
     }
 
 
