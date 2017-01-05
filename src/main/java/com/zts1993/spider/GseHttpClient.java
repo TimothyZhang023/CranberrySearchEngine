@@ -5,6 +5,7 @@
 package com.zts1993.spider;
 
 import com.sun.istack.internal.NotNull;
+import com.zts1993.spider.channel.GseHttpResponseHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -14,6 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.DefaultPromise;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,8 @@ public class GseHttpClient implements GseHttpClientImpl {
     @Getter
     private Bootstrap bootstrap;
 
+    private volatile boolean _closed = false;
+
 
     public void init() {
         eventLoopGroup = new NioEventLoopGroup();
@@ -49,35 +53,58 @@ public class GseHttpClient implements GseHttpClientImpl {
                         ChannelPipeline p = ch.pipeline();
                         p.addLast("codec", new HttpClientCodec());
                         p.addLast("chunkedWriter", new ChunkedWriteHandler());
-                        p.addLast("aggregate", new HttpObjectAggregator(1024 * 100));
+                        p.addLast("aggregate", new HttpObjectAggregator(1024 * 1000));
                     }
                 });
 
     }
 
 
-    public ChannelFuture send(GseHttpRequest gseHttpRequest) throws InterruptedException {
+    public GseHttpResponsePromise send(GseHttpRequest request) throws InterruptedException {
 
-        ChannelFuture f = getBootstrap().connect(gseHttpRequest.getRequestUri().getHost(), 80).sync();
-        String msg = "";
-        // 发送http请求
+        ChannelFuture f = bootstrap.connect(request.getUri().getHost(), 80).sync();
+        Channel c = f.channel();
+
+        request.setPromise(new GseHttpResponsePromise());
+        request.getPromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop()));
+
+        c.pipeline().addLast("handler", new GseHttpResponseHandler(this, request));
+        c.write(request.getHttpRequest());
+        c.flush();
+
+        f.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+
+            }
+        });
+
+        c.closeFuture().addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (log.isDebugEnabled()) {
+                    log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
+                }
+            }
+        });
 
 
-        GseHttpRequest request = new GseHttpRequest(this, gseHttpRequest.getRequestUri());
-
-
-        f.channel().pipeline().addLast("handler", new GseHttpResponseHandler(this, request));
-        f.channel().write(request.getHttpRequest());
-        f.channel().flush();
-
-        return f;
+        return request.getPromise();
     }
 
 
     @Override
     public void close() throws IOException {
+
+        if (_closed) {
+            return;
+        }
+
         log.debug("closing GseHttpClient");
-        eventLoopGroup.shutdownGracefully();
+        synchronized (this) {
+            this._closed = true;
+            eventLoopGroup.shutdownGracefully();
+        }
 
     }
 }

@@ -16,13 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by zts1993 on 2016/11/26.
  */
 @Slf4j
 public class M {
-    public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
+    public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException, ExecutionException {
 
 
         GseHttpClientConfig config = new GseHttpClientConfig();
@@ -31,13 +32,14 @@ public class M {
 
         gseHttpClient.init();
 
-        URI uri = new URI("http://guahao.zjol.com.cn/pb/957108?deptId=7195&fuzzy_deptId=0&docId=&fuzzy_docId=0");
-
-        GseHttpRequest request = new GseHttpRequest(gseHttpClient, uri);
+        URI uri = new URI("http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
 
 
-        ChannelFuture f = gseHttpClient.send(request);
-        f.channel().closeFuture().sync();
+        GseHttpResponsePromise f = gseHttpClient.send(new GseHttpRequest(gseHttpClient, uri));
+//        GseHttpResponsePromise f2 = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new URI("http://www.hao123.com/")));
+
+        GseHttpResponse gseHttpResponse = f.get();
+//        GseHttpResponse gseHttpResponse1 = f2.get();
 
         gseHttpClient.close();
     }

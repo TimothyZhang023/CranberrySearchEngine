@@ -5,10 +5,8 @@
 package com.zts1993.spider;
 
 import com.zts1993.spider.util.Timeout;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.IOException;
@@ -23,22 +21,26 @@ public class GseHttpRequest {
     final GseHttpClientImpl gseHttpClient;
 
     @Getter
-    final URI requestUri;
+    @Setter
+    URI uri;
+
+    @Getter
+    HttpMethod method= HttpMethod.GET;
 
 
-    public GseHttpRequest(GseHttpClientImpl gseHttpClient, URI requestUri) {
+    public GseHttpRequest(GseHttpClientImpl gseHttpClient, URI uri) {
         this.gseHttpClient = gseHttpClient;
-        this.requestUri = requestUri;
+        this.uri = uri;
 
         httpRequest = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, HttpMethod.GET, requestUri.toASCIIString()
+                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.toASCIIString()
                 //,Unpooled.wrappedBuffer(msg.getBytes("UTF-8"))
         );
 
         // 构建http请求
-        httpRequest.headers().set(HttpHeaders.Names.HOST, requestUri.getHost());
-        httpRequest.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        httpRequest.headers().set(HttpHeaders.Names.CONTENT_LENGTH, httpRequest.content().readableBytes());
+        httpRequest.headers().set(HttpHeaderNames.HOST, uri.getHost());
+        httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+        httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
     }
 
     @Getter
@@ -46,14 +48,15 @@ public class GseHttpRequest {
     FullHttpRequest httpRequest;
 
 
+    @Getter
+    @Setter
     GseHttpResponsePromise promise;
 
 
-    public GseHttpResponsePromise send() throws IOException {
+    public GseHttpResponsePromise send() throws IOException, InterruptedException {
 
-//        gseHttpClient.send(httpRequest);
+        return promise = gseHttpClient.send(this);
 
-        return promise;
     }
 
 

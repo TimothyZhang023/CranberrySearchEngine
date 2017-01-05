@@ -4,7 +4,6 @@
 
 package com.zts1993.spider;
 
-import io.netty.channel.ChannelFuture;
 
 import java.io.Closeable;
 
@@ -14,6 +13,6 @@ import java.io.Closeable;
  */
 interface GseHttpClientImpl extends Closeable {
 
-    ChannelFuture send(GseHttpRequest gseHttpRequest) throws InterruptedException;
+    GseHttpResponsePromise send(GseHttpRequest gseHttpRequest) throws InterruptedException;
 
 }
