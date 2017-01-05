@@ -4,12 +4,10 @@
 
 package com.zts1993.spider;
 
+import com.sun.istack.internal.NotNull;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -17,14 +15,18 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 
 @Slf4j
-public class GseHttpClient implements Closeable {
+@RequiredArgsConstructor
+public class GseHttpClient implements GseHttpClientImpl {
+
+    @NotNull
+    final private GseHttpClientConfig clientConfig;
 
     @Getter
     private EventLoopGroup eventLoopGroup;
@@ -51,6 +53,24 @@ public class GseHttpClient implements Closeable {
                     }
                 });
 
+    }
+
+
+    public ChannelFuture send(GseHttpRequest gseHttpRequest) throws InterruptedException {
+
+        ChannelFuture f = getBootstrap().connect(gseHttpRequest.getRequestUri().getHost(), 80).sync();
+        String msg = "";
+        // 发送http请求
+
+
+        GseHttpRequest request = new GseHttpRequest(this, gseHttpRequest.getRequestUri());
+
+
+        f.channel().pipeline().addLast("handler", new GseHttpResponseHandler(this, request));
+        f.channel().write(request.getHttpRequest());
+        f.channel().flush();
+
+        return f;
     }
 
 
