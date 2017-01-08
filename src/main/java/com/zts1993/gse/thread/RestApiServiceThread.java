@@ -7,17 +7,16 @@ package com.zts1993.gse.thread;
 import com.zts1993.gse.Main;
 import com.zts1993.gse.util.ExceptionHandler;
 import com.zts1993.gse.webservice.RestService;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.io.IOException;
 
 /**
  * Created by TianShuo on 2015/3/23.
  */
+@Slf4j
 public class RestApiServiceThread extends Thread {
-
-    private static final Logger logger = LogManager.getLogger("RestApiThread");
 
     private static final int DEFAULT_INTERVAL = 30*1000;
 
@@ -31,7 +30,7 @@ public class RestApiServiceThread extends Thread {
 
 
         try {
-            logger.info("RestApiThread working~ ");
+            log.info("RestApiThread working~ ");
 
             RestService.main(Main.globalArgs);
 

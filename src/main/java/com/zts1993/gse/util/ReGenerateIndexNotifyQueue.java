@@ -10,8 +10,9 @@ import com.mongodb.client.MongoCollection;
 import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.db.mongodb.MongoDB;
 import com.zts1993.gse.db.redis.RedisQueue;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
 import java.util.Iterator;
@@ -19,9 +20,10 @@ import java.util.Iterator;
 /**
  * Created by TianShuo on 2015/4/14.
  */
+@Slf4j
 public class ReGenerateIndexNotifyQueue {
 
-    private static final Logger logger = LogManager.getLogger("GenIndexNotifyQueue");
+
 
     public static void main(String[] args) {
 
@@ -46,11 +48,11 @@ public class ReGenerateIndexNotifyQueue {
                 IndexNotify indexNotify = new IndexNotify(url, title, hash_key, storage_type, page_encoding, queue_time);
                 String item = JSON.toJSONString(indexNotify);
 
-                logger.info("Pushing url:" + url);
+                log.info("Pushing url:" + url);
 
                 redisQueue.push(item);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                log.info(e.getMessage());
                 e.printStackTrace();
             }
 

@@ -8,15 +8,16 @@ import com.zts1993.gse.bean.HtmlDoc;
 import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.html.HtmlContentProvider;
 import com.zts1993.gse.html.IHtmlContentProvider;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * Created by TianShuo on 2015/3/29.
  */
+@Slf4j
 public class InvertedIndexGenerationTask implements Runnable {
 
-    private static final Logger logger = LogManager.getLogger("InvertedIndexGenerationTask");
+
 
 
     private IndexNotify indexNotify;
@@ -36,7 +37,7 @@ public class InvertedIndexGenerationTask implements Runnable {
 
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
         } finally {
             InvertedIndexThreadSemaphore.incr();
@@ -53,7 +54,7 @@ public class InvertedIndexGenerationTask implements Runnable {
 
         long taskTimeStop = System.currentTimeMillis();
 
-        logger.info("Costs " + (taskTimeStop - taskTimeStart) + " ms to process: "+htmlDoc.getUrl());
+        log.info("Costs " + (taskTimeStop - taskTimeStart) + " ms to process: "+htmlDoc.getUrl());
     }
 
     public HtmlDoc getHtmlDoc() {

@@ -16,8 +16,9 @@ import com.zts1993.gse.segmentation.SegmentationFactory;
 import com.zts1993.gse.segmentation.filter.TermFilter;
 import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
 import com.zts1993.gse.util.Factors;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
@@ -26,9 +27,10 @@ import java.util.*;
 /**
  * Created by TianShuo on 2015/3/28.
  */
+@Slf4j
 public class InvertedIndexQueryTool {
 
-    private static final Logger logger = LogManager.getLogger("QueryResult");
+
 
     private String queryKey;
 
@@ -114,7 +116,7 @@ public class InvertedIndexQueryTool {
             }
 
         } catch (Exception e) {
-            logger.error("Process preQueryProcess error");
+            log.error("Process preQueryProcess error");
             RedisDB.closeBrokenJedis(jedis);
             e.printStackTrace();
         } finally {

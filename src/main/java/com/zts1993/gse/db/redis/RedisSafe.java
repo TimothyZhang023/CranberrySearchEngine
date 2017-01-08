@@ -4,8 +4,8 @@
 package com.zts1993.gse.db.redis;
 
 import com.zts1993.gse.util.ConfigurationUtil;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
 import redis.clients.jedis.BinaryClient.LIST_POSITION;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -20,7 +20,7 @@ import java.util.Set;
  * Created by TianShuo on 2015/4/13.
  */
 public class RedisSafe {
-    private static final Logger logger = LogManager.getLogger("RedisSafe");
+
     private static JedisPool pool = null;
 
     public RedisSafe() {

@@ -5,8 +5,9 @@
 package com.zts1993.gse.db.redis;
 
 import com.zts1993.gse.util.ConfigurationUtil;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -16,9 +17,10 @@ import java.io.StringWriter;
 /**
  * Created by TianShuo on 2015/3/31.
  */
+@Slf4j
 public class RedisQueue {
 
-    private static final Logger logger = LogManager.getLogger("RedisQueue");
+
     private String key;
 
     public RedisQueue(String key) {
@@ -48,7 +50,7 @@ public class RedisQueue {
         try (Jedis jedis = pool.getResource()) {
             jedis.lpush(this.key, string);
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(), e);
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 
@@ -57,7 +59,7 @@ public class RedisQueue {
         try (Jedis jedis = pool.getResource()) {
             return jedis.lpop(key);
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(), e);
+            log.error(e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -68,7 +70,7 @@ public class RedisQueue {
         try (Jedis jedis = pool.getResource()) {
             size = jedis.llen(key);
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(), e);
+            log.error(e.getLocalizedMessage(), e);
         }
         return size;
     }
@@ -78,7 +80,7 @@ public class RedisQueue {
         try (Jedis jedis = pool.getResource()) {
             jedis.del(key);
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(), e);
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 

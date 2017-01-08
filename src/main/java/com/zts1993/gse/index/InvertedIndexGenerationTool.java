@@ -11,8 +11,9 @@ import com.zts1993.gse.index.comparator.WordFreqComparator;
 import com.zts1993.gse.index.score.TfIdf;
 import com.zts1993.gse.util.Factors;
 import com.zts1993.gse.util.SimilarDegreeByCos;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
@@ -20,9 +21,10 @@ import java.util.*;
 /**
  * Created by TianShuo on 2015/3/22.
  */
+@Slf4j
 public class InvertedIndexGenerationTool {
 
-    private static final Logger logger = LogManager.getLogger("InvertedIndex");
+
 
     public InvertedIndexGenerationTool() {
     }
@@ -67,7 +69,7 @@ public class InvertedIndexGenerationTool {
             for (Map.Entry<String, Double> entry : wordMapList) {
 
                 String keyWord = entry.getKey();
-                //      logger.info(keyWord + " " + entry.getValue());
+                //      log.info(keyWord + " " + entry.getValue());
 
                 double tf = entry.getValue() * 1.0 / wordCount * 1.0;
 
@@ -102,7 +104,7 @@ public class InvertedIndexGenerationTool {
                 double rank = SimilarDegreeByCos.getSimilarDegree(htmlDoc.getDocId(), urlIdToBeChecked);
                 if (rank > 0.80) {
                     long timeSpend = System.currentTimeMillis() - timeQueryStart;
-                    logger.info("Found " + htmlDoc.getDocId() + " and " + urlIdToBeChecked +
+                    log.info("Found " + htmlDoc.getDocId() + " and " + urlIdToBeChecked +
                                     " with rank " + rank +
                                     " costs " + timeSpend + " ms" +
                                     " preparationurlIdHitsMapTime " + preparationUrlIdHitsMapTime + " ms" +
@@ -114,7 +116,7 @@ public class InvertedIndexGenerationTool {
                 }
             }
             //long timeSpend = System.currentTimeMillis() - timeQueryStart;
-            //logger.info("Similarity check costs " + timeSpend + " ms");
+            //log.info("Similarity check costs " + timeSpend + " ms");
 
 
         } catch (Exception e) {
@@ -150,7 +152,7 @@ public class InvertedIndexGenerationTool {
 
         if (wordFreqMap.size() < Factors.LowerQuality) {
             //low quality web pages reject
-            logger.info("Lower Quality page" + htmlDoc.getUrl() + "with " + wordFreqMap.size() + " words");
+            log.info("Lower Quality page" + htmlDoc.getUrl() + "with " + wordFreqMap.size() + " words");
 
             return;
         }

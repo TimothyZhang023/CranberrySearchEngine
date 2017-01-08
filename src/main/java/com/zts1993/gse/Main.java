@@ -9,13 +9,14 @@ import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
 import com.zts1993.gse.thread.IndexServiceThread;
 import com.zts1993.gse.thread.RestApiServiceThread;
 import com.zts1993.gse.util.ReGenerateIndexNotifyQueue;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
+
+@Slf4j
 public class Main {
 
     /**
@@ -24,7 +25,6 @@ public class Main {
      * add arg " -genIndexQueue " to enable BuildIndexNotifyQueue
      */
 
-    private static final Logger logger = LogManager.getLogger("MainServiceThread");
 
     private static final int DEFAULT_INTERVAL = 30 * 1000;
 
@@ -57,20 +57,20 @@ public class Main {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("api")) {
-                logger.info("RestApiServiceThread  start up ");
+                log.info("RestApiServiceThread  start up ");
                 enableApi = true;
 
             }
 
             if (cmd.hasOption("index")) {
-                logger.info("IndexServiceThread start up ");
+                log.info("IndexServiceThread start up ");
                 enableIndex = true;
 
             }
 
 
             if (cmd.hasOption("genIndexQueue")) {
-                logger.info("GenIndexQueue start up");
+                log.info("GenIndexQueue start up");
                 enableBuildIndexNotifyQueue = true;
 
             }
@@ -97,7 +97,7 @@ public class Main {
 
 
         } catch (Exception e) {
-            logger.error("MainServiceThread catch a unhanded exception:" + e.getMessage());
+            log.error("MainServiceThread catch a unhanded exception:" + e.getMessage());
             e.printStackTrace();
         }
 
@@ -106,15 +106,15 @@ public class Main {
             try {
                 long memoryUsed = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000 / 1000;
 
-                logger.info(String.format("Memory Used: %s mb", memoryUsed));
+                log.info(String.format("Memory Used: %s mb", memoryUsed));
                 if (enableIndex && indexServiceThread != null) {
-                    logger.info(String.format("Queue Size: %s and Semaphore: %s ", indexServiceThread.getRedisQueue().size(), InvertedIndexThreadSemaphore.sum()));
+                    log.info(String.format("Queue Size: %s and Semaphore: %s ", indexServiceThread.getRedisQueue().size(), InvertedIndexThreadSemaphore.sum()));
                 }
 
                 Thread.sleep(DEFAULT_INTERVAL);
 
             } catch (InterruptedException e) {
-                logger.error("MainServiceThread catch a unhanded exception:" + e.getMessage());
+                log.error("MainServiceThread catch a unhanded exception:" + e.getMessage());
                 e.printStackTrace();
             }
 

@@ -10,8 +10,8 @@ import com.zts1993.gse.bean.IndexNotify;
 import com.zts1993.gse.db.redis.RedisQueue;
 import com.zts1993.gse.index.InvertedIndexGenerationTask;
 import com.zts1993.gse.index.InvertedIndexThreadSemaphore;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,9 +20,10 @@ import java.util.concurrent.Executors;
 /**
  * Created by TianShuo on 2015/3/22.
  */
+@Slf4j
 public class IndexServiceThread extends Thread {
 
-    private static final Logger logger = LogManager.getLogger("MainServiceThread");
+
 
     private static final int DEFAULT_INTERVAL = 30*1000;
 
@@ -42,7 +43,7 @@ public class IndexServiceThread extends Thread {
 
 
 //        try {
-        logger.info("IndexServiceThread working~ ");
+        log.info("IndexServiceThread working~ ");
 
         //InvertedIndexTestTool.genIndex();
 
@@ -60,11 +61,11 @@ public class IndexServiceThread extends Thread {
                 if (jsonText == null) {
                     try {
 
-                        logger.debug("No task in Queue : IndexNotifyQueue");
+                        log.debug("No task in Queue : IndexNotifyQueue");
                         Thread.sleep(1000);
 
                     } catch (InterruptedException e) {
-                        logger.info(e.getMessage());
+                        log.info(e.getMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -79,7 +80,7 @@ public class IndexServiceThread extends Thread {
 
 
                     } catch (Exception e) {
-                        logger.info(e.getMessage());
+                        log.info(e.getMessage());
                         e.printStackTrace();
                     }
 
@@ -88,7 +89,7 @@ public class IndexServiceThread extends Thread {
 
             } catch (Exception e) {
                 //Check if redis got problem
-                logger.info(e.getMessage());
+                log.info(e.getMessage());
                 e.printStackTrace();
             }
 

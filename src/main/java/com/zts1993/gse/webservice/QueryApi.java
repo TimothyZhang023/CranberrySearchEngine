@@ -10,8 +10,7 @@ import com.zts1993.gse.bean.Pagination;
 import com.zts1993.gse.bean.QueryResult;
 import com.zts1993.gse.bean.HtmlItem;
 import com.zts1993.gse.index.InvertedIndexQueryTool;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
  */
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/query/{keyword}")
+@Slf4j
 public class QueryApi {
 
     private int curPage = 1;
@@ -34,15 +34,13 @@ public class QueryApi {
 
     long timeQueryStart = System.currentTimeMillis();
 
-    private static final Logger logger = LogManager.getLogger("QueryApi");
-
     // The Java method will process HTTP GET requests
     @GET
     // The Java method will produce content identified by the MIME Media type "text/plain"
     @Produces("application/json")
     public String getQueryResult(@Context UriInfo ui, @PathParam("keyword") String keyword) {
 
-        logger.info("Query words: " + keyword);
+        log.info("Query words: " + keyword);
 
         String jsonRes;
 

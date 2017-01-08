@@ -8,21 +8,22 @@ package com.zts1993.gse.db.redis;
  * Created by TianShuo on 2015/3/22.
  */
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-
+@Slf4j
 public class RedisPoolClient {
 
-    private static final Logger logger = LogManager.getLogger("RedisPoolClient");
+
 
     private JedisPool jedisPool;//非切片连接池
 
     public RedisPoolClient(String ip, int port, int poolsize) {
-        logger.info("Init RedisPoolClient with " + ip + ":" + port);
+        log.info("Init RedisPoolClient with " + ip + ":" + port);
         initialPool(ip, port, poolsize);
     }
 

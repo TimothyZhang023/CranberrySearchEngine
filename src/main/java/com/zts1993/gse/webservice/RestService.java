@@ -6,25 +6,26 @@ package com.zts1993.gse.webservice;
 
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.io.IOException;
 
 /**
  * Created by TianShuo on 2015/3/28.
  */
+@Slf4j
 public class RestService {
 
-    private static final Logger logger = LogManager.getLogger("RestService");
+
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
 
-        logger.info("Api Service Starting");
-        logger.info("Visit: http://localhost:9998/");
+        log.info("Api Service Starting");
+        log.info("Visit: http://localhost:9998/");
         //server.stop(0);
-        //logger.info("Server stopped");
+        //log.info("Server stopped");
     }
 }

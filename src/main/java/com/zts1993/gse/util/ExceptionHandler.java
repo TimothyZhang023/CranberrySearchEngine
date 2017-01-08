@@ -4,8 +4,10 @@
 
 package com.zts1993.gse.util;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,9 +15,10 @@ import java.io.StringWriter;
 /**
  * Created by zts1993 on 15-4-25.
  */
+@Slf4j
 public class ExceptionHandler {
 
-    private static final Logger logger = LogManager.getLogger("ExceptionHandler");
+
 
     private Exception exception;
 
@@ -31,11 +34,11 @@ public class ExceptionHandler {
     }
 
     private void log() {
-        logger.info(exception.getMessage());
+        log.info(exception.getMessage());
         StringWriter sw = new StringWriter();
         exception.printStackTrace(new PrintWriter(sw, true));
         String str = sw.toString();
-        logger.error("Exception : " + str);
+        log.error("Exception : " + str);
     }
 
     private void sendNotification() {

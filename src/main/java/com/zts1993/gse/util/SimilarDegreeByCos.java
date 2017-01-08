@@ -15,14 +15,14 @@ import com.zts1993.gse.index.comparator.WordCountComparator;
 import com.zts1993.gse.segmentation.SegmentationFactory;
 import com.zts1993.gse.segmentation.filter.TermFilter;
 import com.zts1993.gse.segmentation.filter.TermFilterForAnsj;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
 
 import java.util.*;
 
 public class SimilarDegreeByCos {
 
-    private static final Logger logger = LogManager.getLogger("SimilarDegreeByCos");
+
 
 
     public static TermFilter getTermFilterForAnsj(String docId) {
