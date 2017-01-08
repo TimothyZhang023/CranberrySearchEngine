@@ -30,7 +30,7 @@ public class M {
 
         gseHttpClient.init();
 
-        URI uri = new URI("Http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
+        URI uri = new URI("Http://docs.oraacle.com/javase/specs/jls/se8/html/index.html");
 
 
 

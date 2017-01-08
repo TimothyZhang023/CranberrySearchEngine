@@ -7,6 +7,7 @@ package com.zts1993.spider.channel;
 import com.zts1993.spider.GseHttpClient;
 import com.zts1993.spider.GseHttpRequest;
 import com.zts1993.spider.GseHttpResponse;
+import com.zts1993.spider.GseHttpResponsePromise;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -52,6 +53,8 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
         super.channelUnregistered(ctx);
     }
 
+
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
         if (log.isDebugEnabled()) {
@@ -64,7 +67,10 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
                 || response.getStatus().equals(HttpResponseStatus.TEMPORARY_REDIRECT)) {
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
                 this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
-                this.client.send(this.request);
+                GseHttpResponsePromise send = this.client.send(this.request);
+                this.promise = send.getNettyPromise() ;
+                this.request.setPromise(send);
+
                 // Closing the connection which handled the previous request.
                 ctx.close();
                 if (log.isDebugEnabled()) {
