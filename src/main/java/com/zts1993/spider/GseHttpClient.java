@@ -27,6 +27,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class GseHttpClient implements GseHttpClientImpl {
 
+    public GseHttpClient() {
+        this(new GseHttpClientConfig());
+    }
+
     @NotNull
     final private GseHttpClientConfig clientConfig;
 
@@ -62,7 +66,7 @@ public class GseHttpClient implements GseHttpClientImpl {
 
     public GseHttpResponsePromise send(GseHttpRequest request) throws InterruptedException {
 
-        ChannelFuture f = bootstrap.connect(request.getUri().getHost(), 80).sync();
+        ChannelFuture f = bootstrap.connect(request.getHost(), request.getPort()).sync();
         Channel c = f.channel();
 
         request.setPromise(new GseHttpResponsePromise());
@@ -72,19 +76,13 @@ public class GseHttpClient implements GseHttpClientImpl {
         c.write(request.getHttpRequest());
         c.flush();
 
-        f.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
+        f.addListener((ChannelFutureListener) future -> {
 
-            }
         });
 
-        c.closeFuture().addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (log.isDebugEnabled()) {
-                    log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
-                }
+        c.closeFuture().addListener((ChannelFutureListener) future -> {
+            if (log.isDebugEnabled()) {
+                log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
             }
         });
 
@@ -102,6 +100,10 @@ public class GseHttpClient implements GseHttpClientImpl {
 
         log.debug("closing GseHttpClient");
         synchronized (this) {
+            if (_closed) {
+                return;
+            }
+
             this._closed = true;
             eventLoopGroup.shutdownGracefully();
         }

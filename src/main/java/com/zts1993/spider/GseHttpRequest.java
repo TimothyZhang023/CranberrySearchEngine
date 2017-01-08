@@ -5,6 +5,8 @@
 package com.zts1993.spider;
 
 import com.zts1993.spider.util.Timeout;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,43 +20,69 @@ import java.net.URI;
  */
 public class GseHttpRequest {
 
-    final GseHttpClientImpl gseHttpClient;
+    public static final String HTTP = "http";
+    public static final String HTTPS = "https";
+
+
+    private final GseHttpClientImpl gseHttpClient;
+
+    @Getter
+    private URI uri;
+
+    @Getter
+    private boolean ssl;
+
+    public void updateUri(URI uri) {
+        this.uri = uri;
+        this.host = uri.getHost();
+        if (uri.getScheme().toLowerCase().equals(HTTPS)) ssl = true;
+        this.port = (uri.getPort() == -1) ? (ssl ? 443 : 80) : uri.getPort();
+        this.httpRequest = null;
+    }
+
+    @Getter
+    private String host;
+
+    @Getter
+    private int port;
+
 
     @Getter
     @Setter
-    URI uri;
+    private HttpMethod method = HttpMethod.GET;
 
     @Getter
-    HttpMethod method= HttpMethod.GET;
-
+    @Setter
+    private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
 
     public GseHttpRequest(GseHttpClientImpl gseHttpClient, URI uri) {
         this.gseHttpClient = gseHttpClient;
-        this.uri = uri;
-
-        httpRequest = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, HttpMethod.GET, uri.toASCIIString()
-                //,Unpooled.wrappedBuffer(msg.getBytes("UTF-8"))
-        );
-
-        // 构建http请求
-        httpRequest.headers().set(HttpHeaderNames.HOST, uri.getHost());
-        httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
+        updateUri(uri);
     }
 
     @Getter
     @Setter
-    FullHttpRequest httpRequest;
+    private FullHttpRequest httpRequest;
 
 
     @Getter
     @Setter
-    GseHttpResponsePromise promise;
+    private GseHttpResponsePromise promise;
 
+
+    private ByteBuf content = Unpooled.buffer(0);
+
+    public synchronized void prepareRequest() {
+        if (httpRequest == null) {
+            httpRequest = new DefaultFullHttpRequest(httpVersion, method, uri.toASCIIString(), content);
+            httpRequest.headers().set(HttpHeaderNames.HOST, uri.getHost());
+            httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+            httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
+        }
+    }
 
     public GseHttpResponsePromise send() throws IOException, InterruptedException {
-
+        prepareRequest();
         return promise = gseHttpClient.send(this);
 
     }

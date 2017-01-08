@@ -42,6 +42,17 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
     }
 
     @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("" , cause);
+        super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        super.channelUnregistered(ctx);
+    }
+
+    @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug(
@@ -52,7 +63,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
         if (response.getStatus().equals(HttpResponseStatus.MOVED_PERMANENTLY)
                 || response.getStatus().equals(HttpResponseStatus.TEMPORARY_REDIRECT)) {
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
-                this.request.setUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
+                this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
                 this.client.send(this.request);
                 // Closing the connection which handled the previous request.
                 ctx.close();

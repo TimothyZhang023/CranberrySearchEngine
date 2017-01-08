@@ -26,20 +26,21 @@ public class M {
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException, ExecutionException {
 
 
-        GseHttpClientConfig config = new GseHttpClientConfig();
-
-        GseHttpClient gseHttpClient = new GseHttpClient(config);
+        GseHttpClient gseHttpClient = new GseHttpClient();
 
         gseHttpClient.init();
 
-        URI uri = new URI("http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
+        URI uri = new URI("Http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
 
 
-        GseHttpResponsePromise f = gseHttpClient.send(new GseHttpRequest(gseHttpClient, uri));
+
+        GseHttpResponsePromise f =  new GseHttpRequest(gseHttpClient, uri).send();
 //        GseHttpResponsePromise f2 = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new URI("http://www.hao123.com/")));
 
         GseHttpResponse gseHttpResponse = f.get();
 //        GseHttpResponse gseHttpResponse1 = f2.get();
+
+        System.out.println(gseHttpResponse.getContent());
 
         gseHttpClient.close();
     }
