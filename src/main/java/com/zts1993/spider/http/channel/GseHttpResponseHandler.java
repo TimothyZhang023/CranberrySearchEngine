@@ -4,21 +4,29 @@
 
 package com.zts1993.spider.http.channel;
 
+import com.sun.jersey.api.core.HttpResponseContext;
 import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
 import com.zts1993.spider.http.GseHttpResponsePromise;
+import com.zts1993.spider.util.HtmlUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.Promise;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.Buffer;
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 
 /**
  * GSE Component
@@ -44,7 +52,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("" , cause);
+        log.error("", cause);
         super.exceptionCaught(ctx, cause);
     }
 
@@ -52,7 +60,6 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         super.channelUnregistered(ctx);
     }
-
 
 
     @Override
@@ -68,7 +75,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
                 this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
                 GseHttpResponsePromise send = this.client.send(this.request);
-                this.promise = send.getNettyPromise() ;
+                this.promise = send.getNettyPromise();
                 this.request.setPromise(send);
 
                 // Closing the connection which handled the previous request.
@@ -101,7 +108,29 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
             }
 
             try {
-                String res = response.content().toString(Charset.defaultCharset());
+
+                Charset charset = null;
+                CharSequence charsetCharSequence = HttpUtil.getCharsetAsString(response);
+                if (charsetCharSequence!=null) {
+                    try {
+                        charset = Charset.forName(charsetCharSequence.toString());
+                    } catch (UnsupportedCharsetException unsupportedException) {
+
+                    }
+                }
+
+                if (charset == null) {
+                    String s = HtmlUtil.detectCharset(response.content().toString(Charset.defaultCharset()));
+                    if (s!=null) {
+                        charset = Charset.forName(s);
+                    }
+                }
+
+//                String res = response.content().toString();
+
+                String res = response.content().toString(charset);
+//                String res = new String(ByteBufUtil.getBytes(response.content()),"GBK");
+//                String res = new String(response.content().);
 //                log.info(res);
 //                log.info(response.toString());
 

@@ -24,11 +24,10 @@ public class M {
 
         gseHttpClient.init();
 
-        URI uri = new URI("Http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
+        URI uri = new URI("http://cqt.njtech.edu.cn/");
 
 
-
-        GseHttpResponsePromise f =  new GseHttpRequest(gseHttpClient, uri).send();
+        GseHttpResponsePromise f = new GseHttpRequest(gseHttpClient, uri).send();
 //        GseHttpResponsePromise f2 = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new URI("http://www.hao123.com/")));
 
         GseHttpResponse gseHttpResponse = f.get();
