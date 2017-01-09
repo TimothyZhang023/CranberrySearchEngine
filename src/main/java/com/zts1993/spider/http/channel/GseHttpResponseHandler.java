@@ -4,18 +4,14 @@
 
 package com.zts1993.spider.http.channel;
 
-import com.sun.jersey.api.core.HttpResponseContext;
 import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
 import com.zts1993.spider.http.GseHttpResponsePromise;
 import com.zts1993.spider.util.HtmlUtil;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.CharsetUtil;
@@ -24,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
-import java.nio.Buffer;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -119,11 +114,17 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
                     }
                 }
 
+
                 if (charset == null) {
                     String s = HtmlUtil.detectCharset(response.content().toString(Charset.defaultCharset()));
                     if (s != null) {
                         charset = Charset.forName(s);
                     }
+                }
+
+
+                if (charset == null) {
+                    charset = Charset.defaultCharset();
                 }
 
 //                String res = response.content().toString();

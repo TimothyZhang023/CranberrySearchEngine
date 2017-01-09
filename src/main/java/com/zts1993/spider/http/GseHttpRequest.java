@@ -10,6 +10,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,6 +19,7 @@ import java.net.URI;
  * GSE Component
  * Created by TimothyZhang on 2017/1/5.
  */
+@ToString
 public class GseHttpRequest {
 
     public static final String HTTP = "http";

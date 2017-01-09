@@ -2,9 +2,13 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider.http;
+package com.zts1993.spider;
 
 
+import com.zts1993.spider.http.GseHttpClient;
+import com.zts1993.spider.http.GseHttpRequest;
+import com.zts1993.spider.http.GseHttpResponse;
+import com.zts1993.spider.http.GseHttpResponsePromise;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
