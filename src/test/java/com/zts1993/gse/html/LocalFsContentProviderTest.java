@@ -31,8 +31,8 @@ public class LocalFsContentProviderTest {
 //    public void testFetchMarkedText() throws Exception {
 //
 //        Set<String> stringSet = new HashSet<String>();
-//        stringSet.add("美国");
-//        stringSet.add("澳大利亚");
+//        stringSet.addFirst("美国");
+//        stringSet.addFirst("澳大利亚");
 //
 //        String content = fetchLocalHtmlFile.fetchMarkedText(stringSet).toLowerCase();
 //        log.info(content);

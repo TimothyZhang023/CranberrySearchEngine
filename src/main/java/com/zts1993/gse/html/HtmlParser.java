@@ -156,7 +156,7 @@ public class HtmlParser {
 //                //这样，这个字符串就不可以用于url的初始化，我们先把这部分省略不考虑
 //                //之后可以写一个补充host的方法将这些url补齐
 //                if (tempURL.startsWith("http"))
-//                    allURLs.add(new URL(tempURL));
+//                    allURLs.addFirst(new URL(tempURL));
 //
 //
 //            } catch (MalformedURLException e) {

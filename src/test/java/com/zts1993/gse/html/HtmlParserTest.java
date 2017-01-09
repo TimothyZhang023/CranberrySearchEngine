@@ -440,7 +440,7 @@ public class HtmlParserTest {
             "var crossFadeDuration = 3;" +
             "// Specify the image files" +
             "var Pic = new Array();" +
-            "// to add more images, just continue" +
+            "// to addFirst more images, just continue" +
             "// the pattern, adding to the array below" +
             "" +
             "Pic[0] = 'image/f001.jpg'" +

@@ -20,9 +20,9 @@ import org.apache.commons.cli.PosixParser;
 public class Main {
 
     /**
-     * add arg " -api " to enable RestApiService
-     * add arg " -index " to enable IndexService
-     * add arg " -genIndexQueue " to enable BuildIndexNotifyQueue
+     * addFirst arg " -api " to enable RestApiService
+     * addFirst arg " -index " to enable IndexService
+     * addFirst arg " -genIndexQueue " to enable BuildIndexNotifyQueue
      */
 
 

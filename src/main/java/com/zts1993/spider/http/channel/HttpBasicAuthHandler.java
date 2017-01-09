@@ -2,7 +2,7 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider.channel;
+package com.zts1993.spider.http.channel;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

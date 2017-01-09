@@ -5,7 +5,7 @@
 package com.zts1993.spider.http;
 
 import com.sun.istack.internal.NotNull;
-import com.zts1993.spider.channel.GseHttpResponseHandler;
+import com.zts1993.spider.http.channel.GseHttpResponseHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
