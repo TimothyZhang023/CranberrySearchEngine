@@ -11,6 +11,4 @@ package com.zts1993.spider.task;
 public abstract class AbstractTask implements TaskImpl {
 
 
-
-
 }

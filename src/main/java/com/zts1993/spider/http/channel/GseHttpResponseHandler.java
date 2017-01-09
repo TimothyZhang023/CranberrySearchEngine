@@ -111,7 +111,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 
                 Charset charset = null;
                 CharSequence charsetCharSequence = HttpUtil.getCharsetAsString(response);
-                if (charsetCharSequence!=null) {
+                if (charsetCharSequence != null) {
                     try {
                         charset = Charset.forName(charsetCharSequence.toString());
                     } catch (UnsupportedCharsetException unsupportedException) {
@@ -121,7 +121,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 
                 if (charset == null) {
                     String s = HtmlUtil.detectCharset(response.content().toString(Charset.defaultCharset()));
-                    if (s!=null) {
+                    if (s != null) {
                         charset = Charset.forName(s);
                     }
                 }

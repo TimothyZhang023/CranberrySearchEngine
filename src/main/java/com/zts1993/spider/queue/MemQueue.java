@@ -35,9 +35,10 @@ public class MemQueue<T> implements QueueImpl<T> {
     public T poll() {
         return blockingDeque.poll();
     }
+
     @Override
     public T poll(long timeout, TimeUnit unit) throws InterruptedException {
-        return blockingDeque.poll(timeout , unit);
+        return blockingDeque.poll(timeout, unit);
     }
 
     @Override
