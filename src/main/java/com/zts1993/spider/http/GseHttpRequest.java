@@ -4,6 +4,7 @@
 
 package com.zts1993.spider.http;
 
+import com.zts1993.spider.http.channel.GseChannelCallback;
 import com.zts1993.spider.util.Timeout;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -25,6 +26,9 @@ public class GseHttpRequest {
     public static final String HTTP = "http";
     public static final String HTTPS = "https";
 
+    @Getter
+    @Setter
+    GseChannelCallback channelCallback;
 
     @Getter
     private final GseHttpClientImpl gseHttpClient;
@@ -38,6 +42,7 @@ public class GseHttpRequest {
     public void updateUri(URI uri) {
         this.uri = uri;
         this.host = uri.getHost();
+        if (host == null) host = "127.0.0.1";
         if (uri.getScheme().toLowerCase().equals(HTTPS)) ssl = true;
         this.port = (uri.getPort() == -1) ? (ssl ? 443 : 80) : uri.getPort();
         this.httpRequest = null;
@@ -78,7 +83,7 @@ public class GseHttpRequest {
     public synchronized void prepareRequest() {
         if (httpRequest == null) {
             httpRequest = new DefaultFullHttpRequest(httpVersion, method, uri.toASCIIString(), content);
-            httpRequest.headers().set(HttpHeaderNames.HOST, uri.getHost());
+            httpRequest.headers().set(HttpHeaderNames.HOST, host);
             httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
         }

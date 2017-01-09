@@ -4,11 +4,12 @@
 
 package com.zts1993.spider.task;
 
-import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponsePromise;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.io.IOException;
 
 
 /**
@@ -28,9 +29,10 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     @Override
     public GseHttpResponsePromise Do() {
         try {
-            httpRequest.prepareRequest();
-            return httpRequest.getGseHttpClient().send(httpRequest);
+            return httpRequest.send();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

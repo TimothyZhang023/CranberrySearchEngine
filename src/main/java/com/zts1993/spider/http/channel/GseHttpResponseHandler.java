@@ -16,6 +16,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.Promise;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.nio.charset.UnsupportedCharsetException;
 public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttpResponse> {
 
     private static final CharSequence HTTP_HEADER_LOCATION = "Location";
+
 
 
     protected final GseHttpClient client;
@@ -61,12 +63,12 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug(
-                    "Received " + response.getStatus().code() + " for " + this.request.getMethod().name() + " "
+                    "Received " + response.status().code() + " for " + this.request.getMethod().name() + " "
                             + this.request.getUri());
         }
 
-        if (response.getStatus().equals(HttpResponseStatus.MOVED_PERMANENTLY)
-                || response.getStatus().equals(HttpResponseStatus.TEMPORARY_REDIRECT)) {
+        if (response.status().equals(HttpResponseStatus.MOVED_PERMANENTLY)
+                || response.status().equals(HttpResponseStatus.TEMPORARY_REDIRECT)) {
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
                 this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
                 GseHttpResponsePromise send = this.client.send(this.request);
@@ -138,6 +140,12 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
                 GseHttpResponse gseHttpResponse = new GseHttpResponse();
                 gseHttpResponse.setContent(res);
                 this.promise.setSuccess(gseHttpResponse);
+
+                if (request.getChannelCallback() != null) {
+                    request.getChannelCallback().processWithResponse(gseHttpResponse);
+                }
+
+                //channelCallback
             }
             // Catches both parsed EtcdExceptions and parsing exceptions
             catch (Exception e) {

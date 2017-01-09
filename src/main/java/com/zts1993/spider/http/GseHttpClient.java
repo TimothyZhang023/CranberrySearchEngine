@@ -44,7 +44,7 @@ public class GseHttpClient implements GseHttpClientImpl {
 
 
     public void init() {
-        eventLoopGroup = new NioEventLoopGroup();
+        eventLoopGroup = new NioEventLoopGroup(8);
         bootstrap = new Bootstrap()
                 .group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
@@ -81,9 +81,9 @@ public class GseHttpClient implements GseHttpClientImpl {
         });
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
-            if (log.isDebugEnabled()) {
-                log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
+//            }
         });
 
 
