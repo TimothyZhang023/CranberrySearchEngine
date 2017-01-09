@@ -7,7 +7,6 @@ package com.zts1993.spider.http.channel;
 import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
-import com.zts1993.spider.http.GseHttpResponsePromise;
 import com.zts1993.spider.util.HtmlUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -16,11 +15,9 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.Promise;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -32,7 +29,6 @@ import java.nio.charset.UnsupportedCharsetException;
 public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttpResponse> {
 
     private static final CharSequence HTTP_HEADER_LOCATION = "Location";
-
 
 
     protected final GseHttpClient client;
@@ -49,8 +45,8 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("", cause);
-        super.exceptionCaught(ctx, cause);
+        log.error(request.toString(), cause);
+        ctx.close();
     }
 
     @Override
@@ -68,15 +64,18 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
         }
 
         if (response.status().equals(HttpResponseStatus.MOVED_PERMANENTLY)
-                || response.status().equals(HttpResponseStatus.TEMPORARY_REDIRECT)) {
+                || response.status().equals(HttpResponseStatus.TEMPORARY_REDIRECT)
+                || response.status().equals(HttpResponseStatus.FOUND)
+                ) {
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
-                this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
-                GseHttpResponsePromise send = this.client.send(this.request);
-                this.promise = send.getNettyPromise();
-                this.request.setPromise(send);
-
-                // Closing the connection which handled the previous request.
-                ctx.close();
+                //TODO
+//                this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
+//                GseHttpResponsePromise send = this.request.send();
+//                this.promise = send.getNettyPromise();
+//                this.request.setPromise(send);
+//
+//                // Closing the connection which handled the previous request.
+//                ctx.close();
                 if (log.isDebugEnabled()) {
                     log.debug("redirect for " + this.request.getHttpRequest().uri() + " to " +
                             response.headers().get(HTTP_HEADER_LOCATION));
@@ -85,6 +84,8 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
             } else {
                 this.promise.setFailure(new Exception("Missing Location header on redirect"));
             }
+
+            return;
         }
 
 
@@ -137,8 +138,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 //                log.info(res);
 //                log.info(response.toString());
 
-                GseHttpResponse gseHttpResponse = new GseHttpResponse();
-                gseHttpResponse.setContent(res);
+                GseHttpResponse gseHttpResponse = new GseHttpResponse(request, res);
                 this.promise.setSuccess(gseHttpResponse);
 
                 if (request.getChannelCallback() != null) {

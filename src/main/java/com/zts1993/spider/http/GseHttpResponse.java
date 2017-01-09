@@ -5,17 +5,24 @@
 package com.zts1993.spider.http;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
  * GSE Component
  * Created by TimothyZhang on 2017/1/5.
  */
+@RequiredArgsConstructor
 public class GseHttpResponse {
 
+    @Getter
+     private final GseHttpRequest request;
 
     @Getter
-    @Setter
-    private String content;
+    private final String content;
+
+
+
+
 
 }

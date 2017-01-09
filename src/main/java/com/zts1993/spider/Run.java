@@ -22,8 +22,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +47,7 @@ public class Run {
         final QueueImpl<TaskImpl<GseHttpResponsePromise>> taskMemQueue = new MemQueue<>();
         final QueueImpl<GseHttpResponse> promiseMemQueue = new MemQueue<>();
 
-        GseHttpRequest gseHttpRequest = new GseHttpRequest(gseHttpClient, new URI("http://cqt.njtech.edu.cn/"));
+        GseHttpRequest gseHttpRequest = new GseHttpRequest(gseHttpClient, new URI("http://docs.oracle.com/javase/specs/jls/se8/html/index.html"));
         gseHttpRequest.setChannelCallback(new GseChannelCallback() {
             @Override
             public void processWithResponse(GseHttpResponse response) {
@@ -89,6 +91,7 @@ public class Run {
                     if (poll == null) {
                         continue;
                     }
+                    log.info("no.{} pages done" ,set.size() );
 
                     GseHttpResponse gseHttpResponse = poll;
                     String content = gseHttpResponse.getContent();
@@ -106,8 +109,25 @@ public class Run {
                     for (Element link : links) {
 //                        log.info(" * a: <{}>  ({})", link.attr("abs:href"), trim(link.text(), 35));
 
-                        String url = link.attr("abs:href");
+                        String url = link.attr("href");
                         if (url != null && !url.isEmpty()) {
+
+                            if (!url.startsWith("http") && !url.startsWith("https")) {
+                                if ((url.startsWith("/"))) {
+                                    url = "http://docs.oracle.com" + url;
+                                } else {
+
+                                    GseHttpRequest request = gseHttpResponse.getRequest();
+
+                                    URL url1 = new URL(new URL(request.getUri().toASCIIString()), url);
+                                    url = url1.toString();
+
+                                }
+                            }
+
+                            if (!url.startsWith("http://docs.oracle.com")) {
+                                continue;
+                            }
 
                             if (set.contains(url)) {
                                 continue;
@@ -116,12 +136,9 @@ public class Run {
                             }
 
                             GseHttpRequest r = new GseHttpRequest(gseHttpClient, new URI(url));
-                            r.setChannelCallback(new GseChannelCallback() {
-                                @Override
-                                public void processWithResponse(GseHttpResponse response) {
+                            r.setChannelCallback(response -> {
 //                                    promiseMemQueue.addLast(response);
-                                    promiseMemQueue.addFirst(response);
-                                }
+                                promiseMemQueue.addFirst(response);
                             });
 
                             taskMemQueue.addLast(new HttpRequestTask(r));
@@ -129,9 +146,13 @@ public class Run {
                     }
 
 
+                } catch (RuntimeException e) {
+                    log.error(e.getMessage());
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 } catch (URISyntaxException e) {
+                    log.error(e.getMessage());
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
 

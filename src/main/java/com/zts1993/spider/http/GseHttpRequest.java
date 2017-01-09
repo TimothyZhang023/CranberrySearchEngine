@@ -5,6 +5,7 @@
 package com.zts1993.spider.http;
 
 import com.zts1993.spider.http.channel.GseChannelCallback;
+import com.zts1993.spider.util.IpUtil;
 import com.zts1993.spider.util.Timeout;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -86,6 +87,11 @@ public class GseHttpRequest {
             httpRequest.headers().set(HttpHeaderNames.HOST, host);
             httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
+
+            String randomIp = IpUtil.getRandomIp();
+
+            httpRequest.headers().set("X-Forwarded-For", randomIp);
+            httpRequest.headers().set("X-Real-IP", randomIp);
         }
     }
 
