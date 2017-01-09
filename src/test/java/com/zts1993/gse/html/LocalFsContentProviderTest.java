@@ -6,7 +6,7 @@ package com.zts1993.gse.html;
 
 public class LocalFsContentProviderTest {
 
-//    private static final Logger logger = LogManager.getLogger("LocalFsHtmlContentProviderTest");
+//
 //
 //    LocalFsContentProvider fetchLocalHtmlFile;
 //
@@ -24,7 +24,7 @@ public class LocalFsContentProviderTest {
 //    @Test
 //    public void testFetchText() throws Exception {
 //        String content = fetchLocalHtmlFile.fetchText().toLowerCase();
-//        logger.info(content);
+//        log.info(content);
 //    }
 //
 //    @Test
@@ -35,6 +35,6 @@ public class LocalFsContentProviderTest {
 //        stringSet.add("澳大利亚");
 //
 //        String content = fetchLocalHtmlFile.fetchMarkedText(stringSet).toLowerCase();
-//        logger.info(content);
+//        log.info(content);
 //    }
 }

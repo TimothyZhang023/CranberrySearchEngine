@@ -4,18 +4,19 @@
 
 package com.zts1993.gse.segmentation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ansj.domain.Term;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
+@Slf4j
 public class SegmentationFactoryTest {
 
-    final private static Logger logger = LogManager.getLogger("SegmentationFactoryTest");
 
     String demo;
 
@@ -35,7 +36,7 @@ public class SegmentationFactoryTest {
 
     @After
     public void tearDown() throws Exception {
-        logger.info("Segmentation-"+Thread.currentThread().getStackTrace()[2].getMethodName()+ parse.toString());
+        log.info("Segmentation-"+Thread.currentThread().getStackTrace()[2].getMethodName()+ parse.toString());
     }
 
     @Test

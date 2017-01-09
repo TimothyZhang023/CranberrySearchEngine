@@ -2,15 +2,9 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider;
+package com.zts1993.spider.http;
 
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.handler.codec.http.DefaultFullHttpRequest;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpVersion;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -30,7 +24,7 @@ public class M {
 
         gseHttpClient.init();
 
-        URI uri = new URI("Http://docs.oraacle.com/javase/specs/jls/se8/html/index.html");
+        URI uri = new URI("Http://docs.oracle.com/javase/specs/jls/se8/html/index.html");
 
 
 

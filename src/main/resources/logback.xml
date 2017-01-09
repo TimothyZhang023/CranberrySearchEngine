@@ -2,22 +2,43 @@
   ~ Copyright (c) 2017 By Timothy Zhang
   -->
 <configuration  scan="true" scanPeriod="60 seconds">
+    <property name="loggingRoot" value="./log"/>
+
 
     <!-- 输出到控制台中 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss} %-5p %c{0}:%-12L - %m%n</pattern>
+            <!--<pattern>%d{HH:mm:ss} %-5p %c{0}:%-12L - %m%n</pattern>-->
+            <pattern>[%d{yy-MM-dd HH:mm:ss.SSS}] %highlight(%p) [%thread] %cyan(%c{26}.%M) - %m (%c{0}.java:%L\) %n </pattern>
         </encoder>
     </appender>
 
+    <!-- 输出到日志文件  -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${loggingRoot}/main.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${loggingRoot}/main-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder><!-- 必须指定，否则不会往文件输出内容 -->
+            <pattern>[%d{yy-MM-dd HH:mm:ss.SSS}] %p [%thread] %c{26}.%M - %m %n </pattern>
+        </encoder>
+    </appender>
+
+
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
+
 
     <logger name="com.zts1993" additivity="false">
         <level value="DEBUG"/>
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </logger>
+
+
 
 
 </configuration>

@@ -4,10 +4,10 @@
 
 package com.zts1993.spider.channel;
 
-import com.zts1993.spider.GseHttpClient;
-import com.zts1993.spider.GseHttpRequest;
-import com.zts1993.spider.GseHttpResponse;
-import com.zts1993.spider.GseHttpResponsePromise;
+import com.zts1993.spider.http.GseHttpClient;
+import com.zts1993.spider.http.GseHttpRequest;
+import com.zts1993.spider.http.GseHttpResponse;
+import com.zts1993.spider.http.GseHttpResponsePromise;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;

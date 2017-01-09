@@ -4,22 +4,24 @@
 
 package com.zts1993.gse.html;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 public class MongodbContentProviderTest {
 
-    private static final Logger logger = LogManager.getLogger("MongodbContentProviderTest");
+
 
     MongodbContentProvider mongodbContentProvider = new MongodbContentProvider("0001dd7ca15a5d2260c69d9fa160f168cbc2aff438c1ee1c3d98f1cae85bc3fb");
 
     @Test
     public void testFetchHtml() throws Exception {
-        logger.info(mongodbContentProvider.fetchHtml());
+        log.info(mongodbContentProvider.fetchHtml());
     }
 
     @Test
@@ -41,6 +43,6 @@ public class MongodbContentProviderTest {
         stringSet.add("专题");
 
         String content = mongodbContentProvider.fetchMarkedText(stringSet).toLowerCase();
-        logger.info(content);
+        log.info(content);
     }
 }

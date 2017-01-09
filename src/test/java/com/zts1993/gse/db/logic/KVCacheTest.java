@@ -6,13 +6,13 @@ package com.zts1993.gse.db.logic;
 
 import com.zts1993.gse.db.cache.KVCache;
 import com.zts1993.gse.db.cache.LRUCache;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+@Slf4j
 public class KVCacheTest {
-
-    final private static Logger logger = LogManager.getLogger("KVCacheTest");
 
     private static LRUCache<String, String> lruCache = new LRUCache<String, String>(10000);
 //    private static TTLCache<String, String> TTLCache = new TTLCache<String, String>(10000);
@@ -86,7 +86,7 @@ public class KVCacheTest {
 
         long time3 = System.nanoTime();
 
-        logger.info(String.format("Put %s ms,get %s ms", (time2 - time1) / 1000000, (time3 - time2) / 1000000));
+        log.info(String.format("Put %s ms,get %s ms", (time2 - time1) / 1000000, (time3 - time2) / 1000000));
     }
 
 
@@ -123,7 +123,7 @@ public class KVCacheTest {
 //
 //        long time3 = System.nanoTime();
 //
-//        logger.info(String.format("Put %s ms,get %s ms", (time2 - time1) / 1000000, (time3 - time2) / 1000000));
+//        log.info(String.format("Put %s ms,get %s ms", (time2 - time1) / 1000000, (time3 - time2) / 1000000));
 //    }
 
 

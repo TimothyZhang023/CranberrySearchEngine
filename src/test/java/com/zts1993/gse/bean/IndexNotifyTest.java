@@ -4,15 +4,13 @@
 
 package com.zts1993.gse.bean;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+@Slf4j
 public class IndexNotifyTest {
-
-    private static final Logger logger = LogManager.getLogger("IndexNotifyTest");
 
 
     IndexNotify indexNotify = new IndexNotify();
@@ -26,7 +24,7 @@ public class IndexNotifyTest {
         String page_encoding = "utf-8";
         String queue_time = "2014-4-6 14:30:00";
         indexNotify = new  IndexNotify(url, title, hash_key, storage_type, page_encoding, queue_time);
-        logger.info("Set Up IndexNotify :"+ indexNotify.toString());
+        log.info("Set Up IndexNotify :"+ indexNotify.toString());
     }
 
     @Test
@@ -93,7 +91,7 @@ public class IndexNotifyTest {
 
     @After
     public void tearDown() throws Exception {
-        logger.info("Tear Down IndexNotify :"+ indexNotify.toString());
+        log.info("Tear Down IndexNotify :"+ indexNotify.toString());
     }
 
 }
