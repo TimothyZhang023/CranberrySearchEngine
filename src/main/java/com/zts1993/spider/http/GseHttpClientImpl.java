@@ -11,7 +11,7 @@ import java.io.Closeable;
  * GSE Component
  * Created by TimothyZhang on 2017/1/5.
  */
-interface GseHttpClientImpl extends Closeable {
+public interface GseHttpClientImpl extends Closeable {
 
     GseHttpResponsePromise send(GseHttpRequest gseHttpRequest) throws InterruptedException;
 

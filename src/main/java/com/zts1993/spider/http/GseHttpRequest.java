@@ -26,6 +26,7 @@ public class GseHttpRequest {
     public static final String HTTPS = "https";
 
 
+    @Getter
     private final GseHttpClientImpl gseHttpClient;
 
     @Getter

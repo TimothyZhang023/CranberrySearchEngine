@@ -29,7 +29,7 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     public GseHttpResponsePromise Do() {
         try {
             httpRequest.prepareRequest();
-            return gseHttpClient.send(httpRequest);
+            return httpRequest.getGseHttpClient().send(httpRequest);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -38,13 +38,9 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     }
 
     @Getter
-    final private GseHttpClient gseHttpClient;
-
-    @Getter
     final private GseHttpRequest httpRequest;
 
-    public HttpRequestTask(GseHttpClient gseHttpClient, GseHttpRequest httpRequest) {
-        this.gseHttpClient = gseHttpClient;
+    public HttpRequestTask(GseHttpRequest httpRequest) {
         this.httpRequest = httpRequest;
     }
 }

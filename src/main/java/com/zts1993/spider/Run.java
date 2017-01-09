@@ -4,6 +4,7 @@
 
 package com.zts1993.spider;
 
+import com.zts1993.gse.html.HtmlParser;
 import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
@@ -35,15 +36,26 @@ public class Run {
         final QueueImpl<TaskImpl<GseHttpResponsePromise>> taskMemQueue = new MemQueue<>();
         final QueueImpl<GseHttpResponsePromise> promiseMemQueue = new MemQueue<>();
 
-        HttpRequestTask httpRequestTask = new HttpRequestTask(gseHttpClient, new GseHttpRequest(gseHttpClient, new URI("http://cqt.njtech.edu.cn/")));
+        HttpRequestTask httpRequestTask = new HttpRequestTask(new GseHttpRequest(gseHttpClient, new URI("http://cqt.njtech.edu.cn/")));
         taskMemQueue.addLast(httpRequestTask);
 
         Thread task = new Thread(() -> {
             TaskImpl<GseHttpResponsePromise> poll;
-            while ((poll = taskMemQueue.poll()) != null) {
-                log.info(poll.toString());
-                GseHttpResponsePromise aDo = poll.Do();
-                promiseMemQueue.addLast(aDo);
+            while (true) {
+
+                try {
+                    poll = taskMemQueue.poll(10, TimeUnit.SECONDS);
+                    if (poll == null) {
+                        continue;
+                    }
+
+                    log.info(poll.toString());
+                    GseHttpResponsePromise aDo = poll.Do();
+                    promiseMemQueue.addLast(aDo);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         });
@@ -62,7 +74,10 @@ public class Run {
                     }
 
                     GseHttpResponse gseHttpResponse = poll.get();
-                    log.info(gseHttpResponse.getContent());
+                    String content = gseHttpResponse.getContent();
+
+                    log.info(new HtmlParser().html2SimpleText(content));
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
