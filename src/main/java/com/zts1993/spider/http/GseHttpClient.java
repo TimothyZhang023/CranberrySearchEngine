@@ -72,7 +72,7 @@ public class GseHttpClient implements GseHttpClientImpl {
         request.setPromise(new GseHttpResponsePromise());
         request.getPromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop()));
 
-        c.pipeline().addLast("handler", new GseHttpResponseHandler(this, request));
+        c.pipeline().addLast("gseHttpHandler", new GseHttpResponseHandler(request));
         c.write(request.getHttpRequest());
         c.flush();
 
@@ -81,6 +81,7 @@ public class GseHttpClient implements GseHttpClientImpl {
         });
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
+            //close connection
 //            if (log.isDebugEnabled()) {
 //                log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
 //            }

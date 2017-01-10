@@ -32,7 +32,7 @@ public class GseHttpRequest {
     GseChannelCallback channelCallback;
 
     @Getter
-    private final GseHttpClientImpl gseHttpClient;
+    private final GseHttpClientImpl httpClient;
 
     @Getter
     private URI uri;
@@ -64,8 +64,8 @@ public class GseHttpRequest {
     @Setter
     private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
 
-    public GseHttpRequest(GseHttpClientImpl gseHttpClient, URI uri) {
-        this.gseHttpClient = gseHttpClient;
+    public GseHttpRequest(GseHttpClientImpl httpClient, URI uri) {
+        this.httpClient = httpClient;
         updateUri(uri);
     }
 
@@ -97,7 +97,7 @@ public class GseHttpRequest {
 
     public GseHttpResponsePromise send() throws IOException, InterruptedException {
         prepareRequest();
-        return promise = gseHttpClient.send(this);
+        return promise = httpClient.send(this);
 
     }
 

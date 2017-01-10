@@ -5,6 +5,7 @@
 package com.zts1993.spider.http.channel;
 
 import com.zts1993.spider.http.GseHttpClient;
+import com.zts1993.spider.http.GseHttpClientImpl;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
 import com.zts1993.spider.util.HtmlUtil;
@@ -31,14 +32,14 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
     private static final CharSequence HTTP_HEADER_LOCATION = "Location";
 
 
-    protected final GseHttpClient client;
+    protected final GseHttpClientImpl client;
 
     protected final GseHttpRequest request;
 
     protected Promise<GseHttpResponse> promise;
 
-    public GseHttpResponseHandler(GseHttpClient client, GseHttpRequest request) {
-        this.client = client;
+    public GseHttpResponseHandler(GseHttpRequest request) {
+        this.client = request.getHttpClient();
         this.request = request;
         this.promise = request.getPromise().getNettyPromise();
     }
