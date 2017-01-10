@@ -4,7 +4,6 @@
 
 package com.zts1993.spider;
 
-import com.zts1993.gse.html.HtmlParser;
 import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
@@ -20,8 +19,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.nlpcn.commons.lang.util.MD5;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,8 +50,13 @@ public class Run {
         GseHttpRequest gseHttpRequest = new GseHttpRequest(gseHttpClient, new URI("http://docs.oracle.com/javase/specs/jls/se8/html/index.html"));
         gseHttpRequest.setChannelCallback(new GseChannelCallback() {
             @Override
-            public void processWithResponse(GseHttpResponse response) {
+            public void onSuccess(GseHttpResponse response) {
                 promiseMemQueue.addLast(response);
+            }
+
+            @Override
+            public void onFailed(GseHttpResponse response) {
+
             }
         });
         HttpRequestTask httpRequestTask = new HttpRequestTask(gseHttpRequest);
@@ -91,7 +96,7 @@ public class Run {
                     if (poll == null) {
                         continue;
                     }
-                    log.info("no.{} pages done" ,set.size() );
+                    log.info("no.{} pages done", set.size());
 
                     GseHttpResponse gseHttpResponse = poll;
                     String content = gseHttpResponse.getContent();
@@ -103,7 +108,18 @@ public class Run {
                     Document doc = Jsoup.parse(content);
                     Elements links = doc.select("a[href]");
 
-                    log.info(new HtmlParser().html2SimpleText(content));
+//                    log.info(new HtmlParser().html2SimpleText(content));
+
+                    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                            new FileOutputStream("../data/" + MD5.code(gseHttpResponse.getRequest().getUri().toString()) + ".html"), "utf-8"))) {
+                        writer.write(content);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
                     for (Element link : links) {
@@ -121,7 +137,6 @@ public class Run {
 
                                     URL url1 = new URL(new URL(request.getUri().toASCIIString()), url);
                                     url = url1.toString();
-
                                 }
                             }
 
@@ -136,9 +151,16 @@ public class Run {
                             }
 
                             GseHttpRequest r = new GseHttpRequest(gseHttpClient, new URI(url));
-                            r.setChannelCallback(response -> {
-//                                    promiseMemQueue.addLast(response);
-                                promiseMemQueue.addFirst(response);
+                            r.setChannelCallback(new GseChannelCallback() {
+                                @Override
+                                public void onSuccess(GseHttpResponse response) {
+                                    promiseMemQueue.addFirst(response);
+                                }
+
+                                @Override
+                                public void onFailed(GseHttpResponse response) {
+
+                                }
                             });
 
                             taskMemQueue.addLast(new HttpRequestTask(r));

@@ -142,7 +142,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
                 this.promise.setSuccess(gseHttpResponse);
 
                 if (request.getChannelCallback() != null) {
-                    request.getChannelCallback().processWithResponse(gseHttpResponse);
+                    request.getChannelCallback().onSuccess(gseHttpResponse);
                 }
 
                 //channelCallback

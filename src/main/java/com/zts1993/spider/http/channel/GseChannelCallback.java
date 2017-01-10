@@ -12,6 +12,8 @@ import com.zts1993.spider.http.GseHttpResponse;
  */
 public interface GseChannelCallback {
 
-    void processWithResponse(GseHttpResponse response);
+    void onSuccess(GseHttpResponse response);
+
+    void onFailed(GseHttpResponse response);
 
 }
