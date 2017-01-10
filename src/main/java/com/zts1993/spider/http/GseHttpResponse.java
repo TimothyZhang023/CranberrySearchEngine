@@ -6,7 +6,6 @@ package com.zts1993.spider.http;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * GSE Component
@@ -16,13 +15,10 @@ import lombok.Setter;
 public class GseHttpResponse {
 
     @Getter
-     private final GseHttpRequest request;
+    private final GseHttpRequest request;
 
     @Getter
     private final String content;
-
-
-
 
 
 }

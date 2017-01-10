@@ -4,7 +4,6 @@
 
 package com.zts1993.spider.http.channel;
 
-import com.zts1993.spider.http.GseHttpClient;
 import com.zts1993.spider.http.GseHttpClientImpl;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponse;
