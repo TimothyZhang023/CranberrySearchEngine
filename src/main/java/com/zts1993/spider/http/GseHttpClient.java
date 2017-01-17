@@ -13,6 +13,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.DefaultPromise;
@@ -56,6 +57,7 @@ public class GseHttpClient implements GseHttpClientImpl {
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
                         p.addLast("codec", new HttpClientCodec());
+//                        p.addLast("decompressor",new HttpContentDecompressor());
                         p.addLast("chunkedWriter", new ChunkedWriteHandler());
                         p.addLast("aggregate", new HttpObjectAggregator(1024 * 1000));
                     }
@@ -82,11 +84,10 @@ public class GseHttpClient implements GseHttpClientImpl {
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
             //close connection
-//            if (log.isDebugEnabled()) {
-//                log.debug("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
-//            }
+            if (log.isTraceEnabled()) {
+                log.trace("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
+            }
         });
-
 
         return request.getPromise();
     }

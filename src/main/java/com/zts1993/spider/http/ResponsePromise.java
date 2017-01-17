@@ -2,7 +2,7 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider;
+package com.zts1993.spider.http;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.util.concurrent.Promise;
