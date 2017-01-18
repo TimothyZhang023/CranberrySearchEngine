@@ -71,22 +71,22 @@ public class GseHttpRequest {
 
     @Getter
     @Setter
-    private FullHttpRequest httpRequest;
+    private volatile HttpRequest httpRequest;
 
 
     @Getter
     @Setter
-    private GseHttpResponsePromise promise;
+    private GseHttpResponsePromise promise = null;
 
 
     private ByteBuf content = Unpooled.buffer(0);
 
-    public synchronized void prepareRequest() {
+    public synchronized void prepare() {
         if (httpRequest == null) {
             httpRequest = new DefaultFullHttpRequest(httpVersion, method, uri.toASCIIString(), content);
             httpRequest.headers().set(HttpHeaderNames.HOST, host);
             httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-            httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
+//            httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
 
             String randomIp = IpUtil.getRandomIp();
 
@@ -96,9 +96,7 @@ public class GseHttpRequest {
     }
 
     public GseHttpResponsePromise send() throws IOException, InterruptedException {
-        prepareRequest();
         return promise = httpClient.send(this);
-
     }
 
 

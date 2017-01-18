@@ -18,13 +18,13 @@ import java.util.concurrent.ExecutionException;
 public class ResponsePromise<T> {
     ChannelFuture f;
 
-    @Setter
     @Getter
     Promise<T> nettyPromise;
 
 
-    public void attachNettyPromise(Promise<T> promise) {
+    public ResponsePromise<T> attachNettyPromise(Promise<T> promise) {
         this.nettyPromise = promise;
+        return this;
     }
 
     public T get() throws ExecutionException, InterruptedException {

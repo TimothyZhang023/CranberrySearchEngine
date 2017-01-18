@@ -13,12 +13,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.DefaultPromise;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -29,14 +29,18 @@ import java.io.IOException;
 public class GseHttpClient implements GseHttpClientImpl {
 
     public GseHttpClient() {
-        this(new GseHttpClientConfig());
+        this(GseHttpClientConfig.builder().build());
     }
 
     @NotNull
     final private GseHttpClientConfig clientConfig;
 
+    /**
+     * setter for external event loop
+     */
     @Getter
-    private EventLoopGroup eventLoopGroup;
+    @Setter
+    private EventLoopGroup eventLoopGroup = null;
 
     @Getter
     private Bootstrap bootstrap;
@@ -45,13 +49,16 @@ public class GseHttpClient implements GseHttpClientImpl {
 
 
     public void init() {
-        eventLoopGroup = new NioEventLoopGroup(8);
+        if (eventLoopGroup == null) {
+            eventLoopGroup = new NioEventLoopGroup(clientConfig.getThreads());
+        }
+
         bootstrap = new Bootstrap()
                 .group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, clientConfig.getTimeout())
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
@@ -67,12 +74,13 @@ public class GseHttpClient implements GseHttpClientImpl {
 
 
     public GseHttpResponsePromise send(GseHttpRequest request) throws InterruptedException {
+        request.prepare();
 
         ChannelFuture f = bootstrap.connect(request.getHost(), request.getPort()).sync();
         Channel c = f.channel();
 
-        request.setPromise(new GseHttpResponsePromise());
-        request.getPromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop()));
+        request.setPromise(new GseHttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
+
 
         c.pipeline().addLast("gseHttpHandler", new GseHttpResponseHandler(request));
         c.write(request.getHttpRequest());
@@ -84,15 +92,18 @@ public class GseHttpClient implements GseHttpClientImpl {
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
             //close connection
-            if (log.isTraceEnabled()) {
-                log.trace("Connection closed for request " + request.getMethod().name() + " " + request.getUri());
-            }
+            log.debug("Connection closed for request {} {} ", request.getMethod().name(), request.getUri());
         });
 
         return request.getPromise();
     }
 
 
+    /**
+     * will close event loop
+     *
+     * @throws IOException from shutdownGracefully()
+     */
     @Override
     public void close() throws IOException {
 
