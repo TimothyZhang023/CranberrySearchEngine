@@ -1,0 +1,15 @@
+
+*.class
+temp/
+
+.idea
+*.iml
+out
+gen
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+log/
+target/
