@@ -74,13 +74,11 @@ public class GseHttpClient implements GseHttpClientImpl {
 
 
     public GseHttpResponsePromise send(GseHttpRequest request) throws InterruptedException {
-        request.prepare();
 
-        ChannelFuture f = bootstrap.connect(request.getHost(), request.getPort()).sync();
+        ChannelFuture f = bootstrap.connect(request.getUrl().getHost(), request.getUrl().getPort()).sync();
         Channel c = f.channel();
 
         request.setPromise(new GseHttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
-
 
         c.pipeline().addLast("gseHttpHandler", new GseHttpResponseHandler(request));
         c.write(request.getHttpRequest());
@@ -92,7 +90,7 @@ public class GseHttpClient implements GseHttpClientImpl {
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
             //close connection
-            log.debug("Connection closed for request {} {} ", request.getMethod().name(), request.getUri());
+            log.debug("Connection closed for request {} {} ", request.getMethod().name(), request.getUrl().getUri());
         });
 
         return request.getPromise();

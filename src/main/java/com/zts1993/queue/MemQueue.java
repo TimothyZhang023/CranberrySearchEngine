@@ -2,7 +2,7 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider.queue;
+package com.zts1993.queue;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;

@@ -5,10 +5,7 @@
 package com.zts1993.spider;
 
 
-import com.zts1993.spider.http.GseHttpClient;
-import com.zts1993.spider.http.GseHttpRequest;
-import com.zts1993.spider.http.GseHttpResponse;
-import com.zts1993.spider.http.GseHttpResponsePromise;
+import com.zts1993.spider.http.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -28,10 +25,7 @@ public class M {
 
         gseHttpClient.init();
 
-        URI uri = new URI("http://cqt.njtech.edu.cn/");
-
-
-        GseHttpResponsePromise f = new GseHttpRequest(gseHttpClient, uri).send();
+        GseHttpResponsePromise f = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new GseURL("http://cqt.njtech.edu.cn/")));
 //        GseHttpResponsePromise f2 = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new URI("http://www.hao123.com/")));
 
         GseHttpResponse gseHttpResponse = f.get();

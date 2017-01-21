@@ -10,10 +10,18 @@ import com.zts1993.spider.http.GseHttpResponse;
  * GSE Component
  * Created by TimothyZhang on 2017/1/9.
  */
-public interface GseChannelCallback {
+public interface GseHttpRequestCallback {
 
+    /**
+     * on request complete
+     * @param response response
+     */
     void onSuccess(GseHttpResponse response);
 
-    void onFailed(GseHttpResponse response);
+    /**
+     * on request failed
+     * @param why exception
+     */
+    void onFailed(Throwable why);
 
 }

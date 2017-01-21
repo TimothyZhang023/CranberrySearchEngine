@@ -4,18 +4,23 @@
 
 package com.zts1993.spider.http;
 
-import com.zts1993.spider.http.channel.GseChannelCallback;
-import com.zts1993.spider.util.IpUtil;
+import com.google.common.net.MediaType;
+import com.zts1993.spider.http.channel.GseHttpRequestCallback;
 import com.zts1993.spider.util.Timeout;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
+import io.netty.util.CharsetUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
-import java.net.URI;
+import java.io.InputStream;
 
 /**
  * GSE Component
@@ -24,79 +29,67 @@ import java.net.URI;
 @ToString
 public class GseHttpRequest {
 
-    public static final String HTTP = "http";
-    public static final String HTTPS = "https";
-
-    @Getter
-    @Setter
-    GseChannelCallback channelCallback;
+    private static final int DEFAULT_COPY_BUF = 4096;
 
     @Getter
     private final GseHttpClientImpl httpClient;
 
+
+    /**
+     * callback when processing request
+     */
     @Getter
-    private URI uri;
+    @Setter
+    protected GseHttpRequestCallback channelCallback;
 
     @Getter
-    private boolean ssl;
-
-    public void updateUri(URI uri) {
-        this.uri = uri;
-        this.host = uri.getHost();
-        if (host == null) host = "127.0.0.1";
-        if (uri.getScheme().toLowerCase().equals(HTTPS)) ssl = true;
-        this.port = (uri.getPort() == -1) ? (ssl ? 443 : 80) : uri.getPort();
-        this.httpRequest = null;
-    }
+    @Setter
+    protected GseCookie cookies;
 
     @Getter
-    private String host;
+    private GseURL url;
 
-    @Getter
-    private int port;
+    private ByteBuf body = Unpooled.buffer(0);
+
+    private ByteBufAllocator alloc = ByteBufAllocator.DEFAULT;
 
 
     @Getter
     @Setter
     private HttpMethod method = HttpMethod.GET;
 
-    @Getter
     @Setter
     private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
 
-    public GseHttpRequest(GseHttpClientImpl httpClient, URI uri) {
+
+    public GseHttpRequest(GseHttpClientImpl httpClient, GseURL url) {
         this.httpClient = httpClient;
-        updateUri(uri);
+        this.url = url;
     }
 
-    @Getter
     @Setter
     private volatile HttpRequest httpRequest;
 
+    @Setter
+    private String fakeIp = null;
 
     @Getter
     @Setter
     private GseHttpResponsePromise promise = null;
 
-
-    private ByteBuf content = Unpooled.buffer(0);
-
-    public synchronized void prepare() {
+    public synchronized HttpRequest getHttpRequest() {
         if (httpRequest == null) {
-            httpRequest = new DefaultFullHttpRequest(httpVersion, method, uri.toASCIIString(), content);
-            httpRequest.headers().set(HttpHeaderNames.HOST, host);
+            httpRequest = new DefaultFullHttpRequest(httpVersion, method, url.getUri().toASCIIString(), body);
+            httpRequest.headers().set(HttpHeaderNames.HOST, url.getHost());
             httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-//            httpRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, httpRequest.content().readableBytes());
 
-            String randomIp = IpUtil.getRandomIp();
-
-            httpRequest.headers().set("X-Forwarded-For", randomIp);
-            httpRequest.headers().set("X-Real-IP", randomIp);
+            if (fakeIp != null) {
+                httpRequest.headers().set("X-Forwarded-For", fakeIp);
+                httpRequest.headers().set("X-Real-IP", fakeIp);
+            }
         }
-    }
 
-    public GseHttpResponsePromise send() throws IOException, InterruptedException {
-        return promise = httpClient.send(this);
+        return httpRequest;
     }
 
 
@@ -104,7 +97,62 @@ public class GseHttpRequest {
         optional args
      */
     @Setter
-    Timeout time = new Timeout();
+    Timeout timeout = new Timeout();  //default 2s
+
+
+    public HttpHeaders addHeader(CharSequence name, Object value) {
+        return getHttpRequest().headers().set(name, value);
+    }
+
+
+    public void setBody(Object o, MediaType contentType) throws IOException {
+        if (o instanceof CharSequence) {
+            CharSequence seq = (CharSequence) o;
+            setBody(seq.toString().getBytes(CharsetUtil.UTF_8), contentType);
+        } else if (o instanceof byte[]) {
+            byte[] b = (byte[]) o;
+            ByteBuf buffer = alloc.buffer(b.length).writeBytes(b);
+            setBody(buffer, contentType);
+        } else if (o instanceof ByteBuf) {
+            body = (ByteBuf) o;
+            addHeader(HttpHeaderNames.EXPECT, HttpHeaderValues.CONTINUE); //http100
+            addHeader(HttpHeaderNames.CONTENT_LENGTH, (long) body.readableBytes());
+            addHeader(HttpHeaderNames.CONTENT_TYPE, contentType);
+        } else if (o instanceof InputStream) {
+            ByteBuf buf = newByteBuf();
+            try (ByteBufOutputStream out = new ByteBufOutputStream(buf)) {
+                try (InputStream in = (InputStream) o) {
+                    final byte[] buffer = new byte[DEFAULT_COPY_BUF];
+                    for (; ; ) {
+                        int byteCount = in.read(buffer, 0, buffer.length);
+                        if (byteCount <= 0) {
+                            break;
+                        } else {
+                            out.write(buffer, 0, byteCount);
+                        }
+                    }
+                }
+            }
+            setBody(buf, contentType);
+        } else if (o instanceof RenderedImage) {
+            ByteBuf buf = newByteBuf();
+            try (ByteBufOutputStream out = new ByteBufOutputStream(buf)) {
+                String type = contentType.subtype();
+                if ("jpeg".equals(type)) {
+                    type = "jpg";
+                }
+                ImageIO.write((RenderedImage) o, type, out);
+            }
+            setBody(buf, contentType);
+        } else {
+            //todo
+            throw new IllegalArgumentException();
+        }
+    }
+
+    protected ByteBuf newByteBuf() {
+        return alloc.buffer();
+    }
 
 
 }

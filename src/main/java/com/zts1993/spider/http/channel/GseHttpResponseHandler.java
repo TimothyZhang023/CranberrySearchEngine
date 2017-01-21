@@ -60,7 +60,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
         if (log.isDebugEnabled()) {
             log.debug(
                     "Received " + response.status().code() + " for " + this.request.getMethod().name() + " "
-                            + this.request.getUri());
+                            + this.request.getUrl().getUri());
         }
 
         if (response.status().equals(HttpResponseStatus.MOVED_PERMANENTLY)

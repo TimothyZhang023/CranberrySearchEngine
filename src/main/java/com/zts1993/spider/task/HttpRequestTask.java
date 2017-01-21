@@ -4,6 +4,7 @@
 
 package com.zts1993.spider.task;
 
+import com.zts1993.spider.http.GseHttpClientImpl;
 import com.zts1993.spider.http.GseHttpRequest;
 import com.zts1993.spider.http.GseHttpResponsePromise;
 import lombok.Getter;
@@ -29,10 +30,8 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     @Override
     public GseHttpResponsePromise Do() {
         try {
-            return httpRequest.send();
+            return client.send(httpRequest);
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -42,7 +41,11 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     @Getter
     final private GseHttpRequest httpRequest;
 
-    public HttpRequestTask(GseHttpRequest httpRequest) {
+    @Getter
+    final private GseHttpClientImpl client;
+
+    public HttpRequestTask(GseHttpRequest httpRequest, GseHttpClientImpl client) {
         this.httpRequest = httpRequest;
+        this.client = client;
     }
 }
