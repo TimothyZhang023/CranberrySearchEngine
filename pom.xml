@@ -11,8 +11,19 @@
 
     <name>Cranberry Search Engine</name>
     <description>Cranberry Search Engine Kernel</description>
-    <url>http://cse.zts1993.com</url>
+    <url>https://github.com/zts1993/CranberrySearchEngine</url>
 
+    <scm>
+        <connection>git://github.com/zts1993/CranberrySearchEngine.git</connection>
+        <developerConnection>git@github.com:zts1993/CranberrySearchEngine.git</developerConnection>
+        <url>git://github.com/zts1993/CranberrySearchEngine.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Timothy Zhang</name>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
