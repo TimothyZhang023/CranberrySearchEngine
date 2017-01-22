@@ -44,6 +44,10 @@ public class HttpRequest {
 
     @Getter
     @Setter
+    HttpSecurityContext securityContext;
+
+    @Getter
+    @Setter
     protected CookieSet cookies;
 
     @Getter
