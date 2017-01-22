@@ -84,7 +84,7 @@ public class HttpClient implements HttpClientImpl {
 
         request.setPromise(new HttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
 
-        c.pipeline().addLast("gseHttpHandler", new HttpResponseHandler(request));
+        c.pipeline().addLast("GseHttpHandler", new HttpResponseHandler(request));
         c.write(request.getNettyHttpRequest());
         c.flush();
 
