@@ -5,7 +5,7 @@
 package com.zts1993.spider.http;
 
 import com.google.common.net.MediaType;
-import com.zts1993.spider.http.channel.GseHttpRequestCallback;
+import com.zts1993.spider.http.channel.HttpRequestCallback;
 import com.zts1993.spider.util.Timeout;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -27,12 +27,12 @@ import java.io.InputStream;
  * Created by TimothyZhang on 2017/1/5.
  */
 @ToString
-public class GseHttpRequest {
+public class HttpRequest {
 
     private static final int DEFAULT_COPY_BUF = 4096;
 
     @Getter
-    private final GseHttpClientImpl httpClient;
+    private final HttpClientImpl httpClient;
 
 
     /**
@@ -40,14 +40,14 @@ public class GseHttpRequest {
      */
     @Getter
     @Setter
-    protected GseHttpRequestCallback channelCallback;
+    protected HttpRequestCallback channelCallback;
 
     @Getter
     @Setter
-    protected GseCookie cookies;
+    protected CookieSet cookies;
 
     @Getter
-    private GseURL url;
+    private HttpURL httpUrl;
 
     private ByteBuf body = Unpooled.buffer(0);
 
@@ -62,34 +62,34 @@ public class GseHttpRequest {
     private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
 
 
-    public GseHttpRequest(GseHttpClientImpl httpClient, GseURL url) {
+    public HttpRequest(HttpClientImpl httpClient, HttpURL httpUrl) {
         this.httpClient = httpClient;
-        this.url = url;
+        this.httpUrl = httpUrl;
     }
 
     @Setter
-    private volatile HttpRequest httpRequest;
+    private volatile io.netty.handler.codec.http.HttpRequest nettyHttpRequest;
 
     @Setter
     private String fakeIp = null;
 
     @Getter
     @Setter
-    private GseHttpResponsePromise promise = null;
+    private HttpResponsePromise promise = null;
 
-    public synchronized HttpRequest getHttpRequest() {
-        if (httpRequest == null) {
-            httpRequest = new DefaultFullHttpRequest(httpVersion, method, url.getUri().toASCIIString(), body);
-            httpRequest.headers().set(HttpHeaderNames.HOST, url.getHost());
-            httpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+    public synchronized io.netty.handler.codec.http.HttpRequest getNettyHttpRequest() {
+        if (nettyHttpRequest == null) {
+            nettyHttpRequest = new DefaultFullHttpRequest(httpVersion, method, httpUrl.getUri().toASCIIString(), body);
+            nettyHttpRequest.headers().set(HttpHeaderNames.HOST, httpUrl.getHost());
+            nettyHttpRequest.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 
             if (fakeIp != null) {
-                httpRequest.headers().set("X-Forwarded-For", fakeIp);
-                httpRequest.headers().set("X-Real-IP", fakeIp);
+                nettyHttpRequest.headers().set("X-Forwarded-For", fakeIp);
+                nettyHttpRequest.headers().set("X-Real-IP", fakeIp);
             }
         }
 
-        return httpRequest;
+        return nettyHttpRequest;
     }
 
 
@@ -101,7 +101,7 @@ public class GseHttpRequest {
 
 
     public HttpHeaders addHeader(CharSequence name, Object value) {
-        return getHttpRequest().headers().set(name, value);
+        return getNettyHttpRequest().headers().set(name, value);
     }
 
 

@@ -12,10 +12,10 @@ import lombok.RequiredArgsConstructor;
  * Created by TimothyZhang on 2017/1/5.
  */
 @RequiredArgsConstructor
-public class GseHttpResponse {
+public class HttpResponse {
 
     @Getter
-    private final GseHttpRequest request;
+    private final HttpRequest request;
 
     @Getter
     private final String content;

@@ -9,7 +9,6 @@ import com.zts1993.spider.http.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
@@ -20,19 +19,20 @@ import java.util.concurrent.ExecutionException;
 public class M {
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException, ExecutionException {
 
+        HttpClientImpl httpClient = new HttpClient();
 
-        GseHttpClient gseHttpClient = new GseHttpClient();
+        httpClient.init();
 
-        gseHttpClient.init();
 
-        GseHttpResponsePromise f = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new GseURL("http://cqt.njtech.edu.cn/")));
-//        GseHttpResponsePromise f2 = gseHttpClient.send(new GseHttpRequest(gseHttpClient, new URI("http://www.hao123.com/")));
 
-        GseHttpResponse gseHttpResponse = f.get();
-//        GseHttpResponse gseHttpResponse1 = f2.get();
+        HttpResponsePromise f = httpClient.send(new HttpRequest(httpClient, new HttpURL("http://cqt.njtech.edu.cn/")));
+//        HttpResponsePromise f2 = httpClient.send(new HttpRequest(httpClient, new URI("http://www.hao123.com/")));
 
-        System.out.println(gseHttpResponse.getContent());
+        HttpResponse httpResponse = f.get();
+//        HttpResponse gseHttpResponse1 = f2.get();
 
-        gseHttpClient.close();
+        System.out.println(httpResponse.getContent());
+
+        httpClient.close();
     }
 }

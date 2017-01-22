@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class GseHttpClientConfig {
+public class HttpClientConfig {
 
     private int threads = 8;
 

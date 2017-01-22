@@ -5,7 +5,7 @@
 package com.zts1993.spider.http;
 
 import com.sun.istack.internal.NotNull;
-import com.zts1993.spider.http.channel.GseHttpResponseHandler;
+import com.zts1993.spider.http.channel.HttpResponseHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -25,15 +25,19 @@ import java.io.IOException;
 
 
 @Slf4j
-@RequiredArgsConstructor
-public class GseHttpClient implements GseHttpClientImpl {
+public class HttpClient implements HttpClientImpl {
 
-    public GseHttpClient() {
-        this(GseHttpClientConfig.builder().build());
+    final private HttpClientConfig clientConfig;
+
+
+    public HttpClient() {
+        this(HttpClientConfig.builder().build());
     }
 
-    @NotNull
-    final private GseHttpClientConfig clientConfig;
+    public HttpClient(HttpClientConfig clientConfig) {
+        this.clientConfig = clientConfig;
+    }
+
 
     /**
      * setter for external event loop
@@ -48,7 +52,7 @@ public class GseHttpClient implements GseHttpClientImpl {
     private volatile boolean _closed = false;
 
 
-    public void init() {
+    public synchronized void init() {
         if (eventLoopGroup == null) {
             eventLoopGroup = new NioEventLoopGroup(clientConfig.getThreads());
         }
@@ -73,15 +77,15 @@ public class GseHttpClient implements GseHttpClientImpl {
     }
 
 
-    public GseHttpResponsePromise send(GseHttpRequest request) throws InterruptedException {
+    public HttpResponsePromise send(HttpRequest request) throws InterruptedException {
 
-        ChannelFuture f = bootstrap.connect(request.getUrl().getHost(), request.getUrl().getPort()).sync();
+        ChannelFuture f = bootstrap.connect(request.getHttpUrl().getHost(), request.getHttpUrl().getPort()).sync();
         Channel c = f.channel();
 
-        request.setPromise(new GseHttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
+        request.setPromise(new HttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
 
-        c.pipeline().addLast("gseHttpHandler", new GseHttpResponseHandler(request));
-        c.write(request.getHttpRequest());
+        c.pipeline().addLast("gseHttpHandler", new HttpResponseHandler(request));
+        c.write(request.getNettyHttpRequest());
         c.flush();
 
         f.addListener((ChannelFutureListener) future -> {
@@ -90,7 +94,7 @@ public class GseHttpClient implements GseHttpClientImpl {
 
         c.closeFuture().addListener((ChannelFutureListener) future -> {
             //close connection
-            log.debug("Connection closed for request {} {} ", request.getMethod().name(), request.getUrl().getUri());
+            log.debug("Connection closed for request {} {} ", request.getMethod().name(), request.getHttpUrl().getUri());
         });
 
         return request.getPromise();
@@ -109,7 +113,7 @@ public class GseHttpClient implements GseHttpClientImpl {
             return;
         }
 
-        log.debug("closing GseHttpClient");
+        log.debug("closing HttpClient");
         synchronized (this) {
             if (_closed) {
                 return;

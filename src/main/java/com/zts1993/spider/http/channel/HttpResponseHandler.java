@@ -4,9 +4,9 @@
 
 package com.zts1993.spider.http.channel;
 
-import com.zts1993.spider.http.GseHttpClientImpl;
-import com.zts1993.spider.http.GseHttpRequest;
-import com.zts1993.spider.http.GseHttpResponse;
+import com.zts1993.spider.http.HttpClientImpl;
+import com.zts1993.spider.http.HttpRequest;
+import com.zts1993.spider.http.HttpResponse;
 import com.zts1993.spider.util.HtmlUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -26,18 +26,18 @@ import java.nio.charset.UnsupportedCharsetException;
  * Created by TimothyZhang on 2017/1/5.
  */
 @Slf4j
-public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttpResponse> {
+public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpResponse> {
 
     private static final CharSequence HTTP_HEADER_LOCATION = "Location";
 
 
-    protected final GseHttpClientImpl client;
+    protected final HttpClientImpl client;
 
-    protected final GseHttpRequest request;
+    protected final HttpRequest request;
 
-    protected Promise<GseHttpResponse> promise;
+    protected Promise<HttpResponse> promise;
 
-    public GseHttpResponseHandler(GseHttpRequest request) {
+    public HttpResponseHandler(HttpRequest request) {
         this.client = request.getHttpClient();
         this.request = request;
         this.promise = request.getPromise().getNettyPromise();
@@ -60,7 +60,7 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
         if (log.isDebugEnabled()) {
             log.debug(
                     "Received " + response.status().code() + " for " + this.request.getMethod().name() + " "
-                            + this.request.getUrl().getUri());
+                            + this.request.getHttpUrl().getUri());
         }
 
         if (response.status().equals(HttpResponseStatus.MOVED_PERMANENTLY)
@@ -70,14 +70,14 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
             if (response.headers().contains(HTTP_HEADER_LOCATION)) {
                 //TODO
 //                this.request.updateUri(new URI(response.headers().get(HTTP_HEADER_LOCATION)));
-//                GseHttpResponsePromise send = this.request.send();
+//                HttpResponsePromise send = this.request.send();
 //                this.promise = send.getNettyPromise();
 //                this.request.setPromise(send);
 //
 //                // Closing the connection which handled the previous request.
 //                ctx.close();
                 if (log.isDebugEnabled()) {
-                    log.debug("redirect for " + this.request.getHttpRequest().uri() + " to " +
+                    log.debug("redirect for " + this.request.getNettyHttpRequest().uri() + " to " +
                             response.headers().get(HTTP_HEADER_LOCATION));
                 }
 
@@ -138,11 +138,11 @@ public class GseHttpResponseHandler extends SimpleChannelInboundHandler<FullHttp
 //                log.info(res);
 //                log.info(response.toString());
 
-                GseHttpResponse gseHttpResponse = new GseHttpResponse(request, res);
-                this.promise.setSuccess(gseHttpResponse);
+                HttpResponse httpResponse = new HttpResponse(request, res);
+                this.promise.setSuccess(httpResponse);
 
                 if (request.getChannelCallback() != null) {
-                    request.getChannelCallback().onSuccess(gseHttpResponse);
+                    request.getChannelCallback().onSuccess(httpResponse);
                 }
 
                 //channelCallback

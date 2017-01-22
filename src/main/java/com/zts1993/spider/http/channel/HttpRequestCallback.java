@@ -4,19 +4,19 @@
 
 package com.zts1993.spider.http.channel;
 
-import com.zts1993.spider.http.GseHttpResponse;
+import com.zts1993.spider.http.HttpResponse;
 
 /**
  * GSE Component
  * Created by TimothyZhang on 2017/1/9.
  */
-public interface GseHttpRequestCallback {
+public interface HttpRequestCallback {
 
     /**
      * on request complete
      * @param response response
      */
-    void onSuccess(GseHttpResponse response);
+    void onSuccess(HttpResponse response);
 
     /**
      * on request failed

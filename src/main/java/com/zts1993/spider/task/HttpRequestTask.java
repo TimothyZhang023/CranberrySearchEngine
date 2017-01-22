@@ -4,13 +4,11 @@
 
 package com.zts1993.spider.task;
 
-import com.zts1993.spider.http.GseHttpClientImpl;
-import com.zts1993.spider.http.GseHttpRequest;
-import com.zts1993.spider.http.GseHttpResponsePromise;
+import com.zts1993.spider.http.HttpClientImpl;
+import com.zts1993.spider.http.HttpRequest;
+import com.zts1993.spider.http.HttpResponsePromise;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.io.IOException;
 
 
 /**
@@ -18,7 +16,7 @@ import java.io.IOException;
  * Created by TimothyZhang on 2017/1/9.
  */
 @ToString
-public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
+public class HttpRequestTask extends AbstractTask<HttpResponsePromise> {
 
     private String name = "HttpRequestTask";
 
@@ -28,7 +26,7 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     }
 
     @Override
-    public GseHttpResponsePromise Do() {
+    public HttpResponsePromise Do() {
         try {
             return client.send(httpRequest);
         } catch (InterruptedException e) {
@@ -39,12 +37,12 @@ public class HttpRequestTask extends AbstractTask<GseHttpResponsePromise> {
     }
 
     @Getter
-    final private GseHttpRequest httpRequest;
+    final private HttpRequest httpRequest;
 
     @Getter
-    final private GseHttpClientImpl client;
+    final private HttpClientImpl client;
 
-    public HttpRequestTask(GseHttpRequest httpRequest, GseHttpClientImpl client) {
+    public HttpRequestTask(HttpRequest httpRequest, HttpClientImpl client) {
         this.httpRequest = httpRequest;
         this.client = client;
     }

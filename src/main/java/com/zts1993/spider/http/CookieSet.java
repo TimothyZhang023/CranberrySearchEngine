@@ -14,7 +14,7 @@ import java.util.Set;
  * GSE Component
  * Created by TimothyZhang on 2017/1/21.
  */
-public class GseCookie {
+public class CookieSet {
 
 
     final Set<Cookie> cookies = new HashSet<>();

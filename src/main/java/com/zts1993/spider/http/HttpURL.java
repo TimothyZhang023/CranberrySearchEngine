@@ -17,7 +17,7 @@ import static io.netty.handler.codec.http.HttpScheme.HTTPS;
  * GSE Component
  * Created by TimothyZhang on 2017/1/21.
  */
-public class GseURL {
+public class HttpURL {
 
     @Getter
     private URI uri;
@@ -34,15 +34,15 @@ public class GseURL {
     @Getter
     private HttpScheme httpScheme;
 
-    public GseURL(String url) throws URISyntaxException {
-        this(new GseURLBuilder(url).build());
+    public HttpURL(String url) throws URISyntaxException {
+        this(new URLBuilder(url).build());
     }
 
-    public GseURL(GseURLBuilder builder) throws URISyntaxException {
+    public HttpURL(URLBuilder builder) throws URISyntaxException {
         this(builder.build());
     }
 
-    public GseURL(URI uri) throws URISyntaxException {
+    public HttpURL(URI uri) throws URISyntaxException {
         updateUri(uri);
     }
 

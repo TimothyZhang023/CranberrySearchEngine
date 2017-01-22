@@ -11,11 +11,11 @@ import java.net.URISyntaxException;
  * GSE Component
  * Created by TimothyZhang on 2017/1/21.
  */
-public class GseURLBuilder {
+public class URLBuilder {
 
     private String link;
 
-    public GseURLBuilder(String base) {
+    public URLBuilder(String base) {
         this.link = base;
     }
 
