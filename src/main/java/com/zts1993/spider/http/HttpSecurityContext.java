@@ -4,6 +4,7 @@
 
 package com.zts1993.spider.http;
 
+import io.netty.handler.ssl.SslContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,11 +16,15 @@ public class HttpSecurityContext {
 
     @Setter
     @Getter
-    String name = null;
+    private String name = null;
 
     @Setter
     @Getter
-    String password = null;
+    private String password = null;
+
+    @Setter
+    @Getter
+    private SslContext context;
 
 
 }

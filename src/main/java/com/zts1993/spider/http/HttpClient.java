@@ -4,23 +4,28 @@
 
 package com.zts1993.spider.http;
 
-import com.sun.istack.internal.NotNull;
+import com.zts1993.spider.http.channel.ExceptionForwardingSslHandler;
 import com.zts1993.spider.http.channel.HttpResponseHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.DefaultPromise;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 
 
@@ -77,14 +82,32 @@ public class HttpClient implements HttpClientImpl {
     }
 
 
-    public HttpResponsePromise send(HttpRequest request) throws InterruptedException {
+    public HttpResponsePromise send(HttpRequest request) throws InterruptedException, SSLException {
 
         ChannelFuture f = bootstrap.connect(request.getHttpUrl().getHost(), request.getHttpUrl().getPort()).sync();
         Channel c = f.channel();
 
         request.setPromise(new HttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
 
-        c.pipeline().addLast("GseHttpHandler", new HttpResponseHandler(request));
+
+        if (request.getSecurityContext() != null) {
+            SslContext clientContext = request.getSecurityContext().getContext() == null ? SslContextBuilder.forClient()
+                    .trustManager(InsecureTrustManagerFactory.INSTANCE).build() : request.getSecurityContext().getContext();
+            c.pipeline().addLast("ssl", new ExceptionForwardingSslHandler(
+                    clientContext.newEngine(ByteBufAllocator.DEFAULT,
+                            request.getHttpUrl().getHost(), request.getHttpUrl().getPort()), request));
+        }
+
+        if (request.isCompress()) {
+            c.pipeline().addLast("decompressor", new HttpContentDecompressor());
+        }
+
+        c.pipeline().addLast("http-codec", new HttpClientCodec());
+//        c.pipeline().addLast("GseHttpHandler", new HttpResponseHandler(request));
+
+
+
+
         c.write(request.getNettyHttpRequest());
         c.flush();
 

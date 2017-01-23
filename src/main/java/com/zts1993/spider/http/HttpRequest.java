@@ -56,6 +56,9 @@ public class HttpRequest {
 
     private ByteBufAllocator alloc = ByteBufAllocator.DEFAULT;
 
+    @Getter
+    @Setter
+    private boolean compress = false;
 
     @Getter
     @Setter

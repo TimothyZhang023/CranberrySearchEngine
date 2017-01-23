@@ -5,6 +5,7 @@
 package com.zts1993.spider.http;
 
 
+import javax.net.ssl.SSLException;
 import java.io.Closeable;
 
 /**
@@ -13,7 +14,7 @@ import java.io.Closeable;
  */
 public interface HttpClientImpl extends Closeable {
 
-    HttpResponsePromise send(HttpRequest httpRequest) throws InterruptedException;
+    HttpResponsePromise send(HttpRequest httpRequest) throws InterruptedException, SSLException;
 
     void init();
 }
