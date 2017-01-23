@@ -5,7 +5,6 @@
 package com.zts1993.spider.http;
 
 import com.google.common.net.MediaType;
-import com.zts1993.spider.http.channel.HttpRequestCallback;
 import com.zts1993.spider.util.Timeout;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

@@ -2,7 +2,7 @@
  * Copyright (c) 2017 By Timothy Zhang
  */
 
-package com.zts1993.spider.http.channel;
+package com.zts1993.spider.http;
 
 import com.zts1993.spider.http.HttpResponse;
 
