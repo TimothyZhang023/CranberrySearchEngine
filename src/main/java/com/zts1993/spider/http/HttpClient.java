@@ -5,7 +5,7 @@
 package com.zts1993.spider.http;
 
 import com.zts1993.spider.http.channel.ExceptionForwardingSslHandler;
-import com.zts1993.spider.http.channel.HttpResponseHandler;
+import com.zts1993.spider.http.channel.HttpMessageHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -89,7 +89,6 @@ public class HttpClient implements HttpClientImpl {
 
         request.setPromise(new HttpResponsePromise().attachNettyPromise(new DefaultPromise<>(c.eventLoop())));
 
-
         if (request.getSecurityContext() != null) {
             SslContext clientContext = request.getSecurityContext().getContext() == null ? SslContextBuilder.forClient()
                     .trustManager(InsecureTrustManagerFactory.INSTANCE).build() : request.getSecurityContext().getContext();
@@ -103,9 +102,7 @@ public class HttpClient implements HttpClientImpl {
         }
 
         c.pipeline().addLast("http-codec", new HttpClientCodec());
-//        c.pipeline().addLast("GseHttpHandler", new HttpResponseHandler(request));
-
-
+        c.pipeline().addLast("GseHttpHandler", new HttpMessageHandler(this, request));
 
 
         c.write(request.getNettyHttpRequest());
