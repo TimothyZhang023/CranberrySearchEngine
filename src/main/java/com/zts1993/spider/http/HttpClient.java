@@ -26,11 +26,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLException;
+import java.io.Closeable;
 import java.io.IOException;
 
 
 @Slf4j
-public class HttpClient implements HttpClientImpl {
+public class HttpClient implements Closeable {
 
     final private HttpClientConfig clientConfig;
 
@@ -49,35 +50,38 @@ public class HttpClient implements HttpClientImpl {
      */
     @Getter
     @Setter
-    private EventLoopGroup eventLoopGroup = null;
+    private volatile EventLoopGroup eventLoopGroup = null;
 
     @Getter
-    private Bootstrap bootstrap;
+    private volatile Bootstrap bootstrap;
 
     private volatile boolean _closed = false;
 
 
     public synchronized void init() {
+
         if (eventLoopGroup == null) {
             eventLoopGroup = new NioEventLoopGroup(clientConfig.getThreads());
         }
 
-        bootstrap = new Bootstrap()
-                .group(eventLoopGroup)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, clientConfig.getTimeout())
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    public void initChannel(SocketChannel ch) throws Exception {
-                        ChannelPipeline p = ch.pipeline();
-                        p.addLast("codec", new HttpClientCodec());
+        if (bootstrap == null) {
+            bootstrap = new Bootstrap()
+                    .group(eventLoopGroup)
+                    .channel(NioSocketChannel.class)
+                    .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                    .option(ChannelOption.TCP_NODELAY, true)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, clientConfig.getTimeout())
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) throws Exception {
+                            ChannelPipeline p = ch.pipeline();
+                            p.addLast("codec", new HttpClientCodec());
 //                        p.addLast("decompressor",new HttpContentDecompressor());
-                        p.addLast("chunkedWriter", new ChunkedWriteHandler());
-                        p.addLast("aggregate", new HttpObjectAggregator(1024 * 1000));
-                    }
-                });
+                            p.addLast("chunkedWriter", new ChunkedWriteHandler());
+                            p.addLast("aggregate", new HttpObjectAggregator(1024 * 1000));
+                        }
+                    });
+        }
 
     }
 

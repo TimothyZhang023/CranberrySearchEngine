@@ -30,9 +30,6 @@ public class HttpRequest {
 
     private static final int DEFAULT_COPY_BUF = 4096;
 
-    @Getter
-    private final HttpClientImpl httpClient;
-
 
     /**
      * callback when processing request
@@ -68,8 +65,7 @@ public class HttpRequest {
     private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
 
 
-    public HttpRequest(HttpClientImpl httpClient, HttpURL httpUrl) {
-        this.httpClient = httpClient;
+    public HttpRequest(HttpURL httpUrl) {
         this.httpUrl = httpUrl;
     }
 

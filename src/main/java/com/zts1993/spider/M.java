@@ -19,13 +19,13 @@ import java.util.concurrent.ExecutionException;
 public class M {
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException, ExecutionException {
 
-        HttpClientImpl httpClient = new HttpClient();
+        HttpClient httpClient = new HttpClient();
 
         httpClient.init();
 
 
 
-        HttpResponsePromise f = httpClient.send(new HttpRequest(httpClient, new HttpURL("http://cqt.njtech.edu.cn/")));
+        HttpResponsePromise f = httpClient.send(new HttpRequest(new HttpURL("http://www.hao123.com/")));
 //        HttpResponsePromise f2 = httpClient.send(new HttpRequest(httpClient, new URI("http://www.hao123.com/")));
 
         HttpResponse httpResponse = f.get();

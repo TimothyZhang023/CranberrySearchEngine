@@ -4,7 +4,7 @@
 
 package com.zts1993.spider.http.channel;
 
-import com.zts1993.spider.http.HttpClientImpl;
+import com.zts1993.spider.http.HttpClient;
 import com.zts1993.spider.http.HttpRequest;
 import com.zts1993.spider.http.HttpResponse;
 import com.zts1993.spider.util.HtmlUtil;
@@ -30,15 +30,11 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
 
     private static final CharSequence HTTP_HEADER_LOCATION = "Location";
 
-
-    protected final HttpClientImpl client;
-
     protected final HttpRequest request;
 
     protected Promise<HttpResponse> promise;
 
     public HttpResponseHandler(HttpRequest request) {
-        this.client = request.getHttpClient();
         this.request = request;
         this.promise = request.getPromise().getNettyPromise();
     }

@@ -4,11 +4,13 @@
 
 package com.zts1993.spider.task;
 
-import com.zts1993.spider.http.HttpClientImpl;
+import com.zts1993.spider.http.HttpClient;
 import com.zts1993.spider.http.HttpRequest;
 import com.zts1993.spider.http.HttpResponsePromise;
 import lombok.Getter;
 import lombok.ToString;
+
+import javax.net.ssl.SSLException;
 
 
 /**
@@ -31,6 +33,8 @@ public class HttpRequestTask extends AbstractTask<HttpResponsePromise> {
             return client.send(httpRequest);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (SSLException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -40,9 +44,9 @@ public class HttpRequestTask extends AbstractTask<HttpResponsePromise> {
     final private HttpRequest httpRequest;
 
     @Getter
-    final private HttpClientImpl client;
+    final private HttpClient client;
 
-    public HttpRequestTask(HttpRequest httpRequest, HttpClientImpl client) {
+    public HttpRequestTask(HttpRequest httpRequest, HttpClient client) {
         this.httpRequest = httpRequest;
         this.client = client;
     }

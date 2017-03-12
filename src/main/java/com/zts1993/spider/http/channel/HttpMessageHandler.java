@@ -7,12 +7,9 @@ package com.zts1993.spider.http.channel;
 import com.zts1993.spider.http.HttpClient;
 import com.zts1993.spider.http.HttpRequest;
 import com.zts1993.spider.http.HttpResponsePromise;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.CompositeByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * GSE Component
