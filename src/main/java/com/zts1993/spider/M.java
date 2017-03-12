@@ -24,8 +24,9 @@ public class M {
         httpClient.init();
 
 
-
-        HttpResponsePromise f = httpClient.send(new HttpRequest(new HttpURL("http://www.hao123.com/")));
+        HttpRequest req = new HttpRequest(new HttpURL("http://www.hao123.com/"));
+        
+        HttpResponsePromise f = httpClient.send(req);
 //        HttpResponsePromise f2 = httpClient.send(new HttpRequest(httpClient, new URI("http://www.hao123.com/")));
 
         HttpResponse httpResponse = f.get();

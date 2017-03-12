@@ -59,6 +59,9 @@ public class HttpClient implements Closeable {
 
 
     public synchronized void init() {
+        if (_closed) {
+            throw new RuntimeException("client already closed");
+        }
 
         if (eventLoopGroup == null) {
             eventLoopGroup = new NioEventLoopGroup(clientConfig.getThreads());
